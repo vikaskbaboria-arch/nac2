@@ -1,8 +1,8 @@
 import React from 'react'
 
-const Person = ({}) => {
+const Person = () => {
   return (
-    <Profile profile ={}/>
+    <Profile />
   )
 }
 
