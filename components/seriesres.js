@@ -23,7 +23,10 @@ const scrollRight = () => {
 useEffect(() => {
  fetchMovies({type:"byid",id:movies.movie ,type_of:"tv"})
  .then((m)=>(setMovie(m)))
-    
+    async function loaddata(params) {
+          const creditsData = await fetchCredit(movieData.id, "movie");
+    setCredits(creditsData);
+    }
  
 }, [movies])
 console.log(movies.movie)
@@ -110,35 +113,36 @@ useEffect(() => {
 
    </div>
 
-<div className="w-full mt-7 px-6 min-h-[400px] flex flex-col lg:flex-row gap-8 bg-black/30">
+<div className="max-w-[90vw] mx-auto px-4 mt-10 flex flex-col lg:flex-row gap-8">
 
   {/* LEFT: CAST SECTION */}
 <div className="relative w-full lg:w-2/3">
+          <h3 className="text-white text-xl font-semibold mb-4">Cast</h3>
 
   {/* LEFT BUTTON */}
   <button
     onClick={scrollLeft}
    className="
-      absolute left-0 top-32 h-56  -translate-y-1/2 z-10 w-12
-      bg-black/60 hover:bg-black/80
+      absolute -left-12 top-42 h-56  -translate-y-1/2 z-10 w-12
+      bg-black/20 hover:bg-black/40
       text-white p-2 flex items-center justify-center
        hidden sm:flex 
     "
   >
-    ◀
+    <img src="/left.svg" alt="" />
   </button>
 
   {/* CAST SCROLL AREA */}
   <div
-    ref={castRef}
-    className="flex gap-4 sm:gap-6 overflow-x-auto py-4 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+    ref={castRef} 
+    className="flex   gap-4 sm:gap-6 overflow-x-auto py-4 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
   >
     {credits?.cast?.slice(0, 10).map((m) => (
       <div
         key={m.id}
-        className="flex-shrink-0 w-24 sm:w-32 md:w-36 transition-transform duration-300 hover:scale-105"
+        className="flex-shrink-0 w-24 sm:w-32 md:w-36 hover:scale-105 transition"
       >
-        <div className="aspect-[2/3] overflow-hidden rounded-md bg-gray-800">
+        <div className="aspect-[2/3] rounded-md overflow-hidden bg-gray-800">
           <img
             src={
               m.profile_path
@@ -161,16 +165,14 @@ useEffect(() => {
  
       <button
     onClick={scrollRight}
-    className="
-      absolute right-0 top-32 h-56  -translate-y-1/2 z-10 w-12
-      bg-black/60 hover:bg-black/80
+    className=" 
+      absolute -right-12 top-42 h-56  -translate-y-1/2 z-10 w-12
+      bg-black/20 hover:bg-black/40
       text-white p-2 flex items-center justify-center
        hidden sm:flex
     "
   >
-    <span>
-      ▶
-    </span>
+    <img src="/right.svg" alt="" />
     
   </button>
  
@@ -178,33 +180,39 @@ useEffect(() => {
 
 
 
+
   {/* RIGHT: STREAMING INFO */}
-  <div className="w-full lg:w-1/3 min-h-[200px] bg-black/40 rounded-lg p-5 flex flex-col gap-4">
-    <h3 className="text-white font-semibold text-lg">Watch on</h3>
+ <div className="w-full lg:w-[32%] bg-black/40 rounded-lg p-5">
+          <h3 className="text-white text-lg font-semibold mb-4">Watch on</h3>
 
-    <div className="flex gap-4 flex-wrap">
-      {/* Example streaming logos */}
-      <img
-        src="/prime.png"
-        className="w-12 h-12 object-contain"
-        alt="Prime Video"
-      />
-      <img
-        src="/netflix.png"
-        className="w-12 h-12 object-contain"
-        alt="Netflix"
-      />
-      <img
-        src="/hotstar.png"
-        className="w-12 h-12 object-contain"
-        alt="Hotstar"
-      />
-    </div>
+          {movies.streamer?.results?.IN?.flatrate?.length > 0 ? (
+            <div className="flex flex-col gap-3">
+              {movies.streamer?.results?.IN?.flatrate?.map((p) => (
+                <div
+                  key={p.provider_id}
+                  className="flex items-center gap-4 bg-gray-900 hover:bg-gray-800 p-3 rounded-md transition"
+                >
+                  <img
+                    src={`https://image.tmdb.org/t/p/w92${p.logo_path}`}
+                    alt={p.provider_name}
+                    className="w-10 h-10 rounded-md"
+                  />
+                  <span className="text-gray-200 font-semibold">
+                    {p.provider_name}
+                  </span>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-gray-400 text-sm">
+              Not available for streaming in your region
+            </p>
+          )}
 
-    <p className="text-gray-400 text-sm">
-      Availability may vary by region
-    </p>
-  </div>
+          <p className="text-gray-500 text-xs mt-4">
+            Availability may vary by region
+          </p>
+        </div>
 
 </div>
 <div className='w-full   '>
