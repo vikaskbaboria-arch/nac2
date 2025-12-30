@@ -73,11 +73,11 @@ console.log(movies.movie)
 
 
  {/* <div className='text-white'>movie:{movie?.results?.[0]?.title}</div> */}
-<div className="text-white">
-  <div className="cover mx-auto max-w-full transition duration-500">
+<div className="text-white ">
+  <div className="cover mx-auto max-w-full transition duration-500 ">
     
     {/* HERO CONTAINER */}
-    <div className="relative  min-h-[420px] md:min-h-[600px] bg-black/60 sm:bg-black overflow-hidden">
+    <div className="relative  min-h-[420px] md:min-h-[600px] bg-black/60 sm:bg-black overflow-hidden  ">
 
       {/* BACKDROP */}
       <img
@@ -162,7 +162,9 @@ console.log(movies.movie)
     </div>
   </div>
 </div>
-
+<div className='bg-gradient-to-br  sm:hidden  from-black  to-purple-950 via-black/40   h-4 w-full'>
+  
+</div>
 <div className="max-w-[90vw] mx-auto px-4 mt-10 flex flex-col lg:flex-row gap-8">
 
   {/* LEFT: CAST SECTION */}
