@@ -115,13 +115,13 @@ export default function HomeCarousel() {
   return (
     <div className="px-12 my-8">
       <div className="flex items-center justify-between gap-4">
-        <button aria-label="prev" onClick={prev} className="px-3 text-white py-2 bg-slate-900 rounded">{'<'}</button>
+        <button aria-label="prev" onClick={prev} className="px-3 hidden sm:flex  text-white py-2 bg-slate-900 rounded">{'<'}</button>
 
         <div
           ref={containerRef}
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
-          className="w-full max-w-[1200px] mx-auto overflow-hidden rounded-md"
+          className="w-full max-w-[1200px]  mx-auto overflow-hidden rounded-md"
         
         >
           {slides.length === 0 ? (
@@ -136,7 +136,7 @@ export default function HomeCarousel() {
                 <div key={idx}
                   onClick={()=>(handleCick(m))}
                 className="flex-shrink-0 p-2" style={{ width: `${slideWidth}px` }}>
-                  <div className="h-[40vh] md:h-[50vh] lg:h-[60vh] relative rounded-lg overflow-hidden border-2 border-purple-950">
+                  <div className="h-[20vh] md:h-[50vh] lg:h-[60vh] relative rounded-lg overflow-hidden border-2 border-purple-950">
                     <img src={`https://image.tmdb.org/t/p/w1280/${m.backdrop_path}`} alt={m?.title } className="w-full h-full object-cover" />
                     <div className="absolute bottom-6 left-4 text-purple-900 font-bold text-3xl">{m?.title || m?.name}</div>
                     <div className="absolute top-4 w-24 h-6 right-4 bg-green-800 text-white px-2 rounded">⭐ {m?.vote_average}</div>
@@ -147,7 +147,7 @@ export default function HomeCarousel() {
           )}
         </div>
 
-        <button aria-label="next" onClick={next} className="px-3 py-2 bg-slate-900 text-white rounded">{'>'}</button>
+        <button aria-label="next" onClick={next} className="px-3 hidden sm:flex py-2 bg-slate-900 text-white rounded">{'>'}</button>
       </div>
     </div>
   )

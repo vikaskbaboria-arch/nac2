@@ -73,21 +73,21 @@ console.log(movie)
   return (
     <>
     
-    <div className='my-4  mx-auto w-[92vw] h-86    '>
+    <div className='my-9  mx-auto w-[92vw] h-60 sm:h-80    '>
       <div className='flex items-center justify-between ' >
-       <div className='text-white font-bold mx-2   text-3xl'>{names}</div>
-       <div className='text-white mr-6 text-xl flex items-center  gap-2' onClick={()=>handlejust(genere.movie)}> <InteractiveHoverButton>More</InteractiveHoverButton></div>
+       <div className='text-white font-bold mx-3 sm:mx-2    text-l sm:text-3xl'>{names}</div>
+       <div className='text-white mr-6 text-xs sm:text-xl   flex items-center   gap-2' onClick={()=>handlejust(genere.movie)}> <InteractiveHoverButton>More</InteractiveHoverButton></div>
       </div>
       
      
-      <div className="relative mt-4">
+      <div className="relative mt-2">
 
   {/* LEFT BUTTON */}
   <button
     onClick={scrollLeft}
     className="
       absolute left-0 top-1/2 -translate-y-1/2 z-10
-      w-18 h-60
+      w-18 h-60 
       bg-black/70 hover:bg-black/80
       text-white flex items-center justify-center
       hidden sm:flex
@@ -101,7 +101,7 @@ console.log(movie)
     ref={movieRef}
     className="
       snap-x flex overflow-x-auto overflow-y-hidden
-      gap-6 h-80 items-center
+      gap-5 h-56 items-center sm:h-80 sm:gap-6
       [-ms-overflow-style:none]
       [scrollbar-width:none]
       [&::-webkit-scrollbar]:hidden
@@ -113,10 +113,10 @@ console.log(movie)
         onClick={() => handleLink(m)}
         className="
           snap-center flex-shrink-0
-          h-40 rounded-md relative
+          h-38 rounded-md relative
           transition-transform duration-300 hover:scale-105
           cursor-pointer
-          w-28 sm:w-36
+          w-24 sm:w-40
           sm:h-60
         "
       >
