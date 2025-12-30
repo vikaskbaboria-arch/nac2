@@ -73,7 +73,7 @@ console.log(movie)
   return (
     <>
     
-    <div className='my-5 sm:my-7  mx-auto w-[92vw] h-60 sm:h-80    '>
+    <div className='my-1 sm:my-5  mx-auto w-[92vw] h-52 sm:h-80    '>
       <div className='flex items-center justify-between ' >
        <div className='text-white font-bold mx-3 sm:mx-2    text-lg sm:text-3xl'>{names}</div>
        <div className='text-white mr-6 text-xs sm:text-xl   flex items-center   gap-2' onClick={()=>handlejust(genere.movie)}> <InteractiveHoverButton>More</InteractiveHoverButton></div>
