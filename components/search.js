@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 const Search = ({ movie }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
-
+const [showFullOverview, setShowFullOverview] = useState(false);
   const pageFromUrl = Number(searchParams.get("page")) || 1;
   const [movies, setMovies] = useState(null);
   const [pages, setPages] = useState(pageFromUrl);
@@ -44,26 +44,31 @@ console.log(movies?.results)
           onClick={() => handleClick(m)}
           className="
             cursor-pointer
-            flex flex-col md:flex-row
+            flex  md:flex-row
+            sm:w-full
+            text-md sm:text-lg
             gap-6 md:gap-10
             items-start
             bg-gray-900/40
             hover:bg-gray-900/70
             transition rounded-xl
-            p-4 sm:p-6
+            p-4 sm:p-6 
             my-6
+            
           "
         >
           {/* Poster */}
          {/* Poster */}
 <div
   className="
-    w-full
-    sm:w-23
-    md:w-34
-    lg:w-12
-    xl:w-34
+    w-28
+    sm:w-33
+    md:w-36
+    lg:w-42
+    xl:w-44
     flex-shrink-0
+    
+
   "
 >
   <img
@@ -84,14 +89,36 @@ console.log(movies?.results)
             <h2 className="text-xl sm:text-2xl font-bold mb-3">
               {m.title || m.name}
             </h2>
+<div className="over flex flex-col gap-3">
 
-            <p className="text-slate-400 font-semibold mb-2">
-              Overview
-            </p>
+  <span className="text-slate-400 font-bold">
+    Overview
+  </span>
 
-            <p className="text-sm sm:text-base leading-relaxed text-slate-200">
-              {m.overview}
-            </p> 
+  {/* OVERVIEW TEXT */}
+  <p
+    className={`
+      text-gray-200 leading-relaxed
+      ${showFullOverview ? "" : "line-clamp-3"}
+      md:line-clamp-none text-xs sm:text-md
+      transition-all duration-300
+    `}
+  >
+    {m?.overview}
+  </p>
+
+  {/* TOGGLE BUTTON (ONLY MOBILE) */}
+  {m?.overview?.length > 100 && (
+    <button
+      onClick={() => setShowFullOverview(!showFullOverview)}
+      className="md:hidden text-purple-400 text-sm font-semibold self-start"
+    >
+      {showFullOverview ? "Show less" : "Show more"}
+    </button>
+  )}
+
+</div>
+           
              <div className="text-white mt-16 ">
             {m.media_type==="tv"?"Tv":m.media_type==="movie"?"Movie":"Person"}
           </div>
