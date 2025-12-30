@@ -113,10 +113,17 @@ console.log(movie)
         onClick={() => handleLink(m)}
         className="
           snap-center flex-shrink-0
+<<<<<<< HEAD
           h-38 rounded-md relative
           transition-transform duration-300 hover:scale-105
           cursor-pointer
           w-24 sm:w-40
+=======
+          h-40 rounded-md relative
+          transition-transform duration-300 hover:scale-105
+          cursor-pointer
+          w-28 sm:w-36
+>>>>>>> 74579fbfe763d20a75ce6e2643f55bf8856785d0
           sm:h-60
         "
       >
@@ -212,5 +219,8 @@ export default Movie
 //     </div>
 //   );
 // };
+
+// export default Movie;
+
 
 // export default Movie;

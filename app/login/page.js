@@ -12,7 +12,7 @@ export default function Login() {
   // Redirect if already logged in
   useEffect(() => {
     if (status === "authenticated") {
-      router.replace("/profile");
+      router.replace("/");
     }
   }, [status, router]);
 
