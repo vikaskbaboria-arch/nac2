@@ -266,10 +266,10 @@ console.log(movies.movie)
 
 
 
-<div className='w-full   '>
+<div className='w-[90vw] mx-auto  '>
   <ReviewForm movieId={movie?.id} onSuccess={(r)=>setRev(r)} />
 </div>
-<div className=' w-full'>
+<div className=' w-[80vw] mx-auto'>
   <Reviewdata  movieId={movie?.id} />
 </div>
 
