@@ -77,7 +77,7 @@ console.log(movies.movie)
   <div className="cover mx-auto max-w-full transition duration-500">
     
     {/* HERO CONTAINER */}
-    <div className="relative  min-h-[420px] md:min-h-[600px] bg-black overflow-hidden">
+    <div className="relative  min-h-[420px] md:min-h-[600px] bg-black/10 sm:bg-black overflow-hidden">
 
       {/* BACKDROP */}
       <img
