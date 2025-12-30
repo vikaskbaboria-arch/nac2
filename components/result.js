@@ -77,7 +77,7 @@ console.log(movies.movie)
   <div className="cover mx-auto max-w-full transition duration-500">
     
     {/* HERO CONTAINER */}
-    <div className="relative  min-h-[420px] md:min-h-[600px] bg-black/10 sm:bg-black overflow-hidden">
+    <div className="relative  min-h-[420px] md:min-h-[600px] bg-black/60 sm:bg-black overflow-hidden">
 
       {/* BACKDROP */}
       <img
@@ -87,7 +87,7 @@ console.log(movies.movie)
       />
 
       {/* RATING */}
-      <div className="absolute top-4 right-4 px-3 h-7 flex items-center bg-purple-500 text-white rounded font-bold z-10">
+      <div className="absolute top-4 right-4 px-3 h-7 flex items-center bg-green-500 text-sm sm:text-l  font-bold  text-white rounded font-bold z-10">
         ⭐ {movie?.vote_average}
       </div>
 

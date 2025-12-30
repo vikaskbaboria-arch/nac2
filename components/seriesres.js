@@ -17,6 +17,7 @@ const scrollRight = () => {
   castRef.current?.scrollBy({ left: 300, behavior: "smooth" });
 };
    console.log(movies.movie)
+     const [showFullOverview, setShowFullOverview] = useState(false);
    const [movie,setMovie]=useState(null)
    const[rev,setRev]=useState(null)
    const[credits,setCredits] =useState(null)
@@ -56,62 +57,95 @@ useEffect(() => {
 
 
  {/* <div className='text-white'>movie:{movie?.results?.[0]?.title}</div> */}
-<div className='text-white '>
+<div className="text-white">
+  <div className="cover mx-auto max-w-full transition duration-500">
+    
+    {/* HERO CONTAINER */}
+    <div className="relative  min-h-[420px] md:min-h-[600px] bg-black/60 sm:bg-black overflow-hidden">
 
+      {/* BACKDROP */}
+      <img
+        className="absolute hidden sm:flex  inset-0  h-full object-cover  sm:w-full opacity-40"
+        src={cover}
+        alt=""
+      />
 
-<div className=" cover object-contain  border-slate-600    box-border  mx-auto   max-w-[1920px]  transform   transition duration-500   "> 
-   
-   <div className=" relative h-[600px] pb-[260px] bg-black overflow-hidden">
-       <img className='object-cover h-[670px]   opacity-25  w-full  '  src={`${cover}`}  alt="" />
-<div className="absolute top-6 px-2 w-24 font-bold h-7 text-center flex items-center right-8 bg-purple-500 text-white px-2 rounded">⭐{movie?.vote_average} </div>
+      {/* RATING */}
+      <div className="absolute top-4 right-4 px-3 h-7 flex items-center bg-purple-500 text-white rounded font-bold z-10">
+        ⭐ {movie?.vote_average}
+      </div>
 
-<img className='absolute w-64 md:w-72 rounded-lg shadow-2xl object-cover top-25  left-[30]  ' src={`${poster}
-`}  alt="" />
+      {/* CONTENT */}
+      <div className="relative z-10 flex flex-col md:flex-row gap-6 px-4 sm:px-8 pt-24">
 
+        {/* POSTER */}
+        <img
+          className="
+            w-36 sm:w-48 md:w-64
+            rounded-lg shadow-2xl
+            object-cover
+            mx-auto md:mx-0
+          "
+          src={poster}
+          alt=""
+        />
 
+        {/* DETAILS */}
+        <div
+          className="
+            w-full md:w-1/2
+            p-2 sm:p-4 md:p-6
+            flex flex-col gap-4
+            text-center md:text-left
+          "
+        >
+          <span className="text-2xl sm:text-3xl font-bold">
+            {movie?.title || movie?.name}
+          </span>
 
-<div className=' absolute w-1/2  p-6  left-86 top-26   flex flex-col gap-5 '>
-<div className="title text-3xl font-bold">
-  
-</div>
- 
-  
- <div className="over flex flex-col gap-4">
-   <span className='font-bold text-2xl '>{movie?.title ||movie?.name}</span>
-   <span className='text-slate-400 font-bold'>
-     overview
- 
+    <div className="over flex flex-col gap-3">
+
+  <span className="text-slate-400 font-bold">
+    Overview
   </span>
-  <span className='text-gray-200'>
+
+  {/* OVERVIEW TEXT */}
+  <p
+    className={`
+      text-gray-200 leading-relaxed
+      ${showFullOverview ? "" : "line-clamp-3"}
+      md:line-clamp-none
+      transition-all duration-300
+    `}
+  >
     {movie?.overview}
-  </span>
- </div>
- <div className="credits flex justify-between">
-   <div className="director">
-      Director
-   </div>
-    <div className="Producer">
-      Director
-   </div>
-    <div className="writer">
-      Director
-   </div>
- </div>
-</div>
+  </p>
+
+  {/* TOGGLE BUTTON (ONLY MOBILE) */}
+  {movie?.overview?.length > 120 && (
+    <button
+      onClick={() => setShowFullOverview(!showFullOverview)}
+      className="md:hidden text-purple-400 text-sm font-semibold self-start"
+    >
+      {showFullOverview ? "Show less" : "Show more"}
+    </button>
+  )}
 
 </div>
 
 
+          {/* CREDITS */}
+          <div className="flex flex-wrap gap-6 mt-4 justify-center md:justify-between">
+            <div>Director</div>
+            <div>Producer</div>
+            <div>Writer</div>
+          </div>
+        </div>
 
-
- </div>
- 
-
-
-
-
-
-   </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <div className="max-w-[90vw] mx-auto px-4 mt-10 flex flex-col lg:flex-row gap-8">
 
