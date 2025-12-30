@@ -21,6 +21,8 @@ const scrollRight = () => {
    console.log(movies.movie)
    const [movie,setMovie]=useState(null)
    const[rev,setRev]=useState(null)
+   const [showFullOverview, setShowFullOverview] = useState(false);
+
    const[credits,setCredits] =useState(null)
   //  const[streamer,setStreamer]=useState(null)
 useEffect(() => {
@@ -71,73 +73,108 @@ console.log(movies.movie)
 
 
  {/* <div className='text-white'>movie:{movie?.results?.[0]?.title}</div> */}
-<div className='text-white '>
+<div className="text-white">
+  <div className="cover mx-auto max-w-full transition duration-500">
+    
+    {/* HERO CONTAINER */}
+    <div className="relative  min-h-[420px] md:min-h-[600px] bg-black overflow-hidden">
 
+      {/* BACKDROP */}
+      <img
+        className="absolute hidden sm:flex  inset-0  h-full object-cover  sm:w-full opacity-40"
+        src={cover}
+        alt=""
+      />
 
-<div className=" cover object-contain  border-slate-600    box-border  mx-auto   max-w-[1920px]  transform   transition duration-500   "> 
-   
-   <div className=" relative h-[600px] pb-[260px] bg-black overflow-hidden">
-       <img className='object-cover h-[670px]   opacity-25  w-full  '  src={`${cover}`}  alt="" />
-<div className="absolute top-6 px-2 w-24 font-bold h-7 text-center flex items-center right-8 bg-purple-500 text-white px-2 rounded">⭐{movie?.vote_average} </div>
+      {/* RATING */}
+      <div className="absolute top-4 right-4 px-3 h-7 flex items-center bg-purple-500 text-white rounded font-bold z-10">
+        ⭐ {movie?.vote_average}
+      </div>
 
-<img className='absolute w-64 md:w-72 rounded-lg shadow-2xl object-cover top-25  left-[30]  ' src={`${poster}
-`}  alt="" />
+      {/* CONTENT */}
+      <div className="relative z-10 flex flex-col md:flex-row gap-6 px-4 sm:px-8 pt-24">
 
+        {/* POSTER */}
+        <img
+          className="
+            w-36 sm:w-48 md:w-64
+            rounded-lg shadow-2xl
+            object-cover
+            mx-auto md:mx-0
+          "
+          src={poster}
+          alt=""
+        />
 
+        {/* DETAILS */}
+        <div
+          className="
+            w-full md:w-1/2
+            p-2 sm:p-4 md:p-6
+            flex flex-col gap-4
+            text-center md:text-left
+          "
+        >
+          <span className="text-2xl sm:text-3xl font-bold">
+            {movie?.title || movie?.name}
+          </span>
 
-<div className=' absolute w-1/2  p-6  left-86 top-26   flex flex-col gap-5 '>
-<div className="title text-3xl font-bold">
-  
-</div>
- 
-  
- <div className="over flex flex-col gap-4">
-   <span className='font-bold text-2xl '>{movie?.title ||movie?.name}</span>
-   <span className='text-slate-400 font-bold'>
-     overview
- 
+    <div className="over flex flex-col gap-3">
+
+  <span className="text-slate-400 font-bold">
+    Overview
   </span>
-  <span className='text-gray-200'>
+
+  {/* OVERVIEW TEXT */}
+  <p
+    className={`
+      text-gray-200 leading-relaxed
+      ${showFullOverview ? "" : "line-clamp-3"}
+      md:line-clamp-none
+      transition-all duration-300
+    `}
+  >
     {movie?.overview}
-  </span>
- </div>
- <div className="credits flex justify-between">
-   <div className="director">
-      Director
-   </div>
-    <div className="Producer">
-      Director
-   </div>
-    <div className="writer">
-      Director
-   </div>
- </div>
-</div>
+  </p>
+
+  {/* TOGGLE BUTTON (ONLY MOBILE) */}
+  {movie?.overview?.length > 120 && (
+    <button
+      onClick={() => setShowFullOverview(!showFullOverview)}
+      className="md:hidden text-purple-400 text-sm font-semibold self-start"
+    >
+      {showFullOverview ? "Show less" : "Show more"}
+    </button>
+  )}
 
 </div>
 
 
+          {/* CREDITS */}
+          <div className="flex flex-wrap gap-6 mt-4 justify-center md:justify-between">
+            <div>Director</div>
+            <div>Producer</div>
+            <div>Writer</div>
+          </div>
+        </div>
 
+      </div>
+    </div>
+  </div>
+</div>
 
- </div>
- 
-
-
-
-
-
-   </div>
-<div className="w-full mt-7 px-6 min-h-[400px] flex flex-col lg:flex-row gap-8 bg-black/30">
+<div className="max-w-[90vw] mx-auto px-4 mt-10 flex flex-col lg:flex-row gap-8">
 
   {/* LEFT: CAST SECTION */}
-<div className="relative w-full lg:w-2/3">
+  <div className="relative w-full lg:w-2/3">
+          <h3 className="text-white text-xl font-semibold mb-4">Cast</h3>
 
   {/* LEFT BUTTON */}
   <button
     onClick={scrollLeft}
    className="
-      absolute left-0 top-32 h-56  -translate-y-1/2 z-10 w-12
-      bg-black/60 hover:bg-black/80
+      absolute -left-12 top-42 h-56  -translate-y-1/2 z-10 w-12
+      bg-black/20 hover:bg-black/40
       text-white p-2 flex items-center justify-center
        hidden sm:flex 
     "
@@ -153,9 +190,9 @@ console.log(movies.movie)
     {credits?.cast?.slice(0, 10).map((m) => (
       <div
         key={m.id}
-        className="flex-shrink-0 w-24 sm:w-32 md:w-36 transition-transform duration-300 hover:scale-102"
+        className="flex-shrink-0 w-24 sm:w-32 md:w-36 hover:scale-105 transition"
       >
-        <div className="aspect-[2/3] overflow-hidden rounded-md bg-gray-800">
+        <div className="aspect-[2/3] rounded-md overflow-hidden bg-gray-800">
           <img
             src={
               m.profile_path
@@ -178,9 +215,9 @@ console.log(movies.movie)
  
       <button
     onClick={scrollRight}
-    className="
-      absolute right-0 top-32 h-56  -translate-y-1/2 z-10 w-12
-      bg-black/60 hover:bg-black/80
+    className=" 
+      absolute -right-12 top-42 h-56  -translate-y-1/2 z-10 w-12
+      bg-black/20 hover:bg-black/40
       text-white p-2 flex items-center justify-center
        hidden sm:flex
     "
@@ -194,49 +231,40 @@ console.log(movies.movie)
 
 
   {/* RIGHT: STREAMING INFO */}
-  <div className="w-full  lg:w-1/3 min-h-[200px] bg-black/40 rounded-lg p-5 flex flex-col gap-4">
-    <h3 className="text-white font-semibold text-lg">Watch on</h3>
+ <div className="w-full lg:w-[32%] bg-black/40 rounded-lg p-5">
+          <h3 className="text-white text-lg font-semibold mb-4">Watch on</h3>
 
-    <div className="flex gap-4 flex-wrap">
-      {/* Example streaming logos */}
-    
-     
-<div className="flex gap-4 flex-wrap rounded-md w-72 p-1">
-  {movies.streamer?.results?.IN?.flatrate?.map((p) => (
-    <div    key={p.provider_id} className='w-72 rounded-md bg-gray-900 hover:bg-gray-800 flex items-center gap-8 p-2'>
-    <img
-   
-      src={`https://image.tmdb.org/t/p/w500${p.logo_path}`}
-      alt={p.provider_name}
-      className="h-12 w-12 rounded-md"
-    />
-    <span className='text-slate-300 text-xl font-bold'>
-      {p.provider_name}
-    </span>
-    </div>
-  ))}
+          {movies.streamer?.results?.IN?.flatrate?.length > 0 ? (
+            <div className="flex flex-col gap-3">
+              {movies.streamer?.results?.IN?.flatrate?.map((p) => (
+                <div
+                  key={p.provider_id}
+                  className="flex items-center gap-4 bg-gray-900 hover:bg-gray-800 p-3 rounded-md transition"
+                >
+                  <img
+                    src={`https://image.tmdb.org/t/p/w92${p.logo_path}`}
+                    alt={p.provider_name}
+                    className="w-10 h-10 rounded-md"
+                  />
+                  <span className="text-gray-200 font-semibold">
+                    {p.provider_name}
+                  </span>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-gray-400 text-sm">
+              Not available for streaming in your region
+            </p>
+          )}
 
-  {(!movies.streamer?.results?.IN?.flatrate ||
-    movies.streamer.results.IN.flatrate.length === 0) && (
-    <p className="text-gray-400 text-sm">
-      Not available for streaming in your region
-    </p>
-  )}
-</div>
+          <p className="text-gray-500 text-xs mt-4">
+            Availability may vary by region
+          </p>
+        </div>
+      </div>
 
 
-
-  
-     
-    
-    </div>
-
-    <p className="text-gray-400 text-sm">
-      Availability may vary by region
-    </p>
-  </div>
-
-</div>
 
 <div className='w-full   '>
   <ReviewForm movieId={movie?.id} onSuccess={(r)=>setRev(r)} />
