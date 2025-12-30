@@ -155,7 +155,7 @@ Search
 <button onClick={()=>setDropdown2(!dropdown2)} id="dropdownDefaultButton" data-dropdown-toggle="dropdown" className="bg-gradient-to-br from-purple-700 via-purple-800  inline-flex items-center justify-center text-white hover:bg-gradient-to-bl  sm:focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium text-xs  sm:text-l rounded-md text-sm px-1 sm:px-4 py-2" type="button">
    {session.user.email.split("@")[0]}
    
-  <svg className="w-4 h-4 ms-1.5 -me-0.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 9-7 7-7-7"/></svg>
+  <svg className="w-4 h-4 ms-1.5 -me-0.5 hidden sm:flex" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 9-7 7-7-7"/></svg>
 </button>
 
 
