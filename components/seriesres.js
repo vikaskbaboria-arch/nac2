@@ -146,7 +146,9 @@ useEffect(() => {
     </div>
   </div>
 </div>
-
+<div className='bg-gradient-to-br  sm:hidden  from-black  to-purple-950 via-black/40   h-4 w-full'>
+  
+</div>
 <div className="max-w-[90vw] mx-auto px-4 mt-10 flex flex-col lg:flex-row gap-8">
 
   {/* LEFT: CAST SECTION */}
