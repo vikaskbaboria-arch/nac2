@@ -4,6 +4,7 @@ import { fetchMovies } from '@/lib/masterfetch'
 import { useRouter, useSearchParams } from "next/navigation";
 const Genre = ({no}) => {
       const searchParams = useSearchParams();
+      const [showFullOverview, setShowFullOverview] = useState(false);
     const router =useRouter()
       const pageFromUrl = Number(searchParams.get("page")) || 1;
     const[movie,setMovie]=useState(null)
@@ -28,7 +29,7 @@ const handleClick=((m)=>{
           onClick={() => handleClick(m)}
           className="
             cursor-pointer
-            flex flex-col md:flex-row
+            flex  md:flex-row
             gap-6 md:gap-10
             items-start
             bg-gray-900/40
@@ -42,11 +43,11 @@ const handleClick=((m)=>{
          {/* Poster */}
 <div
   className="
-    w-full
-    sm:w-23
-    md:w-34
-    lg:w-12
-    xl:w-34
+    w-28
+    sm:w-33
+    md:w-36
+    lg:w-42
+    xl:w-44
     flex-shrink-0
   "
 >
@@ -69,13 +70,37 @@ const handleClick=((m)=>{
               {m.title}
             </h2>
 
-            <p className="text-slate-400 font-semibold mb-2">
-              Overview
-            </p>
+          <div className="over flex flex-col gap-3">
 
-            <p className="text-sm sm:text-base leading-relaxed text-slate-200">
-              {m.overview}
-            </p>
+  <span className="text-slate-400 font-bold">
+    Overview
+  </span>
+
+  {/* OVERVIEW TEXT */}
+  <p
+    className={`
+         text-gray-200 leading-relaxed
+      ${showFullOverview ? "" : "line-clamp-3"}
+      md:line-clamp-none text-xs sm:text-md
+      transition-all duration-300
+    `}
+  >
+    {m?.overview}
+  </p>
+
+  {/* TOGGLE BUTTON (ONLY MOBILE) */}
+  {m?.overview?.length > 100 && (
+    <button
+      onClick={() => setShowFullOverview(!showFullOverview)}
+      className="md:hidden text-purple-400 text-sm font-semibold self-start"
+    >
+      {showFullOverview ? "Show less" : "Show more"}
+    </button>
+  )}
+
+</div>
+
+           
           </div>
         </div>
       ))}
