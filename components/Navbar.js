@@ -82,12 +82,12 @@ const [scrolled, setScrolled] = useState(false);
         ${scrolled ? "bg-black/70 backdrop-blur-md" : "bg-black"}
       `}>
   <div>
-    <Link href={'/'}><img className='w-20 h-10' src="/Gemini_Generated_Image_oq1x85oq1x85oq1x.png" alt="MOCTALE" /></Link>
+    <Link href={'/'}><img className='w-16 h-8 sm:w-20 sm:h-10' src="/Gemini_Generated_Image_oq1x85oq1x85oq1x.png" alt="MOCTALE" /></Link>
   </div>
-     <div className='flex justify-center gap-8'>
+     <div className='flex justify-center gap-4'>
         <ul className='text-l flex items-center '>
-            <li className='inline-block mx-4 focus:outline-none focus-visible:outline-none'><Link href="/">Home</Link></li>
-            <li className='inline-block mx-4'><Link href="/about">About</Link></li> 
+            <li className='inline-block ml-4 focus:outline-none focus-visible:outline-none'><Link href="/">Home</Link></li>
+            <li className='inline-block ml-4'><Link href="/about">About</Link></li> 
           
 
             {/* {code for search} */}
