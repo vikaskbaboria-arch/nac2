@@ -18,7 +18,7 @@ useEffect(()=>{
 const totalpages = movie?.total_pages;
 // console.log(movie)
 const handleClick=((m)=>{
-    router.push('/movie/'+m.title)
+    router.push('/movie/'+m.id)
 })
   return (
       <div className="w-full min-h-[89vh] px-4 sm:px-8 py-8">
