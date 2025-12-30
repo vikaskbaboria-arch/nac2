@@ -86,8 +86,8 @@ const [scrolled, setScrolled] = useState(false);
   </div>
      <div className='flex justify-center gap-4'>
         <ul className='text-l flex items-center '>
-            <li className='inline-block ml-4 focus:outline-none focus-visible:outline-none'><Link href="/">Home</Link></li>
-            <li className='inline-block ml-4'><Link href="/about">About</Link></li> 
+            <li className='inline-block ml-2 focus:outline-none focus-visible:outline-none'><Link href="/">Home</Link></li>
+            <li className='inline-block ml-2'><Link href="/about">About</Link></li> 
           
 
             {/* {code for search} */}
