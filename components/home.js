@@ -138,8 +138,8 @@ export default function HomeCarousel() {
                 className="flex-shrink-0 p-2" style={{ width: `${slideWidth}px` }}>
                   <div className="h-[20vh] md:h-[50vh] lg:h-[60vh] relative rounded-lg overflow-hidden border-2 border-purple-950">
                     <img src={`https://image.tmdb.org/t/p/w1280/${m.backdrop_path}`} alt={m?.title } className="w-full h-full object-cover" />
-                    <div className="absolute bottom-6 left-4 text-purple-900 font-bold text-3xl">{m?.title || m?.name}</div>
-                    <div className="absolute top-4 w-24 h-6 right-4 bg-green-800 text-white px-2 rounded">⭐ {m?.vote_average}</div>
+                    <div className="absolute bottom-1.5 left-2 sm:left-4 sm:bottom-6 text-white font-semibold sm:text-3xl">{m?.title || m?.name}</div>
+                    <div className="absolute top-2 sm:top-4  w-12 h-4 right-2 sm:right-4 text-xs bg-green-700 text-white px-2 rounded flex items-center justify-center">  {m?.vote_average}</div>
                   </div>
                 </div>
               ))}
