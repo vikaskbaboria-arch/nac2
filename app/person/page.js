@@ -1,8 +1,11 @@
+import { Divide } from 'lucide-react'
 import React from 'react'
 
-const Person = ({}) => {
+const Person = () => {
   return (
-    <Profile profile ={}/>
+  <div>
+    febhibfi
+  </div>
   )
 }
 
