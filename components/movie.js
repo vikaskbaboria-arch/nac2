@@ -113,9 +113,11 @@ console.log(movie)
         onClick={() => handleLink(m)}
         className="
           snap-center flex-shrink-0
-          h-60 rounded-md relative
+          h-40 rounded-md relative
           transition-transform duration-300 hover:scale-105
           cursor-pointer
+          w-28 sm:w-36
+          sm:h-60
         "
       >
         <img
