@@ -73,9 +73,9 @@ console.log(movie)
   return (
     <>
     
-    <div className='my-9  mx-auto w-[92vw] h-60 sm:h-80    '>
+    <div className='my-5 sm:my-7  mx-auto w-[92vw] h-60 sm:h-80    '>
       <div className='flex items-center justify-between ' >
-       <div className='text-white font-bold mx-3 sm:mx-2    text-l sm:text-3xl'>{names}</div>
+       <div className='text-white font-bold mx-3 sm:mx-2    text-lg sm:text-3xl'>{names}</div>
        <div className='text-white mr-6 text-xs sm:text-xl   flex items-center   gap-2' onClick={()=>handlejust(genere.movie)}> <InteractiveHoverButton>More</InteractiveHoverButton></div>
       </div>
       
@@ -101,7 +101,7 @@ console.log(movie)
     ref={movieRef}
     className="
       snap-x flex overflow-x-auto overflow-y-hidden
-      gap-5 h-56 items-center sm:h-80 sm:gap-6
+      gap-5 h-40 sm:h-50  items-center sm:h-80 sm:gap-6
       [-ms-overflow-style:none]
       [scrollbar-width:none]
       [&::-webkit-scrollbar]:hidden
@@ -126,7 +126,7 @@ console.log(movie)
           alt={m.title}
         />
 
-        <span className="absolute top-2 right-3 text-xs bg-green-700 px-2 py-1 rounded text-white font-bold">
+        <span className="absolute top-2 right-1 text-xs bg-green-700 px-0.5 py-0.5 rounded text-white font-bold sm:right-3 ">
           ⭐ {m.vote_average}
         </span>
       </div>
