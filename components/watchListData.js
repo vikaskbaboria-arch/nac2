@@ -14,8 +14,8 @@ const WatchListData = () => {
     const getData = async () => {
       try {
         const res = await fetch("/api/watchlist", {
-          credentials: "same-origin",
-          cache: "no-store", // 🔑 VERY IMPORTANT
+          credentials: "include", // ✅ best for NextAuth
+          cache: "no-store",
         });
 
         if (!res.ok) {
@@ -24,15 +24,14 @@ const WatchListData = () => {
 
         const data = await res.json();
 
-        // 🔑 FIX: correct response key
-        const list = data.watchlist || [];
+        // ✅ FIXED KEY (THIS WAS THE BUG)
+        const list = data.watchList || [];
 
         if (list.length === 0) {
           setWatchlist([]);
           return;
         }
 
-        /* 🔥 Fetch TMDB data */
         const enriched = await Promise.all(
           list.map(async (item) => {
             try {
@@ -90,7 +89,6 @@ const WatchListData = () => {
             className="bg-white/5 rounded-xl overflow-hidden
             border border-white/10 hover:border-purple-500/50 transition"
           >
-            {/* Poster */}
             <div className="aspect-[2/3] bg-black/30">
               <img
                 src={poster}
@@ -99,7 +97,6 @@ const WatchListData = () => {
               />
             </div>
 
-            {/* Info */}
             <div className="p-3">
               <h3 className="text-sm font-semibold text-white truncate">
                 {movie?.title || movie?.name || "Unknown Title"}
