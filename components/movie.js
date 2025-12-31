@@ -20,7 +20,7 @@ const Movie = (genere) => {
  const router =useRouter()
    const [names,setNames]=useState(null)
 useEffect(() => {
- fetchgenere(genere.movie)
+ fetchgenere(genere.movie,"movie")
  .then((m)=>(setMovie(m)))
     
  
@@ -29,7 +29,7 @@ useEffect(() => {
 // console.log(movie)
 
 useEffect(() => {
- generename()
+ generename({type:"movie"})
 
     
  

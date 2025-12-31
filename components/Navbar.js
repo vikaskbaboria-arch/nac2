@@ -39,7 +39,7 @@ const Navbar = () => {
 
   return () => clearTimeout(timer);
   },[input])
-  console.log(suggest)
+  // console.log(suggest)
 
 
 useEffect(()=>{
@@ -47,7 +47,7 @@ useEffect(()=>{
   then((m)=>(setSuggestions(m)))
 },[suggest])
 
-console.log(suggestions)
+// console.log(suggestions)
 const handleLnk=(m)=>{
   if(m.media_type==="movie"){
     router.push(`/movie/${m?.id}`);}

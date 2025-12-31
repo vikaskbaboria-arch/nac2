@@ -18,7 +18,7 @@ const scrollLeft = () => {
 const scrollRight = () => {
   castRef.current?.scrollBy({ left: 680, behavior: "smooth" });
 };
-   console.log(movies.movie)
+  //  console.log(movies.movie)
    const [movie,setMovie]=useState(null)
    const[rev,setRev]=useState(null)
    const [showFullOverview, setShowFullOverview] = useState(false);
@@ -43,7 +43,7 @@ useEffect(() => {
   loadData();
 }, [movies.movie]);
 
-console.log(movies.movie)
+// console.log(movies.movie)
 // console.log(movie?.id)
 // useEffect(() => {
 //   if (!movie?.id) return;
@@ -57,10 +57,10 @@ console.log(movies.movie)
 // },[setRev,movie])
 // console.log(rev)
   //  console.log(movie)
-  console.log(movie)
-  console.log(credits)
- console.log(movies.streamer)
- console.log(movies.streamer?.results?.US?.flatrate)
+//   console.log(movie)
+//   console.log(credits)
+//  console.log(movies.streamer)
+//  console.log(movies.streamer?.results?.US?.flatrate)
  const india =movies.streamer?.results?.IN;
  const flatrate = india?.flatrate || []
  const poster =`https://image.tmdb.org/t/p/w780/`+movie?.poster_path

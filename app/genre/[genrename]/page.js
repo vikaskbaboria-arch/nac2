@@ -6,11 +6,11 @@ import Genre from "@/components/genre"
 const SearchPage = async ({ params }) => {
 const p=await params
 const genreno =p.genrename
-console.log(genreno)
+// console.log(genreno)
 
   return (
     <>
- <Genre no={genreno}/>
+ <Genre no={genreno} type={"movie"}/>
       
     </>
   )
