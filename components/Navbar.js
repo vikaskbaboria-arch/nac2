@@ -62,8 +62,8 @@ const Navbar = () => {
       {/* LOGO */}
       <Link href="/" className="flex items-center w-16 ">
         <img
-          className="w-16 h-8 sm:w-20 sm:h-10 hover:scale-105 transition"
-          src="/Gemini_Generated_Image_oq1x85oq1x85oq1x.png"
+          className="w-18 h-8 sm:w-22 sm:h-14 hover:scale-105 transition "
+          src="/ChatGPT Image Dec 31, 2025, 07_54_03 PM.png"
           alt="MOCTALE"
         />
       </Link>
