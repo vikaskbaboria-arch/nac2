@@ -16,7 +16,7 @@ const POST =async(req)=>{
          if (!session || !session.user || !session.user.email) {
       return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
     }
-    const body =req.json();
+    const body = await req.json();
     const {movieid}=body ||{}
     const mid =movieid
     const currentUser = await User.findOne({email:session.user.email})
@@ -34,7 +34,7 @@ if(existWatch){
 };
 const watchList = await Watch.create({
     user: currentUser._id,
-    movie: currentUser._id
+    movie: currentMovie._id
 });
 return NextResponse.json(watchList,{status:201})
     } catch (error) {
@@ -42,4 +42,37 @@ return NextResponse.json(watchList,{status:201})
         return NextResponse.json({error:"Server error"},{status:500})
     }
 };
-export {POST}
+const GET=async(req)=>{
+try {
+    await connectDB();
+
+    const session = await getServerSession(authOptions);
+    if (!session || !session.user?.email) {
+      return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+    }
+
+    const currentUser = await User.findOne({ email: session.user.email });
+    if (!currentUser) {
+      return NextResponse.json({ error: "User does not exist" }, { status: 404 });
+    }
+    const watchList= await Watch.findOne({user:currentUser._id}).
+          populate({
+        path: "movie",
+        select: "movieid createdAt",
+      })
+      .sort({ createdAt: -1 })
+      .lean();
+          return NextResponse.json(
+      {
+        count: watchList.length,
+        watchList,
+      },
+      { status: 200 }
+    );
+} catch (err) {
+     console.error(err);
+    return NextResponse.json({ error: "Server error" }, { status: 500 });
+}
+}
+
+export {POST,GET}
