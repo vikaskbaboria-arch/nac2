@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { fetchMovies } from "@/lib/masterfetch";
 import { useRouter, useSearchParams } from "next/navigation";
-
+import { fetchratings } from '@/fetch/ratingfetcher'
 const Search = ({ movie }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -34,6 +34,11 @@ const [showFullOverview, setShowFullOverview] = useState(false);
   useEffect(() => {
     router.push(`?page=${pages}`, { scroll: true });
   }, [pages]);
+  const [rating,setRating]=useState(null)
+useEffect(()=>{
+  fetchratings(movies.movie)
+  .then((data)=>(setRating(data)))
+},[movies.movie])
 // console.log(movies?.results)
 
   return (
@@ -124,7 +129,7 @@ const [showFullOverview, setShowFullOverview] = useState(false);
           </div>
         
           </div>
-          <div className=" top-6 px-2 w-24 font-bold h-7 text-center flex items-center right-8 bg-green-700 text-white px-2 rounded">⭐{m?.vote_average} </div>
+          <div className=" top-6 px-2 w-24 font-bold h-7 text-center flex items-center right-8 bg-green-700 text-white px-2 rounded">⭐{} </div>
         </div>
       ))}
 

@@ -43,13 +43,13 @@ export default function ReviewForm({ movieId, onSuccess }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-xl p-4 bg-black mx-auto rounded-md">
+    <form onSubmit={handleSubmit} className="max-w-lg sm:max-w-2xl p-4 bg-black mx-auto rounded-md">
       <div className="mb-2 text-white font-bold">Write a review</div>
       <textarea
         value={reviewText}
         onChange={(e) => setReviewText(e.target.value)}
         placeholder="Share your thoughts"
-        className="w-full p-2 mb-2 rounded textarea bg-purple-700 text-white"
+        className="w-full p-2 mb-2 rounded textarea bg-slate-900 text-white"
         rows={4}
       />
 
@@ -62,7 +62,7 @@ export default function ReviewForm({ movieId, onSuccess }) {
           max="10"
           value={rating}
           onChange={(e) => setRating(e.target.value)}
-          className="w-24 p-1 rounded bg-slate-700 text-white"
+          className="w-24 p-1 rounded bg-slate-800 text-white"
         />
         <div className="text-sm text-slate-400">(0.5 - 10)</div>
       </div>
@@ -71,7 +71,7 @@ export default function ReviewForm({ movieId, onSuccess }) {
         <button
           type="submit"
           disabled={loading}
-          className="px-3 py-1 bg-emerald-600 rounded text-black font-semibold"
+          className="px-3 py-1 bg-emerald-500 rounded text-black font-semibold"
         >
           {loading ? 'Saving...' : 'Submit Review'}
         </button>
