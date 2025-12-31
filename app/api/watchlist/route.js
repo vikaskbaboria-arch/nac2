@@ -29,7 +29,7 @@ const POST =async(req)=>{
         currentMovie =await Movie.create({movieid:mid})
     }
     const existWatch = await Watch.findOne({user:currentUser._id,movie:currentMovie._id});
-if(!existWatch){
+if(existWatch){
     return NextResponse.json({error:"Movie alredy exits in your watch list"},{status:400})
 };
 const watchList = await Watch.create({
