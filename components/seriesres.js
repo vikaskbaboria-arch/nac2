@@ -7,6 +7,8 @@ import { fetchCredit } from '@/fetch/credit'
 import { fetchdata } from '@/fetch/fetchdata'
 import ReviewForm from './ReviewForm'
 import { Slice } from 'lucide-react'
+import Watchlist from './watchlist'
+import { fetchratings } from '@/fetch/ratingfetcher'
   const SeriesR = ( movies) => {
     const castRef = useRef(null);
     const scrollLeft = () => {
@@ -17,25 +19,28 @@ const scrollRight = () => {
   castRef.current?.scrollBy({ left: 300, behavior: "smooth" });
 };
   //  console.log(movies.movie)
-     const [showFullOverview, setShowFullOverview] = useState(false);
-   const [movie,setMovie]=useState(null)
-   const[rev,setRev]=useState(null)
-   const[credits,setCredits] =useState(null)
-useEffect(() => {
- fetchMovies({type:"byid",id:movies.movie ,type_of:"tv"})
- .then((m)=>(setMovie(m)))
-    async function loaddata(params) {
-          const creditsData = await fetchCredit(movieData.id, "movie");
-    setCredits(creditsData);
-    }
- 
-}, [movies])
+  const [showFullOverview, setShowFullOverview] = useState(false);
+  const [movie,setMovie]=useState(null)
+  const[rev,setRev]=useState(null)
+  const[credits,setCredits] =useState(null)
+  const [rating, setRating] = useState(undefined);
+
+  useEffect(() => {
+    fetchMovies({ type: "byid", id: movies.movie, type_of: "tv" })
+      .then((m) => setMovie(m))
+      .catch((err) => console.error("fetchMovies error:", err));
+  }, [movies.movie]);
 // console.log(movies.movie)
 // console.log(movie?.id)
 useEffect(() => {
   if (!movie?.id) return;
 
-  fetchCredit(movie.id, "tv").then(setCredits);
+  fetchCredit(movie.id, "tv").then(setCredits).catch((e)=>console.error(e));
+
+  // Fetch average rating for this title (reviews API uses numeric id)
+  fetchratings(movie.id)
+    .then((r) => setRating(r))
+    .catch(() => setRating(null));
 }, [movie]);
 
 // useEffect(()=>{
@@ -47,7 +52,11 @@ useEffect(() => {
   // console.log(movie)
   // console.log(credits)
 
- const poster =`https://image.tmdb.org/t/p/w780/`+movie?.poster_path
+ const poster = movie?.poster_path
+   ? `https://image.tmdb.org/t/p/w780/${movie.poster_path}`
+   : movie?.backdrop_path
+   ? `https://image.tmdb.org/t/p/w780/${movie.backdrop_path}`
+   : "/placeholder.png";
  const cover = `https://media.themoviedb.org/t/p/w1920_and_h800_multi_faces/${movie?.backdrop_path}`;
 //  console.log(poster)
 
@@ -71,10 +80,19 @@ useEffect(() => {
       />
 
       {/* RATING */}
-      <div className="absolute top-4 right-4 px-3 h-7 flex items-center bg-purple-500 text-white rounded font-bold z-10">
-        ⭐ {movie?.vote_average}
+      <div className="absolute top-4 right-4 px-3 h-7 flex items-center bg-green-500 text-white rounded font-bold z-10">
+        {rating === undefined ? (
+          <span className="animate-pulse text-gray-200">...</span>
+        ) : rating === null ? (
+          <span className="text-sm">N/A</span>
+        ) : (
+          <span>⭐ {rating}</span>
+        )}
       </div>
+<div className='absolute bottom-4 right-4'>
 
+  <Watchlist movieId={movie?.id}/>
+</div>
       {/* CONTENT */}
       <div className="relative z-10 flex flex-col md:flex-row gap-6 px-4 sm:px-8 pt-24">
 
@@ -87,7 +105,8 @@ useEffect(() => {
             mx-auto md:mx-0
           "
           src={poster}
-          alt=""
+          alt={movie?.name || movie?.title || 'poster'}
+          loading="lazy"
         />
 
         {/* DETAILS */}

@@ -34,14 +34,29 @@ const WatchListData = () => {
         const enriched = await Promise.all(
           list.map(async (item) => {
             try {
-              const movieData = await fetchMovies({
+              // Try movie endpoint first, then fallback to TV if not found
+              let tmdb = await fetchMovies({
                 type: "byid",
                 id: item.movie.movieid,
                 type_of: "movie",
               });
 
-              return { ...item, tmdb: movieData };
-            } catch {
+              // TMDB returns an object with `status_code` on error
+              if (tmdb?.status_code || tmdb?.success === false) {
+                tmdb = await fetchMovies({
+                  type: "byid",
+                  id: item.movie.movieid,
+                  type_of: "tv",
+                });
+                // mark inferred type
+                tmdb = { ...tmdb, _inferred_media_type: "tv" };
+              } else {
+                tmdb = { ...tmdb, _inferred_media_type: "movie" };
+              }
+
+              return { ...item, tmdb };
+            } catch (e) {
+              console.error("watchlist item enrich failed", e);
               return item;
             }
           })
@@ -96,15 +111,20 @@ const WatchListData = () => {
       "
     >
       {watchlist.map((item) => {
-        const movie = item.tmdb;
-        const poster = movie?.poster_path
-          ? `${IMAGE_BASE}${movie.poster_path}`
+        const tmdb = item.tmdb;
+        const poster = tmdb?.poster_path
+          ? `${IMAGE_BASE}${tmdb.poster_path}`
           : "/placeholder.png";
+
+        // decide route based on inferred media type or TMDB shape
+        const mediaType = tmdb?._inferred_media_type
+          || (tmdb?.name && !tmdb?.title ? "tv" : "movie");
+        const targetPath = mediaType === "tv" ? `/series/${item.movie.movieid}` : `/movie/${item.movie.movieid}`;
 
         return (
           <div
             key={item._id}
-            onClick={() => router.push(`/movie/${item.movie.movieid}`)}
+            onClick={() => router.push(targetPath)}
             className="
               group cursor-pointer
               rounded-xl overflow-hidden
@@ -119,7 +139,7 @@ const WatchListData = () => {
             <div className="aspect-[2/3] bg-black/30">
               <img
                 src={poster}
-                alt={movie?.title || "Movie poster"}
+                alt={tmdb?.title || tmdb?.name || "Poster"}
                 className="
                   w-full h-full object-cover
                   transition-transform duration-300
@@ -132,7 +152,7 @@ const WatchListData = () => {
             {/* Info */}
             <div className="p-3">
               <h3 className="text-sm sm:text-base font-semibold text-white truncate">
-                {movie?.title || movie?.name || "Unknown Title"}
+                {tmdb?.title || tmdb?.name || "Unknown Title"}
               </h3>
 
               {item.createdAt && (
