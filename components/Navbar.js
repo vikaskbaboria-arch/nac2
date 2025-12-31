@@ -71,7 +71,11 @@ const Navbar = () => {
       {/* DESKTOP LINKS */}
       <ul className="hidden sm:flex items-center gap-4 text-sm font-medium">
         <li className="hover:text-purple-400 transition"><Link href="/">Home</Link></li>
-        <li className="hover:text-purple-400 transition"><Link href="/about">About</Link></li>
+        <li className="hover:text-purple-400 transition"><Link href="/about">About</Link></li>{session?
+        (<li className="hover:text-purple-400 transition"><Link href={`/profile/${session.user.email.split("@")[0]}`}>
+  Profile
+</Link></li>):""}
+
         <button
           onClick={()=>setButton(!button)}
           className="px-3 py-1.5 rounded-md bg-white/5 hover:bg-white/10 border border-white/10 backdrop-blur-md transition"
@@ -79,7 +83,7 @@ const Navbar = () => {
           Search
         </button>
       </ul>
-
+        
       {/* MOBILE HAMBURGER */}
       <button
         onClick={()=>setMobileMenu(!mobileMenu)}
@@ -106,7 +110,9 @@ const Navbar = () => {
               transition-all origin-top
               ${dropdown2 ? "scale-100 opacity-100" : "scale-95 opacity-0 pointer-events-none"}`}>
               <ul className="text-sm">
-                <li className="p-2 hover:bg-white/5"><Link href="#">Profile</Link></li>
+                <li className="p-2 hover:bg-white/5"><Link href={`/profile/${session.user.email.split("@")[0]}`}>
+  Profile
+</Link></li>
                 <li className="p-2 hover:bg-white/5"><Link href="#">Settings</Link></li>
                 <li className="p-2 hover:bg-white/5"><Link href="#">Earnings</Link></li>
                 <li className="p-2 hover:bg-red-500/10">
