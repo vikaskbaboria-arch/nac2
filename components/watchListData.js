@@ -10,14 +10,18 @@ const WatchListData = () => {
   useEffect(() => {
     const getData = async () => {
       try {
-        const res = await fetch("/api/watchlist");
+        const res = await fetch("/api/watchlist", {
+          credentials: "same-origin", // ✅ IMPORTANT
+        });
 
         if (!res.ok) {
           throw new Error("Failed to fetch watchlist");
         }
 
         const data = await res.json();
-        setWatchlist(data.watchlist || []);
+
+        // ✅ FIXED KEY
+        setWatchlist(data.watchList || []);
       } catch (err) {
         console.error(err);
         setError("Could not load watchlist");
@@ -55,9 +59,11 @@ const WatchListData = () => {
             </span>
           </p>
 
-          <p className="text-xs text-gray-500">
-            Added on {new Date(item.createdAt).toLocaleDateString()}
-          </p>
+          {item.createdAt && (
+            <p className="text-xs text-gray-500">
+              Added on {new Date(item.createdAt).toLocaleDateString()}
+            </p>
+          )}
         </div>
       ))}
     </div>
