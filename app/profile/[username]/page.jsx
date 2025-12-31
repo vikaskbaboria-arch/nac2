@@ -61,7 +61,7 @@ const ProfileClient = ({ username }) => {
           </div>
 
           {/* WATCHLIST */}
-          <WatchListData />
+          {/* <WatchListData /> */}
         </div>
       </div>
     </div>
