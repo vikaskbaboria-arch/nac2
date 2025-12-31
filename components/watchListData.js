@@ -11,7 +11,7 @@ const WatchListData = () => {
     const getData = async () => {
       try {
         const res = await fetch("/api/watchlist", {
-          credentials: "same-origin", // ✅ IMPORTANT
+          credentials: "same-origin", 
         });
 
         if (!res.ok) {
@@ -20,7 +20,7 @@ const WatchListData = () => {
 
         const data = await res.json();
 
-        // ✅ FIXED KEY
+ 
         setWatchlist(data.watchList || []);
       } catch (err) {
         console.error(err);
