@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { fetchMovies } from "@/lib/masterfetch";
 import { useRouter, useSearchParams } from "next/navigation";
-import { fetchratings } from '@/fetch/ratingfetcher'
+import { fetchRatingsBatch } from '@/fetch/ratingfetcher'
 const Search = ({ movie }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -34,11 +34,21 @@ const [showFullOverview, setShowFullOverview] = useState(false);
   useEffect(() => {
     router.push(`?page=${pages}`, { scroll: true });
   }, [pages]);
-  const [rating,setRating]=useState(null)
-useEffect(()=>{
-  fetchratings(movies.movie)
-  .then((data)=>(setRating(data)))
-},[movies.movie])
+  const [ratingsMap, setRatingsMap] = useState({});
+
+  useEffect(() => {
+    if (!movies?.results) return;
+    const ids = movies.results
+      .map((r) => (r?.id ? Number(r.id) : null))
+      .filter(Boolean);
+    if (!ids.length) return;
+    let mounted = true;
+    fetchRatingsBatch(ids).then((map) => {
+      if (!mounted) return;
+      setRatingsMap(map || {});
+    });
+    return () => (mounted = false);
+  }, [movies?.results]);
 // console.log(movies?.results)
 
   return (
@@ -129,7 +139,11 @@ useEffect(()=>{
           </div>
         
           </div>
-          <div className=" top-6 px-2 w-24 font-bold h-7 text-center flex items-center right-8 bg-green-700 text-white px-2 rounded">⭐{} </div>
+          <div className=" top-6 px-2 w-24 font-bold h-7 text-center flex items-center right-8 bg-green-700 text-white px-2 rounded">
+            {ratingsMap && ratingsMap[m.id]
+              ? `⭐${Number(ratingsMap[m.id]).toFixed(1)}`
+              : "⭐—"}
+          </div>
         </div>
       ))}
 
