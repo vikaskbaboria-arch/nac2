@@ -70,46 +70,26 @@ export async function POST(req) {
 }
 
 /* ================= GET WATCHLIST ================= */
-export async function GET() {
-  try {
-    await connectDB();
+ export async function GET(req) {
+  await connectDB();
 
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.email) {
-      return NextResponse.json(
-        { error: "Not authenticated" },
-        { status: 401 }
-      );
-    }
+  const session = await getServerSession(req, authOptions);
 
-    const currentUser = await User.findOne({ email: session.user.email });
-    if (!currentUser) {
-      return NextResponse.json(
-        { error: "User does not exist" },
-        { status: 404 }
-      );
-    }
-
-    const watchList = await Watch.find({ user: currentUser._id }) // ✅ FIXED
-      .populate({
-        path: "movie",
-        select: "movieid createdAt",
-      })
-      .sort({ createdAt: -1 })
-      .lean();
-
+  if (!session?.user?.email) {
     return NextResponse.json(
-      {
-        count: watchList.length,
-        watchList,
-      },
-      { status: 200 }
-    );
-  } catch (error) {
-    console.error(error);
-    return NextResponse.json(
-      { error: "Server error" },
-      { status: 500 }
+      { error: "Not authenticated" },
+      { status: 401 }
     );
   }
+
+  const currentUser = await User.findOne({ email: session.user.email });
+
+  const watchList = await Watch.find({ user: currentUser._id })
+    .populate("movie")
+    .lean();
+
+  return NextResponse.json({
+    count: watchList.length,
+    watchList,
+  });
 }
