@@ -1,6 +1,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import Starfield from "@/components/starfield";
 import Sessionwrapper from "@/components/sessionwrapper";
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -20,7 +21,8 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className="bg-gradient-to-br to-gray-950 via-black  from-purple-950  min-h-screen select-none ">
+      <body className="bg-gradient-to-br to-gray-950 via-black  from-gray-950  min-h-screen select-none ">
+               <Starfield />
      <Sessionwrapper>
         <Navbar/>
         {children}
