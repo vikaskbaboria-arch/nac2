@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { fetchMovies } from "@/lib/masterfetch"; // adjust path if needed
+import { fetchMovies } from "@/lib/masterfetch";
 
 const IMAGE_BASE = "https://image.tmdb.org/t/p/w500";
 
@@ -15,6 +15,7 @@ const WatchListData = () => {
       try {
         const res = await fetch("/api/watchlist", {
           credentials: "same-origin",
+          cache: "no-store", // 🔑 VERY IMPORTANT
         });
 
         if (!res.ok) {
@@ -22,9 +23,16 @@ const WatchListData = () => {
         }
 
         const data = await res.json();
+
+        // 🔑 FIX: correct response key
         const list = data.watchlist || [];
 
-        /* 🔥 Fetch TMDB data for each movie */
+        if (list.length === 0) {
+          setWatchlist([]);
+          return;
+        }
+
+        /* 🔥 Fetch TMDB data */
         const enriched = await Promise.all(
           list.map(async (item) => {
             try {
@@ -80,8 +88,7 @@ const WatchListData = () => {
           <div
             key={item._id}
             className="bg-white/5 rounded-xl overflow-hidden
-            border border-white/10 hover:border-purple-500/50
-            transition"
+            border border-white/10 hover:border-purple-500/50 transition"
           >
             {/* Poster */}
             <div className="aspect-[2/3] bg-black/30">
