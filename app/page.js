@@ -13,7 +13,7 @@ export default function Home() {
 
 
 
-    <div className=" px-4">
+    <div className=" px-4 sm:px-0.5">
       <Series movie={35}/>
           <Movie movie ={28}/>
     <Movie movie ={12}/>
