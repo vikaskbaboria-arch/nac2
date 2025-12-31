@@ -3,10 +3,11 @@ import First from "@/components/home";
 import Navbar from "@/components/Navbar";
 import Movie from "@/components/movie";
 import Series from "@/components/series";
+import Starfield from "@/components/starfield";
 export default function Home() {
   return (
     <>
-
+<Starfield/>
      <div>
 <First/>
      </div>

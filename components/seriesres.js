@@ -57,7 +57,7 @@ useEffect(() => {
 
 
  {/* <div className='text-white'>movie:{movie?.results?.[0]?.title}</div> */}
-<div className="text-white">
+<div className="text-white ">
   <div className="cover mx-auto max-w-full transition duration-500">
     
     {/* HERO CONTAINER */}
@@ -149,7 +149,7 @@ useEffect(() => {
 <div className='bg-gradient-to-br  sm:hidden  from-black  to-purple-950 via-black/40   h-4 w-full'>
   
 </div>
-<div className="max-w-[90vw] mx-auto px-4 mt-10 flex flex-col lg:flex-row gap-8">
+<div className="max-w-[90vw] mx-auto bg-black px-4 mt-10 flex flex-col lg:flex-row gap-8">
 
   {/* LEFT: CAST SECTION */}
 <div className="relative w-full lg:w-2/3">
