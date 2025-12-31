@@ -2,7 +2,7 @@
 
 import React from "react";
 import { signOut, useSession } from "next-auth/react";
-import WatchListData from "@/components/watchListData";
+// import WatchListData from "@/components/watchListData";
 
 const ProfileClient = ({ username }) => {
   const { data: session } = useSession();
