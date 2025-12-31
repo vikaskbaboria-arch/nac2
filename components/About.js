@@ -140,7 +140,7 @@ export default function About() {
 
         <div className="flex flex-wrap justify-center gap-4">
           <Link
-            href="mailto:your-email@example.com"
+            href="mailto:vikaskbaboria@example.com"
             className="px-4 py-2 rounded-md
             bg-purple-700 hover:bg-purple-600 transition text-sm"
           >
@@ -148,7 +148,7 @@ export default function About() {
           </Link>
 
           <Link
-            href="https://github.com/your-github"
+            href="https://github.com/vikaskbaboria-arch"
             target="_blank"
             className="px-4 py-2 rounded-md
             bg-white/10 hover:bg-white/20 transition text-sm"

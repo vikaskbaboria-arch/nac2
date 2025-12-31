@@ -7,7 +7,7 @@ export default function Reviewdata({ movieId }) {
   const [error, setError] = useState(null)
   const [average, setAverage] = useState(null)
   const [count, setCount] = useState(0)
-
+  const [showFullOverview, setShowFullOverview] = useState(false);
   useEffect(() => {
     if (!movieId) return
     let mounted = true
@@ -70,7 +70,7 @@ export default function Reviewdata({ movieId }) {
   const displayCount = count || reviews.length
 
   return (
-    <div className="max-w-3xl mx-auto mt-6 text-white">
+    <div className="max-w-2xl sm:max-w-5xl mx-auto mt-6 text-white">
       <h3 className="font-bold mb-3">Reviews</h3>
       {computedAverage !== null && (
         <div className="mb-2 text-slate-200">⭐ Average: {Number(computedAverage).toFixed(1)} ({displayCount} review{displayCount!==1? 's':''})</div>
@@ -82,9 +82,31 @@ export default function Reviewdata({ movieId }) {
             <div className="text-sm text-slate-400">⭐ {rv.rating ?? '-'}</div>
             <div className="text-xs text-slate-500 ml-auto">{new Date(rv.createdAt).toLocaleString()}</div>
           </div>
-          <div className="mt-2 text-slate-200">{rv.review}</div>
+          <div className="mt-2  text-slate-100 "> 
+            
+              <p
+    className={`
+      text-gray-200 leading-relaxed
+      ${showFullOverview ? "" : "line-clamp-2"}
+      
+      transition-all duration-300
+    `}
+  >
+    {rv?.review}
+  </p>
+             {rv.review?.length > 120 && (
+    <button
+      onClick={() => setShowFullOverview(!showFullOverview)}
+      className=" text-purple-400 text-sm font-semibold self-start"
+    >
+      {showFullOverview ? "Show less" : "Show more"}
+    </button>
+  )}</div>
         </div>
       ))}
     </div>
   )
 } 
+export const ratings =()=>{
+  
+}
