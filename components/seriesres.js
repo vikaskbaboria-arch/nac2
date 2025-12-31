@@ -7,7 +7,7 @@ import { fetchCredit } from '@/fetch/credit'
 import { fetchdata } from '@/fetch/fetchdata'
 import ReviewForm from './ReviewForm'
 import { Slice } from 'lucide-react'
-import Watchlist from './watchlist'
+// import Watchlist from './watchlist'
 import { fetchratings } from '@/fetch/ratingfetcher'
   const SeriesR = ( movies) => {
     const castRef = useRef(null);
@@ -89,10 +89,10 @@ useEffect(() => {
           <span>⭐ {rating}</span>
         )}
       </div>
-<div className='absolute bottom-4 right-4'>
+{/* <div className='absolute bottom-4 right-4'>
 
   <Watchlist movieId={movie?.id}/>
-</div>
+</div> */}
       {/* CONTENT */}
       <div className="relative z-10 flex flex-col md:flex-row gap-6 px-4 sm:px-8 pt-24">
 

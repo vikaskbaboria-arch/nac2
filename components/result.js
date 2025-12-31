@@ -1,6 +1,6 @@
 "use client"
 import { useEffect, useState,useRef } from 'react'
-import Watchlist from './watchlist'
+// import Watchlist from './watchlist'
 import Reviewdata from './Reviewdata'
 import { fetchratings } from '@/fetch/ratingfetcher'
 import { fetchMovies } from '@/lib/masterfetch'
@@ -73,7 +73,7 @@ useEffect(()=>{
   fetchratings(movies.movie)
   .then((data)=>(setRating(data)))
 },[movies.movie])
-// console.log(rating)
+console.log(rating)
   return (
  < >
 
@@ -101,10 +101,10 @@ useEffect(()=>{
 )}
 
       </div>
-<div className='absolute bottom-4 right-4'>
+{/* <div className='absolute bottom-4 right-4'>
 
   <Watchlist movieId={movie?.id}/>
-</div>
+</div> */}
       {/* CONTENT */}
       <div className="relative z-10 flex flex-col md:flex-row gap-6 px-4 sm:px-8 pt-24">
 
