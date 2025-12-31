@@ -6,7 +6,8 @@ const about = () => {
 
 <>
 <About/>
-<WatchListData/></>
+<WatchListData/>
+</>
   )
 }
 
