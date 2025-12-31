@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { fetchMovies } from '@/lib/masterfetch'
+import { fetchratings } from '@/fetch/ratingfetcher'
 import { signOut } from 'next-auth/react'
 import { useSession } from 'next-auth/react'
 
@@ -16,6 +17,7 @@ const Navbar = () => {
   const [input,setInput] =useState("")
   const [suggest,setSuggest]=useState("")
   const[suggestions,setSuggestions]=useState(null)
+  const [suggestRatings, setSuggestRatings] = useState({});
   const [mobileMenu, setMobileMenu] = useState(false); // ✅ ADDED
 
   const handleChange=(e)=>{ setSearch(e.target.value) }
@@ -36,6 +38,18 @@ const Navbar = () => {
     fetchMovies({type:"search",type_of:"multi", query: suggest})
     .then((m)=>(setSuggestions(m)))
   },[suggest])
+
+  // fetch ratings for suggestion items
+  useEffect(() => {
+    if (!suggestions?.results) return;
+    suggestions.results.slice(0,4).forEach((it) => {
+      if (!it?.id) return;
+      if (suggestRatings[it.id] !== undefined) return;
+      fetchratings(it.id)
+        .then((r) => setSuggestRatings((s) => ({ ...s, [it.id]: r })))
+        .catch(() => setSuggestRatings((s) => ({ ...s, [it.id]: null })));
+    });
+  }, [suggestions]);
 
   const handleLnk=(m)=>{
     if(m.media_type==="movie"){ router.push(`/movie/${m?.id}`) }
@@ -172,12 +186,18 @@ const Navbar = () => {
                     onClick={()=>handleLnk(m)}
                     className="flex items-center gap-3 p-2 hover:bg-white/5 cursor-pointer"
                   >
-                    <img src={`https://image.tmdb.org/t/p/w92/${m.poster_path}`} className="h-12 rounded-md" />
+                    <img src={m.poster_path?`https://image.tmdb.org/t/p/w92/${m.poster_path}`:'/placeholder.png'} className="h-12 rounded-md" />
                     <span className="text-sm font-semibold flex-1">
                       {m?.title || m?.name}
                     </span>
                     <span className="text-xs bg-green-500 px-2 py-0.5 rounded">
-                      {m.vote_average}
+                      {suggestRatings[m.id] === undefined ? (
+                        <span className="animate-pulse">...</span>
+                      ) : suggestRatings[m.id] === null ? (
+                        <span className="text-xs">N/A</span>
+                      ) : (
+                        <span>⭐ {suggestRatings[m.id]}</span>
+                      )}
                     </span>
                   </div>
                 ))}

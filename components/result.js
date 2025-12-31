@@ -101,7 +101,10 @@ useEffect(()=>{
 )}
 
       </div>
+<div className='absolute bottom-4 right-4'>
 
+  <Watchlist movieId={movie?.id}/>
+</div>
       {/* CONTENT */}
       <div className="relative z-10 flex flex-col md:flex-row gap-6 px-4 sm:px-8 pt-24">
 
@@ -285,10 +288,7 @@ useEffect(()=>{
 <div className=' w-[80vw] mx-auto'>
   <Reviewdata  movieId={movie?.id} />
 </div>
-<div>
 
-  <Watchlist movieId={movie?.id}/>
-</div>
  {/* {pages>1?(<Pagen movie={movie} />):<p>page:1</p>} */}
  </>
   )
