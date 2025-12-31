@@ -85,10 +85,10 @@ const Navbar = () => {
       {/* DESKTOP LINKS */}
       <ul className="hidden sm:flex items-center gap-4 text-sm font-medium">
         <li className="hover:text-purple-400 transition"><Link href="/">Home</Link></li>
-        <li className="hover:text-purple-400 transition"><Link href="/about">About</Link></li>{session?
-        (<li className="hover:text-purple-400 transition"><Link href={`/profile/${session.user.email.split("@")[0]}`}>
+        <li className="hover:text-purple-400 transition"><Link href="/about">About</Link></li>{status === 'authenticated' && session ? (
+        <li className="hover:text-purple-400 transition"><Link href={`/profile/${session.user.email.split("@")[0]}`}>
   Profile
-</Link></li>):""}
+</Link></li>) : null}
 
         <button
           onClick={()=>setButton(!button)}
@@ -108,7 +108,9 @@ const Navbar = () => {
 
       {/* USER / LOGIN */}
       <div className="hidden sm:flex items-center gap-3">
-        {session ? (
+        {status === 'loading' ? (
+          <div className="text-sm text-gray-400">...</div>
+        ) : session ? (
           <div className="relative">
             <button
               onClick={()=>setDropdown2(!dropdown2)}
@@ -153,7 +155,9 @@ const Navbar = () => {
           Search
         </button>
 
-        {session ? (
+        {status === 'loading' ? (
+          <div className="block p-4 text-sm text-gray-400">...</div>
+        ) : status === 'authenticated' && session ? (
           <button onClick={() => signOut()} className="block w-full text-left p-4 text-red-400">
             Sign out
           </button>
