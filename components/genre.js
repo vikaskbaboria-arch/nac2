@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import { fetchMovies } from '@/lib/masterfetch'
 import { useRouter, useSearchParams } from "next/navigation";
-const Genre = ({no}) => {
+const Genre = ({no,type}) => {
       const searchParams = useSearchParams();
       const [showFullOverview, setShowFullOverview] = useState(false);
     const router =useRouter()
@@ -10,9 +10,11 @@ const Genre = ({no}) => {
     const[movie,setMovie]=useState(null)
     const[page,setPage]=useState(pageFromUrl)
 const num =no
+const typeo = type
+
 // console.log(num)
 useEffect(()=>{
-  fetchMovies({genre:num,page:page}).
+  fetchMovies({type_of:typeo,genre:num,page:page}).
   then((m)=>setMovie(m))
 },[movie,page])
 const totalpages = movie?.total_pages;

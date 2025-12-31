@@ -2,6 +2,7 @@ import Image from "next/image";
 import First from "@/components/home";
 import Navbar from "@/components/Navbar";
 import Movie from "@/components/movie";
+import Series from "@/components/series";
 export default function Home() {
   return (
     <>
@@ -13,6 +14,7 @@ export default function Home() {
 
 
     <div className="">
+      <Series movie={35}/>
           <Movie movie ={28}/>
     <Movie movie ={12}/>
     <Movie movie ={16}/>

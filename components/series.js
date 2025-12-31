@@ -5,7 +5,7 @@ import { useState, useEffect,useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button"
 import { fetchgenere,generename , getGenreNames} from '@/fetch/genre'
-const Movie = (genere) => {
+const Series = (genere) => {
     const movieRef = useRef(null);
    
    const scrollLeft = () => {
@@ -20,7 +20,7 @@ const Movie = (genere) => {
  const router =useRouter()
    const [names,setNames]=useState(null)
 useEffect(() => {
- fetchgenere(genere.movie,"movie")
+ fetchgenere(genere.movie,"tv")
  .then((m)=>(setMovie(m)))
     
  
@@ -29,7 +29,7 @@ useEffect(() => {
 // console.log(movie)
 
 useEffect(() => {
- generename({type:"movie"})
+ generename({type:"tv"})
 
     
  
@@ -63,11 +63,11 @@ useEffect(() => {
 // }
 // const genreNames = getGenreNames(28)
 const handleLink=(movie)=>{
-   router.push(`/movie/${movie.id}`)
+   router.push(`/series/${movie.id}`)
    
 }
 const handlejust=(m)=>{
-  router.push(`/genre/${m}`)
+  router.push(`tv/genre/${m}`)
 }
 console.log(movie)
   return (
@@ -159,62 +159,4 @@ console.log(movie)
   )
 }
 
-export default Movie
-
-
-// "use client";
-// import React, { useEffect, useState } from "react";
-// import { fetchgenere, getGenreNames } from "@/api/genre";
-
-// const Movie = ({ movie }) => {
-//   const [movies, setMovies] = useState(null);
-//   const [name, setName] = useState("");
-
-//   // Fetch movies for THIS genre
-//   useEffect(() => {
-//     fetchgenere(movie).then(setMovies);
-//   }, [movie]);
-
-//   // Fetch genre name for THIS genre
-//   useEffect(() => {
-//     getGenreNames(movie).then(setName);
-//   }, [movie]);
-
-//   return (
-//     <div className="my-6 mx-auto   w-[89vw] rounded">
-      
-//       {/* GENRE TITLE */}
-//       <div className="text-white  font-bold m-5 pt-4 text-4xl">
-//         {name}
-//       </div>
-
-//       {/* MOVIES */}
-//       <div className="overflow-x-auto  flex px-4 pb-4 pt-2 gap-6">
-//         {movies?.results?.map((m) => (
-//           <div
-//             key={m.id}
-//             className="bg-amber-500 h-80 w-60 rounded-md relative flex-shrink-0"
-//           >
-//             <img
-//               src={`https://image.tmdb.org/t/p/w500${m.poster_path}`}
-//               className="rounded-md"
-//               alt={m.title}
-//             />
-//             <div className="absolute bottom-0 text-white px-2 pb-2">
-//               <span className="font-bold text-sm">{m.title}</span>
-//               <span className="text-xs block">
-//                 ⭐ {m.vote_average}
-//               </span>
-//             </div>
-//           </div>
-//         ))}
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Movie;
-
-
-// export default Movie;
-
+export default Series

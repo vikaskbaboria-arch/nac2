@@ -8,7 +8,7 @@ const SearchPage = async ({ params }) => {
     media_type: "movie",
     id: moviename,})
 
-    console.log(providers)
+    // console.log(providers)
  
 
 

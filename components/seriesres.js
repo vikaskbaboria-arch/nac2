@@ -16,7 +16,7 @@ import { Slice } from 'lucide-react'
 const scrollRight = () => {
   castRef.current?.scrollBy({ left: 300, behavior: "smooth" });
 };
-   console.log(movies.movie)
+  //  console.log(movies.movie)
      const [showFullOverview, setShowFullOverview] = useState(false);
    const [movie,setMovie]=useState(null)
    const[rev,setRev]=useState(null)
@@ -30,7 +30,7 @@ useEffect(() => {
     }
  
 }, [movies])
-console.log(movies.movie)
+// console.log(movies.movie)
 // console.log(movie?.id)
 useEffect(() => {
   if (!movie?.id) return;
@@ -44,12 +44,12 @@ useEffect(() => {
 // },[setRev,movie])
 // console.log(rev)
   //  console.log(movie)
-  console.log(movie)
-  console.log(credits)
+  // console.log(movie)
+  // console.log(credits)
 
  const poster =`https://image.tmdb.org/t/p/w780/`+movie?.poster_path
  const cover = `https://media.themoviedb.org/t/p/w1920_and_h800_multi_faces/${movie?.backdrop_path}`;
- console.log(poster)
+//  console.log(poster)
 
 
   return (

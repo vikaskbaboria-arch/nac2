@@ -19,7 +19,7 @@ const [showFullOverview, setShowFullOverview] = useState(false);
       page: pages,
     }).then((m) => setMovies(m));
   }, [movie, pages]);
-console.log(movie)
+// console.log(movie)
   const totalpages = movies?.total_pages;
 
   const handleClick = (m) => {
@@ -34,7 +34,7 @@ console.log(movie)
   useEffect(() => {
     router.push(`?page=${pages}`, { scroll: true });
   }, [pages]);
-console.log(movies?.results)
+// console.log(movies?.results)
 
   return (
     <div className="w-full min-h-[89vh] px-4 sm:px-8 py-8">

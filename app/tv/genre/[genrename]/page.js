@@ -10,7 +10,7 @@ const genreno =p.genrename
 
   return (
     <>
- <Genre no={genreno} type={"movie"}/>
+ <Genre no={genreno} type={"tv"}/>
       
     </>
   )
