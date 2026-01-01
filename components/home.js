@@ -1,7 +1,7 @@
 "use client"
 import React, { useEffect, useState, useRef } from 'react'
 import { fetchMovies } from '@/lib/masterfetch'
-import { fetchratings } from '@/fetch/ratingfetcher'
+
 import { useRouter } from 'next/navigation'
 export default function HomeCarousel() {
   const [slides, setSlides] = useState([])
@@ -33,19 +33,10 @@ export default function HomeCarousel() {
   }, [])
 
   const extended = slides.length ? [slides[slides.length - 1], ...slides, slides[0]] : []
-  const [ratingsMap, setRatingsMap] = useState({});
+
 
   // fetch ratings for slides
-  useEffect(() => {
-    if (!slides?.length) return;
-    slides.forEach((s) => {
-      if (!s?.id) return;
-      if (ratingsMap[s.id] !== undefined) return;
-      fetchratings(s.id)
-        .then((r) => setRatingsMap((p) => ({ ...p, [s.id]: r })))
-        .catch(() => setRatingsMap((p) => ({ ...p, [s.id]: null })));
-    });
-  }, [slides]);
+
 
   // measure slide width
   const getSlideWidth = () => containerRef.current?.clientWidth || 900
@@ -154,13 +145,7 @@ export default function HomeCarousel() {
                     <img src={`https://image.tmdb.org/t/p/w1280/${m.backdrop_path}`} alt={m?.title } className="w-full h-full object-cover" />
                     <div className="absolute bottom-1.5 left-2 sm:left-4 sm:bottom-6 text-white font-semibold sm:text-3xl">{m?.title || m?.name}</div>
                     <div className="absolute top-2 sm:top-4  w-14 h-4 right-2 sm:right-4 text-xs bg-green-700 text-white px-2 rounded flex items-center justify-center"> 
-                      {ratingsMap[m.id] === undefined ? (
-                        <span className="animate-pulse">...</span>
-                      ) : ratingsMap[m.id] === null ? (
-                        <span className="text-xs">N/A</span>
-                      ) : (
-                        <span>⭐{ratingsMap[m.id]}</span>
-                      )}
+                  {m?.vote_average}
                     </div>
                   </div>
                 </div>

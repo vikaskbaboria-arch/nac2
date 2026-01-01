@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { fetchMovies } from '@/lib/masterfetch'
-import { fetchratings } from '@/fetch/ratingfetcher'
+
 import { signOut } from 'next-auth/react'
 import { useSession } from 'next-auth/react'
 
@@ -17,7 +17,7 @@ const Navbar = () => {
   const [input,setInput] =useState("")
   const [suggest,setSuggest]=useState("")
   const[suggestions,setSuggestions]=useState(null)
-  const [suggestRatings, setSuggestRatings] = useState({});
+
   const [mobileMenu, setMobileMenu] = useState(false); // ✅ ADDED
 
   const handleChange=(e)=>{ setSearch(e.target.value) }
@@ -40,16 +40,7 @@ const Navbar = () => {
   },[suggest])
 
   // fetch ratings for suggestion items
-  useEffect(() => {
-    if (!suggestions?.results) return;
-    suggestions.results.slice(0,4).forEach((it) => {
-      if (!it?.id) return;
-      if (suggestRatings[it.id] !== undefined) return;
-      fetchratings(it.id)
-        .then((r) => setSuggestRatings((s) => ({ ...s, [it.id]: r })))
-        .catch(() => setSuggestRatings((s) => ({ ...s, [it.id]: null })));
-    });
-  }, [suggestions]);
+
 
   const handleLnk=(m)=>{
     if(m.media_type==="movie"){ router.push(`/movie/${m?.id}`) }
@@ -195,13 +186,7 @@ const Navbar = () => {
                       {m?.title || m?.name}
                     </span>
                     <span className="text-xs bg-green-500 px-2 py-0.5 rounded">
-                      {suggestRatings[m.id] === undefined ? (
-                        <span className="animate-pulse">...</span>
-                      ) : suggestRatings[m.id] === null ? (
-                        <span className="text-xs">N/A</span>
-                      ) : (
-                        <span>⭐ {suggestRatings[m.id]}</span>
-                      )}
+                  {m.vote_average}
                     </span>
                   </div>
                 ))}
