@@ -1,15 +1,10 @@
 export const fetchgenere = async (genre) => {
-  const data = await fetch(
-    `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.NEXT_PUBLIC_API_KEY}&with_genres=${genre}`
-  );
-  const res = await data.json();
-  return res;
+  const res = await fetch(`/api/tmdb/discover/movie?with_genres=${genre}`);
+  return await res.json();
 };
 
 export const generename = async () => {
-  const res = await fetch(
-    `https://api.themoviedb.org/3/genre/movie/list?api_key=${process.env.NEXT_PUBLIC_API_KEY}`
-  );
+  const res = await fetch(`/api/tmdb/genre/movie/list`);
   const data = await res.json();
   return data;
 };
