@@ -54,6 +54,7 @@ const POST = async (req) => {
 
 const GET = async (req) => {
   try {
+    await connectDB();
     const url = new URL(req.url);
     const movieId = url.searchParams.get("movieId") || url.searchParams.get("movieid");
     if (!movieId) {
