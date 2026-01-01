@@ -5,7 +5,7 @@ import { useState, useEffect,useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button"
 import { fetchgenere,generename , getGenreNames} from '@/fetch/genre'
-import { fetchratings } from '@/fetch/ratingfetcher'
+
 const Movie = (genere) => {
     const movieRef = useRef(null);
    
@@ -18,7 +18,7 @@ const Movie = (genere) => {
    };
 
    const [movie,setMovie]=useState(null)
-  const [ratingsMap, setRatingsMap] = useState({});
+
  const router =useRouter()
    const [names,setNames]=useState(null)
 useEffect(() => {
@@ -28,16 +28,7 @@ useEffect(() => {
  
 }, [genere])
 
-useEffect(() => {
-  if (!movie?.results) return;
-  movie.results.forEach((it) => {
-    if (!it?.id) return;
-    if (ratingsMap[it.id] !== undefined) return;
-    fetchratings(it.id)
-      .then((r) => setRatingsMap((s) => ({ ...s, [it.id]: r })))
-      .catch(() => setRatingsMap((s) => ({ ...s, [it.id]: null })));
-  });
-}, [movie]);
+
  
 // console.log(movie)
 
@@ -140,13 +131,7 @@ console.log(movie)
         />
 
         <span className="absolute top-2 right-1 text-xs bg-green-700 px-0.5 py-0.5 rounded text-white font-bold sm:right-3 ">
-          {ratingsMap[m.id] === undefined ? (
-            <span className="animate-pulse">...</span>
-          ) : ratingsMap[m.id] === null ? (
-            <span className="text-xs">N/A</span>
-          ) : (
-            <span>⭐ {ratingsMap[m.id]}</span>
-          )}
+       {m?.vote_average}
         </span>
       </div>
     ))}

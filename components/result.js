@@ -2,7 +2,7 @@
 import { useEffect, useState,useRef } from 'react'
 // import Watchlist from './watchlist'
 import Reviewdata from './Reviewdata'
-import { fetchratings } from '@/fetch/ratingfetcher'
+
 import { fetchMovies } from '@/lib/masterfetch'
 import Image from 'next/image'
 import { submitReview } from '@/lib/fetchr'
@@ -71,12 +71,7 @@ useEffect(() => {
  const poster =`https://image.tmdb.org/t/p/w780/`+movie?.poster_path
  const cover = `https://media.themoviedb.org/t/p/w1920_and_h800_multi_faces/${movie?.backdrop_path}`;
  console.log(poster)
-const [rating,setRating]=useState(null)
-useEffect(()=>{
-  fetchratings(movies.movie)
-  .then((data)=>(setRating(data)))
-},[movies.movie])
-console.log(rating)
+
   return (
  < >
 
@@ -97,11 +92,7 @@ console.log(rating)
 
       {/* RATING */}
       <div className="absolute top-4 right-4 px-3 h-7 flex items-center bg-green-500 text-sm sm:text-l  font-bold  text-white rounded font-bold z-10">
-        {rating === null ? (
-  <span className="animate-pulse text-gray-400 blur-2xl"></span>
-) : (
-  <span className=" font-bold">⭐ {rating}</span>
-)}
+      {movie?.vote_average}
 
       </div>
 {/* <div className='absolute bottom-4 right-4'>

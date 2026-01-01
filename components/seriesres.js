@@ -8,7 +8,7 @@ import { fetchdata } from '@/fetch/fetchdata'
 import ReviewForm from './ReviewForm'
 import { Slice } from 'lucide-react'
 // import Watchlist from './watchlist'
-import { fetchratings } from '@/fetch/ratingfetcher'
+
   const SeriesR = ( movies) => {
     const castRef = useRef(null);
     const scrollLeft = () => {
@@ -38,9 +38,7 @@ useEffect(() => {
   fetchCredit(movie.id, "tv").then(setCredits).catch((e)=>console.error(e));
 
   // Fetch average rating for this title (reviews API uses numeric id)
-  fetchratings(movie.id)
-    .then((r) => setRating(r))
-    .catch(() => setRating(null));
+
 }, [movie]);
 
 // useEffect(()=>{
