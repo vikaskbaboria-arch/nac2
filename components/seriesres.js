@@ -23,7 +23,7 @@ const scrollRight = () => {
   const [movie,setMovie]=useState(null)
   const[rev,setRev]=useState(null)
   const[credits,setCredits] =useState(null)
-  const [rating, setRating] = useState(undefined);
+
 
   useEffect(() => {
     fetchMovies({ type: "byid", id: movies.movie, type_of: "tv" })
@@ -85,13 +85,7 @@ useEffect(() => {
 
       {/* RATING */}
       <div className="absolute top-4 right-4 px-3 h-7 flex items-center bg-green-500 text-white rounded font-bold z-10">
-        {rating === undefined ? (
-          <span className="animate-pulse text-gray-200">...</span>
-        ) : rating === null ? (
-          <span className="text-sm">N/A</span>
-        ) : (
-          <span>⭐ {rating}</span>
-        )}
+        {movie?.vote_average}
       </div>
 {/* <div className='absolute bottom-4 right-4'>
 
