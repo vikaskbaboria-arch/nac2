@@ -1,4 +1,3 @@
-import connectDB from "@/db";
 import Watch from "@/models/watchlist";
 import Movie from "@/models/movie.models";
 import User from "@/models/user";
@@ -9,7 +8,6 @@ import { NextResponse } from "next/server";
 /* ================= ADD TO WATCHLIST ================= */
 export async function POST(req) {
   try {
-    await connectDB();
 
     const session = await getServerSession(authOptions);
     if (!session?.user?.email) {
@@ -71,7 +69,6 @@ export async function POST(req) {
 /* ================= GET WATCHLIST ================= */
 export async function GET(req) {
   try {
-    await connectDB();
 
     const session = await getServerSession(authOptions); // ✅ WORKS NOW
     if (!session?.user?.email) {
