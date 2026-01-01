@@ -34,7 +34,6 @@ export const authOptions = {
       return true;
     },
     async session({ session }) {
-      await connectDB();
       const dbUser = await User.findOne({ email: session.user.email });
       if (dbUser) session.user.name = dbUser.username;
       return session;

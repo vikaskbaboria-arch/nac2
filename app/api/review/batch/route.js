@@ -9,7 +9,6 @@ const TTL_MS = 60 * 1000; // 60s
 
 const POST = async (req) => {
   try {
-    await connectDB();
     const body = await req.json();
     const ids = Array.isArray(body?.ids) ? body.ids.map((i) => Number(i)) : [];
     if (!ids.length) return NextResponse.json({ ratings: {} }, { status: 200 });
