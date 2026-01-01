@@ -63,8 +63,11 @@ useEffect(() => {
 //   console.log(credits)
 //  console.log(movies.streamer)
 //  console.log(movies.streamer?.results?.US?.flatrate)
- const india =movies.streamer?.results?.IN;
- const flatrate = india?.flatrate || []
+  // choose provider region: prefer IN, then US, then first available
+  const providerResults = movies.streamer?.results || {};
+  const regionObj = providerResults?.IN || providerResults?.US || Object.values(providerResults)[0] || null;
+  const providersList =
+    regionObj?.flatrate || regionObj?.buy || regionObj?.rent || regionObj?.ads || [];
  const poster =`https://image.tmdb.org/t/p/w780/`+movie?.poster_path
  const cover = `https://media.themoviedb.org/t/p/w1920_and_h800_multi_faces/${movie?.backdrop_path}`;
  console.log(poster)
@@ -250,9 +253,9 @@ console.log(rating)
  <div className="w-full lg:w-[32%] bg-black/40 rounded-lg p-5">
           <h3 className="text-white text-lg font-semibold mb-4">Watch on</h3>
 
-          {movies.streamer?.results?.IN?.flatrate?.length > 0 ? (
+          {providersList?.length > 0 ? (
             <div className="flex flex-col gap-3">
-              {movies.streamer?.results?.IN?.flatrate?.map((p) => (
+              {providersList?.map((p) => (
                 <div
                   key={p.provider_id}
                   className="flex items-center gap-4 bg-gray-900 hover:bg-gray-800 p-3 rounded-md transition"
