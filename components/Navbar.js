@@ -74,7 +74,8 @@ const Navbar = () => {
       </Link>
 
       {/* DESKTOP LINKS */}
-      <ul className="hidden sm:flex items-center gap-4 text-sm font-medium">
+      
+      <ul className="hidden bg-black/5 hover:bg-black/20 border border-white/10 backdrop-blur-md transition sm:flex items-center gap-4 px-2 py-1 text-sm font-medium bg-gray-950 rounded-2xl">
         <li className="hover:text-purple-400 transition"><Link href="/">Home</Link></li>
         <li className="hover:text-purple-400 transition"><Link href="/about">About</Link></li>{status === 'authenticated' && session ? (
         <li className="hover:text-purple-400 transition"><Link href={`/profile/${session.user.email.split("@")[0]}`}>
@@ -83,7 +84,7 @@ const Navbar = () => {
 
         <button
           onClick={()=>setButton(!button)}
-          className="px-3 py-1.5 rounded-md bg-white/5 hover:bg-white/10 border border-white/10 backdrop-blur-md transition"
+          className="px-1 py-1 rounded-md bg-white/5 hover:bg-gray-600 border border-white/10 backdrop-blur-md transition"
         >
           Search
         </button>
@@ -145,13 +146,17 @@ const Navbar = () => {
         <button onClick={()=>{setButton(true); setMobileMenu(false)}} className="block w-full text-left p-4">
           Search
         </button>
-
         {status === 'loading' ? (
           <div className="block p-4 text-sm text-gray-400">...</div>
         ) : status === 'authenticated' && session ? (
-          <button onClick={() => signOut()} className="block w-full text-left p-4 text-red-400">
-            Sign out
-          </button>
+          <>
+            <Link onClick={()=>setMobileMenu(false)} className="block p-4 border-b border-white/10" href={`/profile/${session.user.email.split("@")[0]}`}>
+              Profile
+            </Link>
+            <button onClick={() => signOut()} className="block w-full text-left p-4 text-red-400">
+              Sign out
+            </button>
+          </>
         ) : (
           <Link onClick={()=>setMobileMenu(false)} className="block p-4" href="/login">Login</Link>
         )}

@@ -1,5 +1,6 @@
 "use client"
 import { useEffect, useState ,useRef } from 'react'
+import Rating from './rating';
 import Reviewdata from './Reviewdata'
 import { fetchMovies } from '@/lib/masterfetch'
 import { submitReview } from '@/lib/fetchr'
@@ -7,7 +8,8 @@ import { fetchCredit } from '@/fetch/credit'
 import { fetchdata } from '@/fetch/fetchdata'
 import ReviewForm from './ReviewForm'
 import { Slice } from 'lucide-react'
-// import Watchlist from './watchlist'
+import Watchlist from './watchlist'
+import ReviewsSection from './parent';
 
   const SeriesR = ( movies) => {
     const castRef = useRef(null);
@@ -85,7 +87,7 @@ useEffect(() => {
 
       {/* RATING */}
       <div className="absolute top-4 right-4 px-3 h-7 flex items-center bg-green-500 text-white rounded font-bold z-10">
-        {movie?.vote_average}
+       <Rating movieId={movies.movie}/>
       </div>
 {/* <div className='absolute bottom-4 right-4'>
 
@@ -269,11 +271,11 @@ useEffect(() => {
 
 </div>
 <div className='w-[90vw] mx-auto  '>
-  <ReviewForm movieId={movie?.id} onSuccess={(r)=>setRev(r)} />
+  <div className='w-[90vw] mx-auto  '>
+   <ReviewsSection movieId={movie?.id}/>
+  </div>
 </div>
-<div className=' w-[80vw] mx-auto'>
-  <Reviewdata  movieId={movie?.id} />
-</div>
+
 
  {/* {pages>1?(<Pagen movie={movie} />):<p>page:1</p>} */}
  </>

@@ -16,5 +16,5 @@ const WatchSchema  = new mongoose.Schema({
 },{timestamps: true})
 WatchSchema.index({ user: 1, movie: 1 }, { unique: true });
 
-export default mongoose.models.Watch ||
-  mongoose.model("Watch", WatchSchema);
+export default mongoose.models.Watchlist ||
+  mongoose.model("Watchlist", WatchSchema);

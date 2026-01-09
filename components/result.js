@@ -2,7 +2,7 @@
 import { useEffect, useState,useRef } from 'react'
 // import Watchlist from './watchlist'
 import Reviewdata from './Reviewdata'
-
+import Rating from './rating'
 import { fetchMovies } from '@/lib/masterfetch'
 import Image from 'next/image'
 import { submitReview } from '@/lib/fetchr'
@@ -10,6 +10,8 @@ import { fetchCredit } from '@/fetch/credit'
 import { fetchdata } from '@/fetch/fetchdata'
 import ReviewForm from './ReviewForm'
 import { Slice } from 'lucide-react'
+import Watchlist from './watchlist'
+import ReviewsSection from './parent'
   const Result = ( movies) => {
    const castRef = useRef(null);
 
@@ -76,6 +78,7 @@ useEffect(() => {
  < >
 
 
+
  {/* <div className='text-white'>movie:{movie?.results?.[0]?.title}</div> */}
 <div className="text-white ">
   <div className="cover mx-auto max-w-full transition duration-500 ">
@@ -83,7 +86,7 @@ useEffect(() => {
     {/* HERO CONTAINER */}
     <div className="relative  min-h-[420px] md:min-h-[600px] bg-black/60 sm:bg-black overflow-hidden  ">
 
-      {/* BACKDROP */}
+      {/* BACKDROP */} 
       <img
         className="absolute hidden sm:flex  inset-0  h-full object-cover  sm:w-full opacity-40"
         src={cover}
@@ -92,7 +95,7 @@ useEffect(() => {
 
       {/* RATING */}
       <div className="absolute top-4 right-4 px-3 h-7 flex items-center bg-green-500 text-sm sm:text-l  font-bold  text-white rounded font-bold z-10">
-      {movie?.vote_average}
+    <Rating movieId={movies.movie}/>
 
       </div>
 {/* <div className='absolute bottom-4 right-4'>
@@ -277,12 +280,10 @@ useEffect(() => {
 
 
 <div className='w-[90vw] mx-auto  '>
-  <ReviewForm movieId={movie?.id} onSuccess={(r)=>setRev(r)} />
-</div>
-<div className=' w-[80vw] mx-auto'>
-  <Reviewdata  movieId={movie?.id} />
+ <ReviewsSection movieId={movie?.id}/>
 </div>
 
+<Watchlist movieId={movie?.id}/>
  {/* {pages>1?(<Pagen movie={movie} />):<p>page:1</p>} */}
  </>
   )
