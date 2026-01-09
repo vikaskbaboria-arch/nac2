@@ -3,7 +3,7 @@
 import React from "react";
 import { signOut, useSession } from "next-auth/react";
 // import WatchListData from "@/components/watchListData";
-
+import Userwatchlist from "@/components/userwatchlist";
 const ProfileClient = ({ username }) => {
   const { data: session } = useSession();
 
@@ -59,7 +59,7 @@ const ProfileClient = ({ username }) => {
               Your saved movies & TV series
             </p>
           </div>
-
+          <Userwatchlist />
           {/* WATCHLIST */}
           {/* <WatchListData /> */}
         </div>
