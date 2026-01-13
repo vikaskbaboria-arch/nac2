@@ -1,19 +1,30 @@
 import Image from "next/image";
 import First from "@/components/home";
+import { AuroraText } from "@/components/ui/aurora-text";
 import Navbar from "@/components/Navbar";
 import Movie from "@/components/movie";
 import Series from "@/components/series";
+import Trending from "@/components/Trending";
 import Starfield from "@/components/starfield";
+import Rightsidepanel from "@/components/rightsidepanel";
 export default function Home() {
   return (
     <>
+    <div className="">
+
+   
 <Starfield/>
      <div>
 <First/>
      </div>
+ <div className="relative  z-10  mx-auto px-30 mt-6">
+  <div className="hidden lg:grid grid-cols-[4fr_2fr] gap-6 items-start" >
+    <Trending />
+    <Rightsidepanel />
+  </div>
+</div>
 
-
-
+    
     <div className=" px-4 sm:px-0.5">
       <Series movie={35}/>
           <Movie movie ={28}/>
@@ -33,7 +44,7 @@ export default function Home() {
     <Movie movie ={53}/>
     </div>
 
-
+ </div>
 
     </>
   

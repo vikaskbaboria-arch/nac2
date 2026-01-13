@@ -118,8 +118,8 @@ export default function HomeCarousel() {
   })
 
   return (
-    <div className="px-12 my-8">
-      <div className="flex items-center justify-between gap-4">
+    <div className="px-12 my-8 rounded-lg">
+      <div className="flex items-center justify-between rounded gap-4">
         <button aria-label="prev" onClick={prev} className="px-3 hidden sm:flex  text-white py-2 bg-slate-900 rounded">{'<'}</button>
 
         <div
@@ -127,10 +127,10 @@ export default function HomeCarousel() {
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
           className="w-full max-w-[1200px]  mx-auto overflow-hidden rounded-md"
-        
+       
         >
           {slides.length === 0 ? (
-            <div className="w-full h-[20vh] md:h-[50vh] lg:h-[60vh] flex items-center justify-center bg-gradient-to-tr from-gray-900  to-purple-900 text-white font-bold text-xl">No slides available</div>
+            <div className="w-full h-[20vh] md:h-[50vh] lg:h-[60vh] rounded-md flex items-center justify-center bg-gradient-to-tr from-gray-900  to-purple-900 text-white font-bold text-xl">No slides available</div>
           ) : (
             <div
               ref={trackRef}
@@ -141,7 +141,7 @@ export default function HomeCarousel() {
                 <div key={idx}
                   onClick={()=>(handleCick(m))}
                 className="flex-shrink-0 p-2" style={{ width: `${slideWidth}px` }}>
-                  <div className="h-[20vh] md:h-[50vh] lg:h-[60vh] relative rounded-lg overflow-hidden border-2 border-purple-950">
+                  <div className="h-[20vh] md:h-[50vh] lg:h-[60vh] relative rounded-lg overflow-hidden border-2 border-white/10">
                     <img src={`https://image.tmdb.org/t/p/w1280/${m.backdrop_path}`} alt={m?.title } className="w-full h-full object-cover" />
                     <div className="absolute bottom-1.5 left-2 sm:left-4 sm:bottom-6 text-white font-semibold sm:text-3xl">{m?.title || m?.name}</div>
                     <div className="absolute top-2 sm:top-4  w-14 h-4 right-2 sm:right-4 text-xs bg-green-700 text-white px-2 rounded flex items-center justify-center"> 

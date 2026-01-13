@@ -21,7 +21,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className="bg-gradient-to-br to-gray-950 via-black  from-gray-950  min-h-screen select-none ">
+      <body className="bg_color_for  min-h-screen select-none ">
                {/* <Starfield /> */}
      <Sessionwrapper>
         <Navbar/>
