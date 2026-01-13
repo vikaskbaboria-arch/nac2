@@ -1,84 +1,6 @@
 "use client"
 import { useState, useRef, useEffect } from "react"
 
-/* =========================
-   SVG Star (Full / Half)
-========================= */
-function Star({ fill }) {
-  return (
-    <svg viewBox="0 0 24 24" className="w-6 h-6">
-      <defs>
-        <linearGradient id={`half-${fill}`}>
-          <stop offset="50%" stopColor="#a855f7" />
-          <stop offset="50%" stopColor="#475569" />
-        </linearGradient>
-      </defs>
-
-      <path
-        d="M12 2l2.9 6 6.6.6-5 4.4 1.5 6.5L12 16l-6 3.5 1.5-6.5-5-4.4 6.6-.6L12 2z"
-        fill={
-          fill === "full"
-            ? "#a855f7"
-            : fill === "half"
-            ? "url(#half-half)"
-            : "#475569"
-        }
-      />
-    </svg>
-  )
-}
-
-/* =========================
-   Star Rating Component
-========================= */
-function StarRating({ value, onChange, max = 10 }) {
-  const [hover, setHover] = useState(null)
-  const display = hover ?? value
-
-  return (
-    <div className="flex items-center gap-1">
-      {Array.from({ length: max }).map((_, i) => {
-        const star = i + 1
-        let fill = "empty"
-
-        if (display >= star) fill = "full"
-        else if (display >= star - 0.5) fill = "half"
-
-        return (
-          <div
-            key={i}
-            className="relative cursor-pointer"
-            onMouseLeave={() => setHover(null)}
-          >
-            {/* Left half */}
-            <div
-              className="absolute left-0 top-0 w-1/2 h-full z-10"
-              onMouseEnter={() => setHover(star - 0.5)}
-              onClick={() => onChange(star - 0.5)}
-            />
-
-            {/* Right half */}
-            <div
-              className="absolute right-0 top-0 w-1/2 h-full z-10"
-              onMouseEnter={() => setHover(star)}
-              onClick={() => onChange(star)}
-            />
-
-            <Star fill={fill} />
-          </div>
-        )
-      })}
-
-      <span className="ml-2 text-white font-semibold">
-        {display}
-      </span>
-    </div>
-  )
-}
-
-/* =========================
-   Review Form
-========================= */
 export default function ReviewForm({ movieId, onSuccess }) {
   const [reviewText, setReviewText] = useState("")
   const [rating, setRating] = useState(5)
@@ -88,7 +10,7 @@ export default function ReviewForm({ movieId, onSuccess }) {
 
   const textareaRef = useRef(null)
   const MAX_LEN = 1000
-
+ 
   useEffect(() => {
     const ta = textareaRef.current
     if (!ta) return
@@ -150,11 +72,29 @@ export default function ReviewForm({ movieId, onSuccess }) {
         <span>{reviewText.length}/{MAX_LEN}</span>
       </div>
 
-      {/* ⭐ Rating */}
-      <div className="flex items-center gap-3 mt-4">
-        <span className="text-slate-300 font-semibold">Rating</span>
-        <StarRating value={rating} onChange={setRating} max={10} />
-        <span className="text-sm text-slate-400">(0.5 – 10)</span>
+      {/* 🎚️ Slider Rating */}
+      <div className="mt-4">
+        <div className="flex justify-between items-center mb-2">
+          <span className="text-slate-300 font-semibold">Rating</span>
+          <span className="text-purple-400 font-bold text-lg">
+            {rating}
+          </span>
+        </div>
+
+        <input
+          type="range"
+          min="0.5"
+          max="10"
+          step="0.5"
+          value={rating}
+          onChange={(e) => setRating(Number(e.target.value))}
+          className="w-full accent-purple-500 cursor-pointer"
+        />
+
+        <div className="flex justify-between text-xs text-slate-400 mt-1">
+          <span>0.5</span>
+          <span>10</span>
+        </div>
       </div>
 
       <div className="flex items-center gap-3 mt-4">
@@ -172,4 +112,3 @@ export default function ReviewForm({ movieId, onSuccess }) {
     </form>
   )
 }
-

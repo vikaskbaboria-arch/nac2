@@ -22,7 +22,7 @@ const ProfileClient = ({ username }) => {
               />
 
               <h2 className="mt-4 text-xl font-semibold">
-                {username}
+                {/* {username} */}
               </h2>
 
               <button className="mt-4 px-4 py-2 rounded-lg bg-purple-900 hover:bg-purple-700 transition">

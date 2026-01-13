@@ -8,6 +8,7 @@ import { fetchCredit } from '@/fetch/credit'
 import { fetchdata } from '@/fetch/fetchdata'
 import ReviewForm from './ReviewForm'
 import { Slice } from 'lucide-react'
+import Credit from './credit';
 import Watchlist from './watchlist'
 import ReviewsSection from './parent';
 
@@ -25,8 +26,7 @@ const scrollRight = () => {
   const [movie,setMovie]=useState(null)
   const[rev,setRev]=useState(null)
   const[credits,setCredits] =useState(null)
-
-
+  
   useEffect(() => {
     fetchMovies({ type: "byid", id: movies.movie, type_of: "tv" })
       .then((m) => setMovie(m))
@@ -65,7 +65,7 @@ useEffect(() => {
    : "/placeholder.png";
  const cover = `https://media.themoviedb.org/t/p/w1920_and_h800_multi_faces/${movie?.backdrop_path}`;
 //  console.log(poster)
-
+console.log(providerResults)
 
   return (
  < >
@@ -154,10 +154,21 @@ useEffect(() => {
 
 
           {/* CREDITS */}
-          <div className="flex flex-wrap gap-6 mt-4 justify-center md:justify-between">
-            <div>Director</div>
-            <div>Producer</div>
-            <div>Writer</div>
+          <div className="flex  flex-wrap gap-5 px-8 md:px-0">
+             <div className='font-bold text-white/50'>
+                  Director:
+                </div>
+            <div className='flex gap-2'>  {movie?.created_by?.map((m)=>{
+              return (
+               
+               
+                
+                 <div className='cursor-pointer' key={m.id}>{m.name}</div>
+              
+              )
+            })}</div>
+           
+           
           </div>
         </div>
 
@@ -168,29 +179,42 @@ useEffect(() => {
 <div className='bg-gradient-to-br  sm:hidden  from-black  to-purple-950 via-black/40   h-4 w-full'>
   
 </div>
-<div className="max-w-[90vw] mx-auto bg-black px-4 mt-10 flex flex-col lg:flex-row gap-8">
+<div className="max-w-[90vw] mx-auto bg-black mb-7 pb-4 px-4 mt-10 flex flex-col lg:flex-row gap-8 rounded-md">
 
   {/* LEFT: CAST SECTION */}
-<div className="relative w-full lg:w-2/3">
-          <h3 className="text-white text-xl font-semibold mb-4">Cast</h3>
+<div className="relative w-full lg:w-2/3 overflow-hidden group">
+  <h3 className="text-white text-xl font-semibold mb-0 mt-2">Cast</h3>
 
   {/* LEFT BUTTON */}
   <button
     onClick={scrollLeft}
-   className="
-      absolute -left-12 top-42 h-56  -translate-y-1/2 z-10 w-12
-      bg-black/20 hover:bg-black/40
-      text-white p-2 flex items-center justify-center
-       hidden sm:flex 
+    className="
+      absolute left-2 top-1/2 -translate-y-1/2 z-10
+      w-10 h-20
+      bg-black/40 backdrop-blur-md
+      text-white rounded-md
+      flex items-center justify-center
+      opacity-0 group-hover:opacity-100
+      transition-all duration-300
+      hover:scale-110 hover:bg-black/60
+      active:scale-95
+      hidden sm:flex
     "
   >
-    <img src="/left.svg" alt="" />
+    <img src="/left.svg" alt="" className="w-5 opacity-80" />
   </button>
 
   {/* CAST SCROLL AREA */}
   <div
-    ref={castRef} 
-    className="flex   gap-4 sm:gap-6 overflow-x-auto py-4 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+    ref={castRef}
+    className="
+      flex gap-4 sm:gap-6
+      overflow-x-auto py-4
+      scroll-smooth
+      [-ms-overflow-style:none]
+      [scrollbar-width:none]
+      [&::-webkit-scrollbar]:hidden
+    "
   >
     {credits?.cast?.slice(0, 10).map((m) => (
       <div
@@ -217,20 +241,23 @@ useEffect(() => {
   </div>
 
   {/* RIGHT BUTTON */}
- 
-      <button
+  <button
     onClick={scrollRight}
-    className=" 
-      absolute -right-12 top-42 h-56  -translate-y-1/2 z-10 w-12
-      bg-black/20 hover:bg-black/40
-      text-white p-2 flex items-center justify-center
-       hidden sm:flex
+    className="
+      absolute right-2 top-1/2 -translate-y-1/2 z-10
+      w-10 h-20
+      bg-black/40 backdrop-blur-md
+      text-white rounded-md
+      flex items-center justify-center
+      opacity-0 group-hover:opacity-100
+      transition-all duration-300
+      hover:scale-110 hover:bg-black/60
+      active:scale-95
+      hidden sm:flex
     "
   >
-    <img src="/right.svg" alt="" />
-    
+    <img src="/right.svg" alt="" className="w-5 opacity-80" />
   </button>
- 
 </div>
 
 
@@ -275,7 +302,7 @@ useEffect(() => {
    <ReviewsSection movieId={movie?.id}/>
   </div>
 </div>
-
+<Credit movie={movie?.id}/>
 
  {/* {pages>1?(<Pagen movie={movie} />):<p>page:1</p>} */}
  </>

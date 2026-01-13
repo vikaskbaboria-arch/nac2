@@ -5,3 +5,10 @@ const fetchCredit = async (id, media) => {
 };
 
 export { fetchCredit };
+// const fetchCrew = async (id, media) => {
+//         const res = await fetch(`/api/tmdb/${media}/${id}/crew`);
+//         const data = await res.json();
+//         return data;
+// };
+
+// export { fetchCrew };
