@@ -87,11 +87,16 @@ const director = credits?.crew?.filter(
   <div className="cover mx-auto max-w-full transition duration-500 ">
     
     {/* HERO CONTAINER */}
-    <div className="relative  min-h-[420px] md:min-h-[600px] bg-black/60 sm:bg-black overflow-hidden  ">
+    <div className="relative min-h-[420px] md:min-h-[620px]
+  bg-gradient-to-b from-black/70 via-black/60 to-black
+  backdrop-blur-[2px]
+  overflow-hidden ">
 
       {/* BACKDROP */} 
       <img
-        className="absolute hidden sm:flex  inset-0  h-full object-cover  sm:w-full opacity-40"
+        className="absolute hidden sm:flex inset-0 h-full w-full object-cover
+  opacity-35 scale-105
+  blur-[1px]"
         src={cover}
         alt=""
       />
@@ -112,9 +117,13 @@ const director = credits?.crew?.filter(
         <img
           className="
             w-36 sm:w-48 md:w-64
-            rounded-lg shadow-2xl
-            object-cover
-            mx-auto md:mx-0
+  rounded-xl shadow-[0_20px_50px_rgba(0,0,0,0.7)]
+  object-cover
+  mx-auto md:mx-0
+  transition-all duration-500
+  hover:scale-[1.03]
+  hover:shadow-purple-500/20 animate-up
+    [animation-delay:0.1s]
           "
           src={poster}
           alt=""
@@ -124,12 +133,14 @@ const director = credits?.crew?.filter(
         <div
           className="
             w-full md:w-1/2
-            p-2 sm:p-4 md:p-6
-            flex flex-col gap-4
-            text-center md:text-left
+    p-2 sm:p-4 md:p-6
+    flex flex-col gap-4
+    text-center md:text-left
+    animate-right
+    [animation-delay:0.2s]
           "
         >
-          <span className="text-2xl sm:text-3xl font-bold">
+          <span className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight">
             {movie?.title || movie?.name}
           </span>
 
@@ -142,7 +153,8 @@ const director = credits?.crew?.filter(
   {/* OVERVIEW TEXT */}
   <p
     className={`
-      text-gray-200 leading-relaxed
+      text-gray-300 leading-relaxed text-sm sm:text-base
+
       ${showFullOverview ? "" : "line-clamp-3"}
       md:line-clamp-none
       transition-all duration-300
@@ -155,7 +167,9 @@ const director = credits?.crew?.filter(
   {movie?.overview?.length > 120 && (
     <button
       onClick={() => setShowFullOverview(!showFullOverview)}
-      className="md:hidden text-purple-400 text-sm font-semibold self-start"
+      className=" md:hidden text-purple-400 text-sm font-semibold
+  hover:text-purple-300
+  transition"
     >
       {showFullOverview ? "Show less" : "Show more"}
     </button>
@@ -165,7 +179,8 @@ const director = credits?.crew?.filter(
 
 
           {/* CREDITS */}
-             <div className="flex flex-wrap gap-5 px-8 md:px-0">
+             <div className="flex flex-wrap items-center gap-3
+  px-2 sm:px-0">
   <div className="font-bold text-white/50">
     Director:
   </div>
@@ -237,7 +252,10 @@ const director = credits?.crew?.filter(
         key={m.id}
         className="flex-shrink-0 w-24 sm:w-32 md:w-36 hover:scale-105 transition"
       >
-        <div className="aspect-[2/3] rounded-md overflow-hidden bg-gray-800">
+        <div className="flex-shrink-0 w-24 sm:w-32 md:w-36
+  transition-all duration-300
+  hover:scale-110
+  hover:-translate-y-1">
           <img
             src={
               m.profile_path
@@ -245,7 +263,7 @@ const director = credits?.crew?.filter(
                 : "/avatar.png"
             }
             alt={m.name}
-            className="w-full h-full object-cover"
+            className="rounded-lg w-full h-full object-cover"
           />
         </div>
 
@@ -283,11 +301,17 @@ const director = credits?.crew?.filter(
 
           {providersList?.length > 0 ? (
             <div className="flex flex-col gap-3">
-              {providersList?.map((p) => (
-                <div
-                  key={p.provider_id}
-                  className="flex items-center gap-4 bg-gray-900 hover:bg-gray-800 p-3 rounded-md transition"
-                >
+              {providersList?.map((p,index) => (
+             <div
+  key={p.provider_id}
+  className="
+    flex items-center gap-4
+    bg-gray-900/80
+    p-3 rounded-lg
+    animate-left
+  "
+  style={{ animationDelay: `${index * 0.1}s` }}
+>
                   <img
                     src={`https://image.tmdb.org/t/p/w92${p.logo_path}`}
                     alt={p.provider_name}
@@ -313,7 +337,7 @@ const director = credits?.crew?.filter(
 
 
 
-<div className='w-[90vw] mx-auto  '>
+<div className='w-[90vw] mx-auto   '>
  <ReviewsSection movieId={movie?.id}/>
 </div>
 

@@ -26,7 +26,7 @@ export default function Rightsidepanel() {
     <aside
       className="
         hidden lg:block w-[420px]
-        h-[671px] rounded-2xl
+        h-[626px] rounded-2xl
         bg-gradient-to-b from-black/60 to-black/30
         backdrop-blur-2xl
         border border-white/10
@@ -46,7 +46,7 @@ export default function Rightsidepanel() {
       {/* Scroll Area */}
       <div
         className="
-          h-[580px]
+          h-[520px]
           overflow-y-auto
           px-4 py-4 space-y-3
           scrollbar-hidden
@@ -59,7 +59,7 @@ export default function Rightsidepanel() {
             <div
               key={m.id}
               className="
-                group flex gap-4 p-3 rounded-xl
+                group flex gap-3 p-3 rounded-xl
                 bg-white/[0.02]
                 hover:bg-white/[0.06]
                 transition-all duration-300 ease-out

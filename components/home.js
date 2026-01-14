@@ -118,7 +118,7 @@ export default function HomeCarousel() {
   })
 
   return (
-    <div className="px-12 my-8 rounded-lg">
+    <div className="px-13 my-8 rounded-lg">
       <div className="flex items-center justify-between rounded gap-4">
         <button aria-label="prev" onClick={prev} className="px-3 hidden sm:flex  text-white py-2 bg-slate-900 rounded">{'<'}</button>
 
@@ -159,4 +159,7 @@ export default function HomeCarousel() {
     </div>
   )
 }
+
+
+
 

@@ -73,11 +73,16 @@ const handleLink=(movie)=>{
 const handlejust=(m)=>{
   router.push(`/genre/${m}`)
 }
+const [button,setButton]=useState(false)
+const mouseenter=()=>{
+    setButton(()=>(!button))
+}
 console.log(movie)
   return (
     <>
     
-    <div className='my-1 sm:my-8  mx-auto [92vw] h-52 sm:h-80    '>
+    <div className='my-1 sm:my-8  mx-auto [92vw] h-52 sm:h-80     '    onMouseEnter={() => setButton(true)}
+  onMouseLeave={() => setButton(false)}>
       <div className='flex items-center justify-between ' >
        <div className='text-white font-bold mx-3 sm:mx-2    text-lg sm:text-3xl'>{names}</div>
        <div className='text-white mr-6 text-xs sm:text-xl   flex items-center   gap-2' onClick={()=>handlejust(genere.movie)}> <InteractiveHoverButton>More</InteractiveHoverButton></div>
@@ -89,13 +94,13 @@ console.log(movie)
   {/* LEFT BUTTON */}
   <button
     onClick={scrollLeft}
-    className="
+    className={`
       absolute left-0 top-1/2 -translate-y-1/2 z-10
       w-18 h-60 
       bg-black/70 hover:bg-black/80
       text-white flex items-center justify-center
-      hidden sm:flex
-    "
+      hidden  hidden ${button?"sm:flex":""}
+    `}
   >
     <img src="./left.svg" alt="" />
   </button>
@@ -140,13 +145,13 @@ console.log(movie)
   {/* RIGHT BUTTON */}
   <button
     onClick={scrollRight}
-    className="
+    className={`
       absolute right-0 top-1/2 -translate-y-1/2 z-10
       w-18 h-60
       bg-black/70 hover:bg-black/80
       text-white flex items-center justify-center
-      hidden sm:flex
-    "
+      hidden ${button?"sm:flex":""}
+    `}
   >
   <img src="./right.svg" alt="" />
   </button>
