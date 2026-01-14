@@ -41,7 +41,7 @@ const [showFullOverview, setShowFullOverview] = useState(false);
 
   return (
      <div className="w-full min-h-[89vh] px-4 sm:px-8 py-8">
-      {movie?.results?.map((m) => (
+      {movies?.results?.map((m) => (
         <div
         
           key={m.id}
@@ -126,9 +126,9 @@ const [showFullOverview, setShowFullOverview] = useState(false);
 
       {/* Pagination */}
       <div className={ `${totalpages>1?"":"hidden"} flex items-center justify-center gap-6 mt-8 text-white`}>
-        <span>{page}</span>
+        <span>{pages}</span>
         <button
-          onClick={() => setPage(page + 1)}
+          onClick={() => setPages(page + 1)}
           className="px-4 py-2 rounded-md bg-purple-600 hover:bg-purple-700 transition"
         >
           Next
