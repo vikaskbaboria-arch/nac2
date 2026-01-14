@@ -205,3 +205,64 @@ background: linear-gradient(159deg,rgba(141, 44, 158, 1) 0%, rgba(23, 22, 22, 1)
     transform: translateX(-100%);
   }
 }
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-left {
+  from {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fade-right {
+  from {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fade-down {
+  from {
+    opacity: 0;
+    transform: translateY(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-up {
+  animation: fade-up 0.8s ease-out both;
+}
+
+.animate-left {
+  animation: fade-left 0.8s ease-out both;
+}
+
+.animate-right {
+  animation: fade-right 0.8s ease-out both;
+}
+
+.animate-down {
+  animation: fade-down 0.8s ease-out both;
+}
+/* * {
+  will-change: transform, opacity;
+} */

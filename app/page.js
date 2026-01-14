@@ -14,18 +14,30 @@ export default function Home() {
 
    
 <Starfield/>
-     <div>
+     <div className=" sm:hidden">
 <First/>
      </div>
  <div className="relative  z-10  mx-auto px-30 mt-6">
-  <div className="hidden lg:grid grid-cols-[4fr_2fr] gap-6 items-start" >
-    <Trending />
-    <Rightsidepanel />
+ <div className="relative  z-10  mx-auto px-30 mt-6">
+  <div className="hidden lg:grid grid-cols-[4fr_2fr] gap-10 items-start" >
+
+
+      <div className="animate-left [animation-delay:0.2s]">
+      <Trending />
+    </div>
+
+    <div className="animate-right [animation-delay:0.3s]">
+      <Rightsidepanel />
+    </div>
+
+    
+   
   </div>
+</div>
 </div>
 
     
-    <div className=" px-4 sm:px-0.5">
+    <div className=" -px-1">
       <Series movie={35}/>
           <Movie movie ={28}/>
     <Movie movie ={12}/>
