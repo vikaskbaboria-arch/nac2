@@ -1,349 +1,256 @@
-"use client"
-import { useEffect, useState,useRef } from 'react'
-// import Watchlist from './watchlist'
-import Reviewdata from './Reviewdata'
-import Rating from './rating'
-import { fetchMovies } from '@/lib/masterfetch'
-import Image from 'next/image'
-import { submitReview } from '@/lib/fetchr'
-import { fetchCredit } from '@/fetch/credit'
-import { fetchdata } from '@/fetch/fetchdata'
-import ReviewForm from './ReviewForm'
-import { Slice } from 'lucide-react'
-import Watchlist from './watchlist'
-import ReviewsSection from './parent'
-  const Result = ( movies) => {
-   const castRef = useRef(null);
+"use client";
 
-const scrollLeft = () => {
-  castRef.current?.scrollBy({ left: -680, behavior: "smooth" });
-};
+import { useEffect, useState, useRef } from "react";
+import Rating from "./rating";
+import Watchlist from "./watchlist";
+import ReviewsSection from "./parent";
+import { fetchMovies } from "@/lib/masterfetch";
+import { fetchCredit } from "@/fetch/credit";
+import { getTrailerUrl } from "@/lib/gettrailer";
 
-const scrollRight = () => {
-  castRef.current?.scrollBy({ left: 680, behavior: "smooth" });
-};
-  //  console.log(movies.movie)
-   const [movie,setMovie]=useState(null)
-   const[rev,setRev]=useState(null)
-   const [showFullOverview, setShowFullOverview] = useState(false);
+const SeriesR = (movies) => {
+  const castRef = useRef(null);
 
-   const[credits,setCredits] =useState(null)
-  //  const[streamer,setStreamer]=useState(null)
-useEffect(() => {
-  async function loadData() {
-    const movieData = await fetchMovies({
-      type: "byid",
-      id: movies.movie,
-      type_of: "movie",
-    });
+  const [movie, setMovie] = useState(null);
+  const [credits, setCredits] = useState(null);
+  const [showFullOverview, setShowFullOverview] = useState(false);
+  const [trailerUrl, setTrailerUrl] = useState(null);
+  const [showTrailer, setShowTrailer] = useState(false);
 
-    setMovie(movieData);
+  /* ================= FETCH DATA ================= */
+  useEffect(() => {
+    async function loadData() {
+      const tvData = await fetchMovies({
+        type: "byid",
+        id: movies.movie,
+        type_of: "movie",
+      });
 
-    const creditsData = await fetchCredit(movieData.id, "movie");
-    setCredits(creditsData);
-    // setStreamer(movies.streamer)
-  }
+      setMovie(tvData);
 
-  loadData();
-}, [movies.movie]);
+      const creditsData = await fetchCredit(tvData.id, "movie");
+      setCredits(creditsData);
 
-// console.log(movies.movie)
-// console.log(movie?.id)
-// useEffect(() => {
-//   if (!movie?.id) return;
+      const trailer = await getTrailerUrl(tvData.id, "movie");
+      setTrailerUrl(trailer);
+    }
 
-//   fetchCredit(movie.id, "movie").then(setCredits);
-// }, [movie]);
+    loadData();
+  }, [movies.movie]);
 
-// useEffect(()=>{
-// submitReview({mid:1336189,rt:"hello i love this movue",rat:10})
-// .then((m)=>(setRev(m)))
-// },[setRev,movie])
-// console.log(rev)
-  //  console.log(movie)
-//   console.log(movie)
-//   console.log(credits)
-//  console.log(movies.streamer)
-//  console.log(movies.streamer?.results?.US?.flatrate)
-  // choose provider region: prefer IN, then US, then first available
+  /* ================= LOCK BODY SCROLL ================= */
+  useEffect(() => {
+    document.body.style.overflow = showTrailer ? "hidden" : "auto";
+  }, [showTrailer]);
+
+  /* ================= PROVIDERS ================= */
   const providerResults = movies.streamer?.results || {};
-  const regionObj = providerResults?.IN || providerResults?.US || Object.values(providerResults)[0] || null;
+  const regionObj =
+    providerResults?.IN ||
+    providerResults?.US ||
+    Object.values(providerResults)[0] ||
+    null;
+
   const providersList =
-    regionObj?.flatrate || regionObj?.buy || regionObj?.rent || regionObj?.ads || [];
- const poster =`https://image.tmdb.org/t/p/w780/`+movie?.poster_path
- const cover = `https://media.themoviedb.org/t/p/w1920_and_h800_multi_faces/${movie?.backdrop_path}`;
- console.log(regionObj)
-const director = credits?.crew?.filter(
-  person => person.job === "Director"
-);
+    regionObj?.flatrate ||
+    regionObj?.buy ||
+    regionObj?.rent ||
+    regionObj?.ads ||
+    [];
 
+  const poster = movie?.poster_path
+    ? `https://image.tmdb.org/t/p/w780/${movie.poster_path}`
+    : "/placeholder.png";
+
+  const cover = movie?.backdrop_path
+    ? `https://image.tmdb.org/t/p/w1920_and_h800_multi_faces/${movie.backdrop_path}`
+    : "";
+    const director = credits?.crew?.filter( (person) => person.job === "Director" );
+console.log(movie)
   return (
- < >
+    <div className="w-full overflow-x-hidden bg-black text-white">
+      {/* ================= HERO ================= */}
+      <div className="relative min-h-[60vh] md:min-h-[80vh] w-full overflow-hidden">
 
-
-
- {/* <div className='text-white'>movie:{movie?.results?.[0]?.title}</div> */}
-<div className="text-white ">
-  <div className="cover mx-auto max-w-full transition duration-500 ">
-    
-    {/* HERO CONTAINER */}
-    <div className="relative min-h-[420px] md:min-h-[620px]
-  bg-gradient-to-b from-black/70 via-black/60 to-black
-  backdrop-blur-[2px]
-  overflow-hidden ">
-
-      {/* BACKDROP */} 
-      <img
-        className="absolute hidden sm:flex inset-0 h-full w-full object-cover
-  opacity-35 scale-105
-  blur-[1px]"
-        src={cover}
-        alt=""
-      />
-
-      {/* RATING */}
-      <div className="absolute top-4 right-4 px-3 h-7 flex items-center bg-green-500 text-sm sm:text-l  font-bold  text-white rounded font-bold z-10">
-    <Rating movieId={movies.movie}/>
-
-      </div>
-{/* <div className='absolute bottom-4 right-4'>
-
-  <Watchlist movieId={movie?.id}/>
-</div> */}
-      {/* CONTENT */}
-      <div className="relative z-10 flex flex-col md:flex-row gap-6 px-4 sm:px-8 pt-24">
-
-        {/* POSTER */}
         <img
-          className="
-            w-36 sm:w-48 md:w-64
-  rounded-xl shadow-[0_20px_50px_rgba(0,0,0,0.7)]
-  object-cover
-  mx-auto md:mx-0
-  transition-all duration-500
-  hover:scale-[1.03]
-  hover:shadow-purple-500/20 animate-up
-    [animation-delay:0.1s]
-          "
-          src={poster}
+          src={cover}
           alt=""
+          className="absolute inset-0 h-full w-full object-cover scale-105"
         />
 
-        {/* DETAILS */}
-        <div
-          className="
-            w-full md:w-1/2
-    p-2 sm:p-4 md:p-6
-    flex flex-col gap-4
-    text-center md:text-left
-    animate-right
-    [animation-delay:0.2s]
-          "
-        >
-          <span className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight">
-            {movie?.title || movie?.name}
-          </span>
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-transparent" />
 
-    <div className="over flex flex-col gap-3">
-
-  <span className="text-slate-400 font-bold">
-    Overview
-  </span>
-
-  {/* OVERVIEW TEXT */}
-  <p
-    className={`
-      text-gray-300 leading-relaxed text-sm sm:text-base
-
-      ${showFullOverview ? "" : "line-clamp-3"}
-      md:line-clamp-none
-      transition-all duration-300
-    `}
-  >
-    {movie?.overview}
-  </p>
-
-  {/* TOGGLE BUTTON (ONLY MOBILE) */}
-  {movie?.overview?.length > 120 && (
-    <button
-      onClick={() => setShowFullOverview(!showFullOverview)}
-      className=" md:hidden text-purple-400 text-sm font-semibold
-  hover:text-purple-300
-  transition"
-    >
-      {showFullOverview ? "Show less" : "Show more"}
-    </button>
-  )}
-
-</div>
-
-
-          {/* CREDITS */}
-             <div className="flex flex-wrap items-center gap-3
-  px-2 sm:px-0">
-  <div className="font-bold text-white/50">
-    Director:
-  </div>
-
-  <div className="flex gap-2 flex-wrap">
-    {director?.length > 0 ? (
-      director.map((d) => (
-        <div
-          key={d.id}
-          className="cursor-pointer hover:text-white transition"
-        >
-          {d.name}
-        </div>
-      ))
-    ) : (
-      <span className="text-white/40">N/A</span>
-    )}
-  </div>
-</div>
-
+        <div className="absolute top-4 right-4 z-20">
+          <Rating movieId={movies.movie} />
         </div>
 
+        <div className="absolute hidden lg:flex bottom-16 right-10 z-20">
+          <Watchlist movieId={movie?.id} />
+        </div>
+
+        <div className="absolute inset-0 hidden lg:flex items-center justify-center z-20">
+          <button
+            onClick={() => setShowTrailer(true)}
+            className="w-12 h-12 rounded-full bg-black/80 flex items-center justify-center hover:scale-110 transition"
+          >
+            <img src="/play.svg" alt="Play" />
+          </button>
+        </div>
       </div>
-    </div>
-  </div>
-</div>
-<div className='bg-gradient-to-br  sm:hidden  from-black  to-purple-950 via-black/40   h-4 w-full'>
-  
-</div>
-<div className="max-w-[90vw] mb-7 pb-4 bg-black rounded-md mx-auto px-4 mt-10 flex flex-col  lg:flex-row gap-8">
 
-  {/* LEFT: CAST SECTION */}
-  <div className="relative w-full lg:w-2/3 overflow-hidden group">
-  <h3 className="text-white text-xl font-semibold mb-0 mt-2">Cast</h3>
+      {/* ================= POSTER + DETAILS ================= */}
+      <div className="relative z-10 grid md:grid-cols-[240px_1fr] gap-6 px-6 sm:px-12  -mt-64 md:ml-28">
 
-  {/* LEFT BUTTON */}
-  <button
-    onClick={scrollLeft}
-    className="
-      absolute left-2 top-1/2 -translate-y-1/2 z-10
-      w-10 h-20
-      bg-black/40 backdrop-blur-md
-      text-white rounded-md
-      flex items-center justify-center
-      opacity-0 group-hover:opacity-100
-      transition-all duration-300
-      hover:scale-110 hover:bg-black/60
-      active:scale-95
-      hidden sm:flex
-    "
-  >
-    <img src="/left.svg" alt="" className="w-5 opacity-80" />
-  </button>
+        <img
+          src={poster}
+          alt=""
+          className="w-36 sm:w-40 md:w-52 rounded-xl shadow-2xl mx-auto md:mx-0"
+        />
 
-  {/* CAST SCROLL AREA */}
-  <div
-    ref={castRef}
-    className="
-      flex gap-4 sm:gap-6
-      overflow-x-auto py-4
-      scroll-smooth
-      [-ms-overflow-style:none]
-      [scrollbar-width:none]
-      [&::-webkit-scrollbar]:hidden
-    "
-  >
-    {credits?.cast?.slice(0, 10).map((m) => (
-      <div
-        key={m.id}
-        className="flex-shrink-0 w-24 sm:w-32 md:w-36 hover:scale-105 transition"
-      >
-        <div className="flex-shrink-0 w-24 sm:w-32 md:w-36
-  transition-all duration-300
-  hover:scale-110
-  hover:-translate-y-1">
-          <img
-            src={
-              m.profile_path
-                ? `https://image.tmdb.org/t/p/w185${m.profile_path}`
-                : "/avatar.png"
-            }
-            alt={m.name}
-            className="rounded-lg w-full h-full object-cover"
-          />
+        <div className="flex flex-col gap-4 text-center md:text-left md:mt-40">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold">
+            {movie?.name}
+          </h1>
+
+          <div className="flex gap-2 justify-center md:justify-start">
+            <span className="text-white/50 font-bold">Director:</span>
+            {director?.length > 0 ? (
+              director.map((c) => (
+                <span key={c.id} className="cursor-pointer">
+                  {c.name}
+                </span>
+              ))
+            ) : (
+              <span className="text-white/40">N/A</span>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* ================= OVERVIEW + WATCH ================= */}
+      <div className="flex flex-col xl:flex-row gap-16  px-6 sm:px-12 lg:px-36 py-12">
+
+        <div className="max-w-4xl">
+          <h3 className="text-slate-400 text-xl sm:text-3xl font-bold mb-4">
+            Overview
+          </h3>
+
+          <p
+            className={`text-white/60 leading-relaxed ${
+              showFullOverview ? "" : "line-clamp-4"
+            }`}
+          >
+            {movie?.overview}
+          </p>
+
+          {movie?.overview?.length > 120 && (
+            <button
+              onClick={() => setShowFullOverview(!showFullOverview)}
+              className="md:hidden text-purple-400 mt-2"
+            >
+              {showFullOverview ? "Show less" : "Show more"}
+            </button>
+          )}
         </div>
 
-        <p className="mt-2 text-[10px] sm:text-xs font-semibold text-center text-white truncate">
-          {m.name}
-        </p>
-      </div>
-    ))}
-  </div>
+        <div className="w-full xl:w-[30%] bg-gray-900 rounded-lg p-5">
+          <h3 className="text-lg font-semibold mb-4">Watch on</h3>
 
-  {/* RIGHT BUTTON */}
-  <button
-    onClick={scrollRight}
-    className="
-      absolute right-2 top-1/2 -translate-y-1/2 z-10
-      w-10 h-20
-      bg-black/40 backdrop-blur-md
-      text-white rounded-md
-      flex items-center justify-center
-      opacity-0 group-hover:opacity-100
-      transition-all duration-300
-      hover:scale-110 hover:bg-black/60
-      active:scale-95
-      hidden sm:flex
-    "
-  >
-    <img src="/right.svg" alt="" className="w-5 opacity-80" />
-  </button>
-</div>
-
-
-  {/* RIGHT: STREAMING INFO */}
- <div className="w-full lg:w-[32%] bg-black/40 rounded-lg p-5">
-          <h3 className="text-white text-lg font-semibold mb-4">Watch on</h3>
-
-          {providersList?.length > 0 ? (
+          {providersList.length > 0 ? (
             <div className="flex flex-col gap-3">
-              {providersList?.map((p,index) => (
-             <div
-  key={p.provider_id}
-  className="
-    flex items-center gap-4
-    bg-gray-900/80
-    p-3 rounded-lg
-    animate-left
-  "
-  style={{ animationDelay: `${index * 0.1}s` }}
->
+              {providersList.map((p) => (
+                <div
+                  key={p.provider_id}
+                  className="flex items-center gap-4 bg-black/60 p-3 rounded-md"
+                >
                   <img
                     src={`https://image.tmdb.org/t/p/w92${p.logo_path}`}
                     alt={p.provider_name}
                     className="w-10 h-10 rounded-md"
                   />
-                  <span className="text-gray-200 font-semibold">
-                    {p.provider_name}
-                  </span>
+                  <span>{p.provider_name}</span>
                 </div>
               ))}
             </div>
           ) : (
             <p className="text-gray-400 text-sm">
-              Not available for streaming in your region
+              Not available in your region
             </p>
           )}
-
-          <p className="text-gray-500 text-xs mt-4">
-            Availability may vary by region
-          </p>
         </div>
       </div>
 
+      {/* ================= CAST =================  and */}
+      <div className="flex flex-col xl:flex-row gap-16  px-6 sm:px-12 lg:px-36 py-0">
+             
+      <div className="px-6 sm:px-12 pb-12">
+        <h3 className="text-xl font-semibold mb-4">Cast</h3>
 
+        <div
+          ref={castRef}
+          className="
+            flex gap-4 sm:gap-6
+            overflow-x-auto overflow-y-hidden
+            touch-pan-x
+            scroll-smooth
+            overscroll-x-contain
+            [-ms-overflow-style:none]
+            [scrollbar-width:none]
+            [&::-webkit-scrollbar]:hidden
+          "
+          style={{ WebkitOverflowScrolling: "touch" }}
+        >
+          {credits?.cast?.slice(0, 8).map((m) => (
+            <div key={m.id} className="flex-shrink-0 w-24 sm:w-32 text-center">
+              <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-full overflow-hidden mx-auto">
+                <img
+                  src={
+                    m.profile_path
+                      ? `https://image.tmdb.org/t/p/w500${m.profile_path}`
+                      : "/avatar.png"
+                  }
+                  alt={m.name}
+                  className="object-cover w-full h-full"
+                />
+              </div>
+              <p className="mt-2 text-xs font-semibold truncate">{m.name}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div>
+        
+      </div>
+      </div>
+ 
 
-<div className='w-[90vw] mx-auto   '>
- <ReviewsSection movieId={movie?.id}/>
-</div>
+      {/* ================= REVIEWS ================= */}
+      <div className="bg-black pb-16">
+        <ReviewsSection movieId={movie?.id} />
+      </div>
 
-<Watchlist movieId={movie?.id}/>
- {/* {pages>1?(<Pagen movie={movie} />):<p>page:1</p>} */}
- </>
-  )
-  }
-  export default Result
+      {/* ================= TRAILER OVERLAY ================= */}
+      {showTrailer && (
+        <div className="fixed inset-0 z-[9999] bg-black">
+          <button
+            onClick={() => setShowTrailer(false)}
+            className="absolute top-5 right-5 z-10 bg-black/90 px-4 py-2 rounded text-white"
+          >
+            ✕ Close
+          </button>
+
+          <iframe
+            src={trailerUrl}
+            title="Trailer"
+            className="w-full h-full"
+            allow="autoplay; fullscreen"
+            allowFullScreen
+          />
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default SeriesR;
