@@ -51,9 +51,9 @@
 }
 .bg_color_for{
   background: #8d2c9e;
-background: -webkit-linear-gradient(159deg,rgba(141, 44, 158, 1) 0%, rgba(23, 22, 22, 1) 13%, rgba(0, 0, 0, 1) 100%);
-background: -moz-linear-gradient(159deg,rgba(141, 44, 158, 1) 0%, rgba(23, 22, 22, 1) 13%, rgba(0, 0, 0, 1) 100%);
-background: linear-gradient(159deg,rgba(141, 44, 158, 1) 0%, rgba(23, 22, 22, 1) 13%, rgba(0, 0, 0, 1) 100%);
+background: -webkit-linear-gradient(159deg,rgb(144, 35, 163) 0%, rgb(0, 0, 0) 13%, rgb(0, 0, 0) 100%);
+background: -moz-linear-gradient(159deg,rgba(141, 44, 158, 1) 0%, rgb(0, 0, 0) 13%, rgb(0, 0, 0) 100%);
+background: linear-gradient(159deg,rgba(141, 44, 158, 1) 0%, rgb(0, 0, 0) 13%, rgb(0, 0, 0) 100%);
 
 }
 
