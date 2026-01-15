@@ -7,10 +7,10 @@ import ReviewsSection from "./parent";
 import { fetchMovies } from "@/lib/masterfetch";
 import { fetchCredit } from "@/fetch/credit";
 import { getTrailerUrl } from "@/lib/gettrailer";
-
+import SeriesSkeleton from "./SeriesSkeleton";
 const SeriesR = (movies) => {
   const castRef = useRef(null);
-
+const [loading, setLoading] = useState(true);
   const [movie, setMovie] = useState(null);
   const [credits, setCredits] = useState(null);
   const [showFullOverview, setShowFullOverview] = useState(false);
@@ -33,6 +33,8 @@ const SeriesR = (movies) => {
 
       const trailer = await getTrailerUrl(tvData.id, "movie");
       setTrailerUrl(trailer);
+             
+      setLoading(false)
     }
 
     loadData();
@@ -67,6 +69,10 @@ const SeriesR = (movies) => {
     : "";
     const director = credits?.crew?.filter( (person) => person.job === "Director" );
 console.log(movie)
+
+if (loading) {
+  return <SeriesSkeleton />;
+}
   return (
     <div className="w-full overflow-x-hidden bg-black text-white">
       {/* ================= HERO ================= */}

@@ -7,7 +7,7 @@ import ReviewsSection from "./parent";
 import { fetchMovies } from "@/lib/masterfetch";
 import { fetchCredit } from "@/fetch/credit";
 import { getTrailerUrl } from "@/lib/gettrailer";
-
+import SeriesSkeleton from "./SeriesSkeleton";
 const SeriesR = (movies) => {
   const castRef = useRef(null);
 
@@ -16,10 +16,13 @@ const SeriesR = (movies) => {
   const [showFullOverview, setShowFullOverview] = useState(false);
   const [trailerUrl, setTrailerUrl] = useState(null);
   const [showTrailer, setShowTrailer] = useState(false);
-
+const [loading, setLoading] = useState(true);
   /* ================= FETCH DATA ================= */
   useEffect(() => {
+
     async function loadData() {
+
+
       const tvData = await fetchMovies({
         type: "byid",
         id: movies.movie,
@@ -33,6 +36,8 @@ const SeriesR = (movies) => {
 
       const trailer = await getTrailerUrl(tvData.id, "tv");
       setTrailerUrl(trailer);
+       
+      setLoading(false)
     }
 
     loadData();
@@ -64,17 +69,27 @@ const SeriesR = (movies) => {
 
   const cover = movie?.backdrop_path
     ? `https://image.tmdb.org/t/p/w1920_and_h800_multi_faces/${movie.backdrop_path}`
-    : "";
+  :"hello";
+   
+
+
+if (loading) {
+  return <SeriesSkeleton />;
+}
 
   return (
+
+
+
+
     <div className="w-full overflow-x-hidden bg-black text-white">
       {/* ================= HERO ================= */}
-      <div className="relative min-h-[60vh] md:min-h-[80vh] w-full overflow-hidden">
+      <div className="relative  min-h-[60vh] md:min-h-[80vh] w-full overflow-hidden">
 
         <img
           src={cover}
           alt=""
-          className="absolute inset-0 h-full w-full object-cover scale-105"
+          className="animate-down [animation-delay:0.3s] absolute inset-0 h-full w-full object-cover scale-105"
         />
 
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent" />
@@ -84,7 +99,7 @@ const SeriesR = (movies) => {
           <Rating movieId={movies.movie} />
         </div>
 
-        <div className="absolute hidden lg:flex bottom-16 right-10 z-20">
+        <div className="animate-right [animation-delay:0.3s]  absolute hidden  lg:flex bottom-16 right-10 z-20">
           <Watchlist movieId={movie?.id} />
         </div>
 
@@ -99,12 +114,12 @@ const SeriesR = (movies) => {
       </div>
 
       {/* ================= POSTER + DETAILS ================= */}
-      <div className="relative z-10 grid md:grid-cols-[240px_1fr] gap-6 px-6 sm:px-12  -mt-64 md:ml-28">
+      <div className=" animate-left [animation-delay:0.3s]relative z-10 grid md:grid-cols-[240px_1fr] gap-6 px-6 sm:px-12  -mt-64 md:ml-28 ">
 
         <img
           src={poster}
           alt=""
-          className="w-36 sm:w-40 md:w-52 rounded-xl shadow-2xl mx-auto md:mx-0"
+          className="w-36 sm:w-40 md:w-52 rounded-xl  shadow-2xl mx-auto md:mx-0"
         />
 
         <div className="flex flex-col gap-4 text-center md:text-left md:mt-40">
@@ -153,7 +168,7 @@ const SeriesR = (movies) => {
           )}
         </div>
 
-        <div className="w-full xl:w-[30%] bg-gray-900 rounded-lg p-5">
+        <div className="  w-full xl:w-[30%] bg-gray-900 rounded-lg p-5">
           <h3 className="text-lg font-semibold mb-4">Watch on</h3>
 
           {providersList.length > 0 ? (
