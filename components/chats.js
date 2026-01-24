@@ -30,7 +30,14 @@ fetchConversations();
 console.log("conversations",conversations)
 const handleClick = (id) => {
     router.push(`/message/${id}`);
-}
+};
+
+
+
+
+
+
+
   return (
 <div >
 
@@ -50,7 +57,7 @@ const handleClick = (id) => {
         {receiver?.username || "Unknown user"}
       </h3>
       <div>
-        {conversation?.lastMessage?.text || "No messages yet."}
+        {conversations?.lastMessage?.text|| "No messages yet."}
       </div>
     </div>
   );
