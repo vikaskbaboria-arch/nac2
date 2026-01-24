@@ -76,7 +76,7 @@ if (loading) {
   return (
     <div className="w-full overflow-x-hidden bg-black text-white">
       {/* ================= HERO ================= */}
-      <div className="relative min-h-[60vh] md:min-h-[80vh] w-full overflow-hidden">
+      <div className="relative min-h-[60vh] md:min-h-[70vh] w-full overflow-hidden">
 
         <img
           src={cover}
@@ -91,9 +91,7 @@ if (loading) {
           <Rating movieId={movies.movie} />
         </div>
 
-        <div className="absolute hidden lg:flex bottom-16 right-10 z-20">
-          <Watchlist movieId={movie?.id} />
-        </div>
+   
 
         <div className="absolute inset-0 hidden lg:flex items-center justify-center z-20">
           <button
@@ -106,7 +104,7 @@ if (loading) {
       </div>
 
       {/* ================= POSTER + DETAILS ================= */}
-      <div className="relative z-10 grid md:grid-cols-[240px_1fr] gap-6 px-6 sm:px-12  -mt-64 md:ml-28">
+      <div className="relative z-10 grid md:grid-cols-[240px_1fr] gap-6 px-6 sm:px-12  -mt-72 md:ml-28 ">
 
         <img
           src={poster}
@@ -114,28 +112,52 @@ if (loading) {
           className="w-36 sm:w-40 md:w-52 rounded-xl shadow-2xl mx-auto md:mx-0"
         />
 
-        <div className="flex flex-col gap-4 text-center md:text-left md:mt-40">
+        <div className="flex flex-col  gap-3 text-center md:text-left md:mt-40">
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold">
-            {movie?.name}
+            {movie?.title}
           </h1>
 
           <div className="flex gap-2 justify-center md:justify-start">
-            <span className="text-white/50 font-bold">Director:</span>
+            <span className="text-white font-bold">Director:</span>
             {director?.length > 0 ? (
               director.map((c) => (
-                <span key={c.id} className="cursor-pointer">
+                <span key={c.id} className="text-white/50 cursor-pointer">
                   {c.name}
                 </span>
               ))
             ) : (
-              <span className="text-white/40">N/A</span>
+              <span className="text-white/50">N/A</span>
             )}
           </div>
+            <div className=" flex gap-1">  Release Year:
+              {movie?.release_date && (  
+                <span className="text-white/50 ">
+               
+                  {new Date(movie.release_date).getFullYear() }
+                </span>)}
+              </div>  
+          {/* <div className=" flex gap-1">  Duration:
+              {movie?.runtime && (  
+                <span className="text-white/50 "> 
+                  {movie.runtime} min
+                </span>)}
+              </div>   */}
+          <div className=" flex gap-1">  Genres:
+              {movie?.genres && (  
+                <span className="text-white/50 ">  
+                  {movie.genres.map((genre) => genre.name).join(", ")}
+                </span>)}
+              </div>  
+              </div>
+         <div className="absolute  right-86 hidden lg:flex bottom-10 mr-18  z-20">
+          <Watchlist movieId={movie?.id} />
         </div>
       </div>
 
+
+      
       {/* ================= OVERVIEW + WATCH ================= */}
-      <div className="flex flex-col xl:flex-row gap-16  px-6 sm:px-12 lg:px-36 py-12">
+      <div className="flex flex-col xl:flex-row gap-16 px-6 sm:px-12 lg:px-36 py-12">
 
         <div className="max-w-4xl">
           <h3 className="text-slate-400 text-xl sm:text-3xl font-bold mb-4">
@@ -160,15 +182,18 @@ if (loading) {
           )}
         </div>
 
-        <div className="w-full xl:w-[30%] bg-gray-900 rounded-lg p-5">
+        <div className="w-full xl:w-[40%]   bg-gray-900 rounded-lg p-5">
           <h3 className="text-lg font-semibold mb-4">Watch on</h3>
 
           {providersList.length > 0 ? (
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-row gap-3 max-w-full no-scrollbar overflow-x-auto">
               {providersList.map((p) => (
                 <div
                   key={p.provider_id}
-                  className="flex items-center gap-4 bg-black/60 p-3 rounded-md"
+                  className="   flex-shrink-0
+w-full
+    flex items-center gap-3
+    bg-black/60 p-3 rounded-md"
                 >
                   <img
                     src={`https://image.tmdb.org/t/p/w92${p.logo_path}`}
@@ -188,7 +213,7 @@ if (loading) {
       </div>
 
       {/* ================= CAST =================  and */}
-      <div className="flex flex-col xl:flex-row gap-16  px-6 sm:px-12 lg:px-36 py-0">
+      <div className="flex flex-col xl:flex-row gap-16 md:justify-center  px-6 sm:px-12 lg:px-36 py-0">
              
       <div className="px-6 sm:px-12 pb-12">
         <h3 className="text-xl font-semibold mb-4">Cast</h3>
@@ -207,9 +232,9 @@ if (loading) {
           "
           style={{ WebkitOverflowScrolling: "touch" }}
         >
-          {credits?.cast?.slice(0, 8).map((m) => (
-            <div key={m.id} className="flex-shrink-0 w-24 sm:w-32 text-center">
-              <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-full overflow-hidden mx-auto">
+          {credits?.cast?.slice(0, 6).map((m) => (
+            <div key={m.id} className="flex-shrink-0 w-18 sm:w-28 text-center">
+              <div className="w-18 h-18 sm:w-28 sm:h-28 rounded-full overflow-hidden mx-auto">
                 <img
                   src={
                     m.profile_path

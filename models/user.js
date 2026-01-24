@@ -13,7 +13,7 @@ const UserSchema =new Schema ({
     name:{
         type:String
     },
-   
+    
     profilepic:{
         type:String
     },

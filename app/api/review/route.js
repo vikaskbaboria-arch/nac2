@@ -83,5 +83,39 @@ const GET = async (req) => {
     return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 };
+export const DELETE=async(req)=>{
+  try {
+    await connectDB();
+     const session = await getServerSession(authOptions);
+       if (!session?.user?.email) {
+         return NextResponse.json({ error: "User not authenticated" }, { status: 401 });
+       }
+     
+       const {movieid,movieId}  = await req.json();
+     const mid = Number(movieId || movieid);
+       console.log(movieId)
+      if (!mid || typeof mid !== "number") {
+            return NextResponse.json({ error: "Valid movieid required" }, { status: 403 });
+          }
 
+     const user = await User.findOne({email:session.user.email})
+       if (!user) {
+           return NextResponse.json({ error: "User not found" }, { status: 404 });
+         }
+
+    const movie = await Movie.findOne({movieid:mid})
+    if (!movie) {
+           return NextResponse.json({ error: "Movie not found" }, { status: 404 });
+         }
+    const deleted= await  Review.findOneAndDelete({user:user._id,movie:movie._id});
+     if (!deleted) {
+          return NextResponse.json({ error: "Not in Review" }, { status: 400 });
+        }
+    
+        return NextResponse.json({ message: "review deleted" }, { status: 200 });
+  } catch (error) {
+     console.error("DELETE review error:", error);
+    return NextResponse.json({ error: "Server error" }, { status: 500 });
+  }
+}
 export { GET, POST };

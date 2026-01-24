@@ -99,9 +99,7 @@ if (loading) {
           <Rating movieId={movies.movie} />
         </div>
 
-        <div className="animate-right [animation-delay:0.3s]  absolute hidden  lg:flex bottom-16 right-10 z-20">
-          <Watchlist movieId={movie?.id} />
-        </div>
+      
 
         <div className="absolute inset-0 hidden lg:flex items-center justify-center z-20">
           <button
@@ -140,6 +138,9 @@ if (loading) {
             )}
           </div>
         </div>
+           <div className="absolute  right-52 hidden lg:flex bottom-10 mr-18  z-20">
+          <Watchlist movieId={movie?.id} />
+        </div>
       </div>
 
       {/* ================= OVERVIEW + WATCH ================= */}
@@ -168,15 +169,18 @@ if (loading) {
           )}
         </div>
 
-        <div className="  w-full xl:w-[30%] bg-gray-900 rounded-lg p-5">
+        <div className="w-full xl:w-[40%]  bg-gray-900 rounded-lg p-5">
           <h3 className="text-lg font-semibold mb-4">Watch on</h3>
 
           {providersList.length > 0 ? (
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-row gap-3 max-w-full no-scrollbar overflow-x-auto">
               {providersList.map((p) => (
                 <div
                   key={p.provider_id}
-                  className="flex items-center gap-4 bg-black/60 p-3 rounded-md"
+                  className="   flex-shrink-0
+w-full
+    flex items-center gap-3
+    bg-black/60 p-3 rounded-md"
                 >
                   <img
                     src={`https://image.tmdb.org/t/p/w92${p.logo_path}`}
@@ -193,10 +197,11 @@ if (loading) {
             </p>
           )}
         </div>
+        
       </div>
 
       {/* ================= CAST ================= */}
-  <div className="flex flex-col xl:flex-row gap-16  px-6 sm:px-12 lg:px-36 py-0">
+  <div className="flex flex-col xl:flex-row gap-16  md:justify-center px-6 sm:px-12 lg:px-36 py-0">
              
       <div className="px-6 sm:px-12 pb-12">
         <h3 className="text-xl font-semibold mb-4">Cast</h3>
@@ -215,9 +220,9 @@ if (loading) {
           "
           style={{ WebkitOverflowScrolling: "touch" }}
         >
-          {credits?.cast?.slice(0, 8).map((m) => (
-            <div key={m.id} className="flex-shrink-0 w-24 sm:w-32 text-center">
-              <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-full overflow-hidden mx-auto">
+          {credits?.cast?.slice(0, 6).map((m) => (
+            <div key={m.id} className="flex-shrink-0 w-18 sm:w-28 text-center">
+              <div className="w-18 h-18 sm:w-28 sm:h-28 rounded-full overflow-hidden mx-auto">
                 <img
                   src={
                     m.profile_path
@@ -234,7 +239,7 @@ if (loading) {
         </div>
       </div>
       <div>
-        
+           
       </div>
       </div>
 
