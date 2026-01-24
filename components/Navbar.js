@@ -77,6 +77,11 @@ const Navbar = () => {
       
       <ul className="hidden bg-black/5 hover:bg-black/20 border border-white/10 backdrop-blur-md transition sm:flex items-center gap-4 px-2 py-1 text-sm font-medium bg-gray-950 rounded-2xl">
         <li className="hover:text-purple-400 transition"><Link href="/">Home</Link></li>
+        {session && status === 'authenticated' ? (<li>
+          <Link href="/chats" className="hover:text-purple-400 transition">
+            Chats
+          </Link>
+        </li>):null}
         <li className="hover:text-purple-400 transition"><Link href="/about">About</Link></li>{status === 'authenticated' && session ? (
         <li className="hover:text-purple-400 transition"><Link href={`/profile/${session.user.email.split("@")[0]}`}>
   Profile
