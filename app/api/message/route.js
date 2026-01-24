@@ -22,9 +22,15 @@ export  const POST = async (req) => {
             text:text,
             sender:sender
         })
-        const lastMessage= await Conversation.findByIdAndUpdate(converastionId, {
-  lastMessage: newMessage._id,
-});
+     await Conversation.findByIdAndUpdate(
+      converastionId,
+      {
+        $set: {
+          lastMessage: newMessage._id,
+        },
+      },
+      { new: true }
+    );
 if(!lastMessage){
     return NextResponse({status:400},{error:"lastmessage"})
 }
