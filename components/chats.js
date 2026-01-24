@@ -57,7 +57,7 @@ const handleClick = (id) => {
         {receiver?.username || "Unknown user"}
       </h3>
       <div>
-        {conversations?.lastMessage?.text|| "No messages yet."}
+        {conversation?.lastMessage?.text|| "No messages yet."}
       </div>
     </div>
   );
