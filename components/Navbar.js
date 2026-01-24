@@ -121,7 +121,7 @@ const Navbar = () => {
                 <li className="p-2 hover:bg-white/5"><Link href={`/profile/${session.user.email.split("@")[0]}`}>
   Profile
 </Link></li>
-                <li className="p-2 hover:bg-white/5"><Link href="#">Settings</Link></li>
+                <li className="p-2 hover:bg-white/5"><Link href="/chats">chats</Link></li>
                 <li className="p-2 hover:bg-white/5"><Link href="#">Earnings</Link></li>
                 <li className="p-2 hover:bg-red-500/10">
                   <button onClick={() => signOut()}>Sign out</button>

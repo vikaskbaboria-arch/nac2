@@ -28,8 +28,8 @@ const Watchlist = ({ movieId }) => {
 
   return (
 
-    <div className="relative" >
-      <div className="relative bg-purple-500 flex hover:bg-purple-600 justify-center items-center rounded-xl text-lg text-white/80  w-60 h-12 " >
+    <div className="absolute" >
+      <div className="absolute bg-purple-500 flex hover:bg-purple-900 justify-center items-center rounded-xl text-lg text-white/80  w-68 h-12 " >
       <button onClick={handleSubmit} >{watchlist}</button>
     </div>
        {logpop && (

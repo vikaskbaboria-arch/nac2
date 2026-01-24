@@ -34,8 +34,13 @@ export const authOptions = {
       return true;
     },
     async session({ session }) {
+    
+    
       const dbUser = await User.findOne({ email: session.user.email });
-      if (dbUser) session.user.name = dbUser.username;
+      if (dbUser) {session.user.name = dbUser.username;
+session.user.id = await dbUser._id ;
+      }; 
+       
       return session;
     },
   },
