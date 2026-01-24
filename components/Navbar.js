@@ -77,11 +77,7 @@ const Navbar = () => {
       
       <ul className="hidden bg-black/5 hover:bg-black/20 border border-white/10 backdrop-blur-md transition sm:flex items-center gap-4 px-2 py-1 text-sm font-medium bg-gray-950 rounded-2xl">
         <li className="hover:text-purple-400 transition"><Link href="/">Home</Link></li>
-        {session && status === 'authenticated' ? (<li>
-          <Link href="/chats" className="hover:text-purple-400 transition">
-            Chats
-          </Link>
-        </li>):null}
+       
         <li className="hover:text-purple-400 transition"><Link href="/about">About</Link></li>{status === 'authenticated' && session ? (
         <li className="hover:text-purple-400 transition"><Link href={`/profile/${session.user.email.split("@")[0]}`}>
   Profile
@@ -147,7 +143,10 @@ const Navbar = () => {
         ${mobileMenu ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4 pointer-events-none"}
       `}>
         <Link onClick={()=>setMobileMenu(false)} className="block p-4 border-b border-white/10" href="/">Home</Link>
-        <Link onClick={()=>setMobileMenu(false)} className="block p-4 border-b border-white/10" href="/about">About</Link>
+        <Link onClick={()=>setMobileMenu(false)} className="block p-4 border-b border-white/10" href="/about">About</Link> {session && status === 'authenticated' ? (
+          <Link onClick={()=>setMobileMenu(false)}  href="/chats" className="hover:text-purple-400 transition">
+            Chats
+          </Link>):null}
         <button onClick={()=>{setButton(true); setMobileMenu(false)}} className="block w-full text-left p-4">
           Search
         </button>
