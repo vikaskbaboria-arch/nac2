@@ -8,11 +8,6 @@ const ConservationSchema = new mongoose.Schema({
            required:true
     }
     ],
-    message:{
-        type:String,
-        red:"Message"
-    },
-
     lastMessage: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Message",

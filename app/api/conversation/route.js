@@ -49,7 +49,15 @@ export const GET = async (req) => {
     // 🔹 CASE 1: Single conversation by ID
     if (conversationId) {
       const conversation = await Conversation.findById(conversationId)
-        .populate("members", "username email");
+        .populate("members", "username email")
+.populate({
+  path: "lastMessage",
+  select: "text sender createdAt",
+})
+
+  .sort({ updatedAt: -1 })
+  .exec();
+
 
       if (!conversation) {
         return NextResponse.json(
@@ -69,7 +77,10 @@ export const GET = async (req) => {
         }
         await connectDB();
         const user = await User.findOne({ email: session.user.email });
-        const conversations = await Conversation.find({ members: user._id }).populate('members', 'username email').exec();
+        const conversations = await Conversation.find({ members: user._id }).populate('members', 'username email')  .populate({
+    path: "lastMessage",
+    select: "text sender createdAt",
+  }).exec();
         return NextResponse.json({ conversations }, { status: 200 });
     } catch (error) {
         return NextResponse.json({error:"Database connection failed"},{status:500});

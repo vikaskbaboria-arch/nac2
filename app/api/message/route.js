@@ -53,11 +53,25 @@ if(!lastMessage){
 export const GET = async(req)=>{
     try {
        await connectDB();
+       
+
+
+
        const url = new URL(req.url);
      const conversationId = url.searchParams.get("chat") || url.searchParams.get("chat");
+     const lastMessageid =url.searchParams.get("lastMessage")|| url.searchParams.get("lastMessage");
+
+     if(lastMessageid){
+     const lastMessage=await Message.findById(lastMessageid);
+        if(!lastMessage){
+            return NextResponse({error:"last message ot found"},{status:401})
+        }
+        return NextResponse.json({lastMessage},{status:200})
+     }
      if(!conversationId){
         return NextResponse.json({error:"not a valid conversationid"},{status:400})
      }
+     
      const message=  await Message.find({conversation:conversationId}).
    populate("sender", "username email")
    .sort({ createdAt: 1 })
