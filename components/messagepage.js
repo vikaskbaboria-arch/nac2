@@ -34,6 +34,7 @@ fetchmessages();
     id: msg?._id,
     text: msg?.text,
     mine: msg?.sender?._id === session?.user?.id,
+    createdAt: msg?.createdAt,
   }));
 
   const sendMessage = async () => {
