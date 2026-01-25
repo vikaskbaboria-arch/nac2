@@ -28,7 +28,7 @@ const MessagePage = ({conversationid}) => {
    }
    
 fetchmessages();
-  },[conversationid]);
+  },[message]);
   console.log(messagess);
   const messages = messagess.map((msg) => ({
     id: msg?._id,
@@ -80,7 +80,7 @@ const receiver = name?.find(
 const receiverName = receiver?.username;
 
  
-   
+   console.log(messages)
   return (
 <div className="h-screen flex flex-col bg-[#0b0b0c] text-white">
 
