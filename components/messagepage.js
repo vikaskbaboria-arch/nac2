@@ -81,110 +81,84 @@ const receiverName = receiver?.username;
  
    
   return (
-<div className="h-screen bg-gradient-to-b from-black via-zinc-900 to-black text-white flex flex-col">
+<div className="h-screen flex flex-col bg-[#0b0b0c] text-white">
 
   {/* HEADER */}
-  <div className="
-    sticky top-0 z-50
-    bg-black/70 backdrop-blur-md
-    px-4 py-3 sm:px-6
-    border-b border-white/10
-    flex items-center gap-4
-  ">
-    {/* Avatar */}
-    <div className="
-      h-10 w-10 sm:h-12 sm:w-12
-      rounded-full
-      bg-gradient-to-br from-purple-500 to-pink-500
-      flex items-center justify-center
-      font-bold text-black
-    ">
-      {receiverName?.[0]?.toUpperCase()}
-    </div>
+  <div className="sticky top-0 z-40 px-4 sm:px-6 py-3 border-b border-white/5 bg-[#0b0b0c]/90 backdrop-blur">
+    <div className="flex items-center gap-3">
+      <div className="h-10 w-10 rounded-full bg-zinc-700 flex items-center justify-center text-sm font-medium">
+        {receiverName?.[0]?.toUpperCase()}
+      </div>
 
-    {/* Name + status */}
-    <div className="flex-1">
-      <p className="font-semibold text-sm sm:text-base truncate">
-        {receiverName}
-      </p>
-      <div className="flex items-center gap-1 text-xs text-green-400">
-        <span className="h-2 w-2 bg-green-400 rounded-full animate-pulse" />
-        online
+      <div className="leading-tight">
+        <p className="text-sm sm:text-base font-medium">
+          {receiverName}
+        </p>
+        <p className="text-xs text-zinc-400">online</p>
       </div>
     </div>
   </div>
 
   {/* MESSAGES */}
-  <div className="
-    flex-1 overflow-y-auto
-    px-3 sm:px-6 py-4
-    space-y-3
-    scrollbar-hidden
-  ">
-    {messages.map((msg) => (
-      <div
-        key={msg.id}
-        className={`flex ${msg.mine ? "justify-end" : "justify-start"}`}
-      >
+  <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-6 space-y-6">
+
+    {messages.map((msg, index) => {
+      const time = new Date(msg.createdAt).toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+
+      return (
         <div
-          className={`
-            max-w-[85%] sm:max-w-[70%]
-            px-4 py-2.5
-            text-sm sm:text-base
-            rounded-2xl
-            shadow-md
-            transition-all
-            ${msg.mine
-              ? "bg-gradient-to-br from-purple-600 to-indigo-600 rounded-br-sm"
-              : "bg-zinc-800 rounded-bl-sm"}
-          `}
+          key={msg._id || index}
+          className={`flex ${msg.mine ? "justify-end" : "justify-start"}`}
         >
-          {msg.text}
+          <div className="max-w-[85%] sm:max-w-[70%]">
+            
+            {/* Message bubble */}
+            <div
+              className={`px-4 py-2.5 rounded-lg text-sm sm:text-base leading-relaxed
+                ${msg.mine
+                  ? "bg-zinc-800 text-white"
+                  : "bg-zinc-900 text-zinc-100"}
+              `}
+            >
+              {msg.text}
+            </div>
+
+            {/* Timestamp */}
+            <div
+              className={`mt-1 text-[11px] text-zinc-500 ${
+                msg.mine ? "text-right" : "text-left"
+              }`}
+            >
+              {time}
+            </div>
+          </div>
         </div>
-      </div>
-    ))}
+      );
+    })}
   </div>
 
   {/* INPUT */}
-  <div className="
-    sticky bottom-0 z-50
-    bg-black/70 backdrop-blur-md
-    px-3 sm:px-6 py-3
-    border-t border-white/10
-    flex gap-3
-  ">
-    <input
-      value={message}
-      onChange={(e) => setMessage(e.target.value)}
-      placeholder="Type a message…"
-      className="
-        flex-1
-        px-4 py-3
-        rounded-full
-        bg-zinc-900
-        text-sm sm:text-base
-        outline-none
-        border border-white/10
-        focus:border-purple-500/60
-        focus:ring-2 focus:ring-purple-500/20
-        transition
-      "
-    />
+  <div className="sticky bottom-0 z-40 px-4 sm:px-6 py-3 border-t border-white/5 bg-[#0b0b0c]/90 backdrop-blur">
+    <div className="flex items-center gap-3">
 
-    <button
-      onClick={sendMessage}
-      className="
-        px-5 sm:px-6 py-3
-        rounded-full
-        bg-gradient-to-br from-purple-600 to-indigo-600
-        text-sm sm:text-base font-medium
-        hover:opacity-90
-        active:scale-95
-        transition
-      "
-    >
-      Send
-    </button>
+      <input
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+        placeholder="Message…"
+        className="flex-1 bg-zinc-900 px-4 py-2.5 rounded-md text-sm sm:text-base outline-none border border-white/5 focus:border-zinc-600 transition"
+      />
+
+      <button
+        onClick={sendMessage}
+        className="px-4 py-2.5 rounded-md bg-white text-black text-sm font-medium hover:opacity-90 active:scale-[0.97] transition"
+      >
+        Send
+      </button>
+
+    </div>
   </div>
 
 </div>
