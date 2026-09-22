@@ -67,11 +67,11 @@ useEffect(() => {
 // }
 // const genreNames = getGenreNames(28)
 const handleLink=(movie)=>{
-   router.push(`/movie/${movie.id}`)
+   router.push(`/movie/${movie.id}?type=movie`)
    
 }
 const handlejust=(m)=>{
-  router.push(`/genre/${m}`)
+  router.push(`/genre/${m}?type=movie`)
 }
 const [button,setButton]=useState(false)
 const mouseenter=()=>{

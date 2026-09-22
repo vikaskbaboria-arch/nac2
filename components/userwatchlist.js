@@ -14,13 +14,25 @@ const Userwatchlist = () => {
     };
     loadData();
   }, []);
-  console.log(watchlist)
+
   return (
-    <div>
+    <div
+      className="
+        grid
+        grid-cols-2
+        sm:grid-cols-3
+        md:grid-cols-4
+        lg:grid-cols-5
+        gap-4
+      "
+    >
       {watchlist.map((item) => (
         <Watchcomp
-          key={item._id}              // ✅ UNIQUE KEY
+          key={item._id}
           movieid={item.movie.movieid}
+          posterPath={item.movie.poster_path}
+          title={item.movie.title || item.movie.name}
+          mediaType={item.movie.media_type}
         />
       ))}
     </div>

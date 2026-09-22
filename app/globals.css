@@ -141,7 +141,12 @@ background: linear-gradient(159deg,rgba(141, 44, 158, 1) 0%, rgb(0, 0, 0) 13%, r
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
 }
-
+.footerbg{
+  background-color: #0000009b;
+}
+.bghomerev{
+  background-color: #1d1b1b;
+}
 .dark {
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
@@ -275,4 +280,9 @@ background: linear-gradient(159deg,rgba(141, 44, 158, 1) 0%, rgb(0, 0, 0) 13%, r
     opacity: 1;
     transform: scale(1);
   }
+}
+
+.blackgreengrad{
+background: #2c9e49;
+background: linear-gradient(151deg, rgba(44, 158, 73, 1) 0%, rgba(5, 17, 36, 1) 5%, rgba(0, 0, 0, 1) 12%);
 }

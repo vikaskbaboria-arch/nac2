@@ -1,6 +1,7 @@
 "use client"
 import React, { useEffect, useState, useRef } from 'react'
 import { fetchMovies } from '@/lib/masterfetch'
+import RetroTv from '@/components/RetroTv'
 
 import { useRouter } from 'next/navigation'
 export default function HomeCarousel() {
@@ -111,41 +112,45 @@ export default function HomeCarousel() {
 
   const handleCick=((m)=>{
        if(m.media_type==="movie"){
-    router.push(`/movie/${m?.id}`);}
+    router.push(`/movie/${m?.id}?type=movie`);}
    else{
-    router.push(`/series/${m.id}`);
+    router.push(`/series/${m.id}?type=tv`);
    }
   })
 
-  return (
-    <div className="px-13 my-8 rounded-lg">
-      <div className="flex items-center justify-between rounded gap-4">
-        <button aria-label="prev" onClick={prev} className="px-3 hidden sm:flex  text-white py-2 bg-slate-900 rounded">{'<'}</button>
+  const channelNumber = slides.length
+    ? String(((currentIndex - 1 + slides.length) % slides.length) + 1).padStart(2, '0')
+    : '00'
 
+  return (
+    <div className="px-4 sm:px-13 my-8 rounded-lg">
+      <RetroTv onPrev={prev} onNext={next} channel={channelNumber}>
         <div
           ref={containerRef}
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
-          className="w-full max-w-[1200px]  mx-auto overflow-hidden rounded-md"
-       
+          className="w-full h-full mx-auto overflow-hidden"
         >
           {slides.length === 0 ? (
-            <div className="w-full h-[20vh] md:h-[50vh] lg:h-[60vh] rounded-md flex items-center justify-center bg-gradient-to-tr from-gray-900  to-purple-900 text-white font-bold text-xl">No slides available</div>
+            <div className="w-full h-full flex items-center justify-center bg-gradient-to-tr from-[#2b2018] to-[#17110b] text-[var(--fade)] font-[var(--font-arvo)] font-bold text-xl">
+              Tuning in&hellip;
+            </div>
           ) : (
             <div
               ref={trackRef}
-              className="flex"
-              style={{ width: `${extended.length * slideWidth}px`, wil2lChange: 'transform' }}
+              className="flex h-full"
+              style={{ width: `${extended.length * slideWidth}px`, willChange: 'transform' }}
             >
               {extended.map((m, idx) => (
                 <div key={idx}
                   onClick={()=>(handleCick(m))}
-                className="flex-shrink-0 p-2" style={{ width: `${slideWidth}px` }}>
-                  <div className="h-[20vh] md:h-[50vh] lg:h-[60vh] relative rounded-lg overflow-hidden border-2 border-white/10">
-                    <img src={`https://image.tmdb.org/t/p/w1280/${m.backdrop_path}`} alt={m?.title } className="w-full h-full object-cover" />
-                    <div className="absolute bottom-1.5 left-2 sm:left-4 sm:bottom-6 text-white font-semibold sm:text-3xl">{m?.title || m?.name}</div>
-                    <div className="absolute top-2 sm:top-4  w-14 h-4 right-2 sm:right-4 text-xs bg-green-700 text-white px-2 rounded flex items-center justify-center"> 
-                  {m?.vote_average}
+                className="flex-shrink-0 p-0 h-full cursor-pointer" style={{ width: `${slideWidth}px` }}>
+                  <div className="h-full relative overflow-hidden">
+                    <img src={`https://image.tmdb.org/t/p/w1280/${m.backdrop_path}`} alt={m?.title } className="w-full h-full object-cover sepia-[0.25] contrast-110" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+                    <div className="absolute bottom-1.5 left-2 sm:left-4 sm:bottom-6 text-[var(--paper)] font-[var(--font-alfa-slab)] font-normal sm:text-2xl drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">{m?.title || m?.name}</div>
+                    <div className="absolute top-2 sm:top-4 min-w-10 h-5 right-2 sm:right-4 text-xs rating-tag px-2 rounded flex items-center justify-center">
+                  {m?.vote_average?.toFixed?.(1) ?? m?.vote_average}
                     </div>
                   </div>
                 </div>
@@ -153,13 +158,9 @@ export default function HomeCarousel() {
             </div>
           )}
         </div>
-
-        <button aria-label="next" onClick={next} className="px-3 hidden sm:flex py-2 bg-slate-900 text-white rounded">{'>'}</button>
-      </div>
+      </RetroTv>
     </div>
   )
 }
-
-
 
 

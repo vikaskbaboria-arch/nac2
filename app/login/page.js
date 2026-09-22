@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
+import { fetchMovies } from "@/lib/masterfetch";
 
 /* ================= STARFIELD BACKGROUND ================= */
 function Starfield() {
@@ -55,11 +56,63 @@ function Starfield() {
     };
   }, []);
 
+  return <canvas ref={canvasRef} className="absolute inset-0 z-0" />;
+}
+
+/* ================= POSTER COLLAGE (left panel) ================= */
+function PosterCollage() {
+  const [posters, setPosters] = useState(null);
+
+  useEffect(() => {
+    fetchMovies({ type: "trending", time: "day", type_of: "all" })
+      .then((m) => {
+        const urls = (m?.results || [])
+          .filter((r) => r.poster_path)
+          .slice(0, 9)
+          .map((r) => `https://image.tmdb.org/t/p/w342${r.poster_path}`);
+        setPosters(urls);
+      })
+      .catch(() => setPosters([]));
+  }, []);
+
   return (
-    <canvas
-      ref={canvasRef}
-      className="absolute inset-0 z-0"
-    />
+    <div className="relative  h-full w-full overflow-hidden md:block">
+      {/* Poster grid */}
+      <div className="grid h-full grid-cols-3 gap-1 p-1">
+        {(posters ?? Array.from({ length: 9 })).map((src, i) => (
+          <div
+            key={src ?? i}
+            className="relative overflow-hidden rounded-md bg-white/5"
+          >
+            {src ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={src}
+                alt=""
+                className="h-full w-full object-cover"
+                style={{ animationDelay: `${i * 70}ms` }}
+              />
+            ) : (
+              <div className="h-full w-full animate-pulse bg-white/5" />
+            )}
+          </div>
+        ))}
+      </div>
+
+      {/* Blend into the card: dark on the edges, clearest in the middle */}
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black via-black/30 to-black/60" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/10 via-transparent to-black/80" />
+
+      {/* Copy over the collage */}
+      <div className="absolute inset-0 flex flex-col justify-end p-10 text-white">
+        <h1 className="text-4xl font-bold mb-3">
+          Welcome to <span className="text-[#7d29e4]">NAC</span>
+        </h1>
+        <p className="max-w-md text-gray-300">
+          Discover movies, rate content, and build your watchlist.
+        </p>
+      </div>
+    </div>
   );
 }
 
@@ -93,16 +146,16 @@ export default function Login() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-black">
         <div className="w-72 space-y-4 animate-pulse">
-          <div className="h-6 bg-gray-700 rounded" />
-          <div className="h-10 bg-gray-700 rounded" />
-          <div className="h-10 bg-gray-700 rounded" />
+          <div className="h-6 bg-white/10 rounded" />
+          <div className="h-10 bg-white/10 rounded" />
+          <div className="h-10 bg-white/10 rounded" />
         </div>
       </div>
     );
   }
 
   return (
-    <div className="relative min-h-screen overflow-hidden flex items-center justify-center bg-black px-4">
+    <div className="relative mt-12 overflow-hidden flex items-center justify-center bg-black px-4">
 
       {/* Starfield */}
       <Starfield />
@@ -119,7 +172,7 @@ export default function Login() {
               initial={{ scale: 0.6, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.8 }}
-              className="text-4xl font-bold text-purple-400"
+              className="text-4xl font-bold text-[#e8a94a]"
             >
               NAC
             </motion.h1>
@@ -132,24 +185,17 @@ export default function Login() {
         initial={{ opacity: 0, y: 60 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="relative z-10 w-full max-w-5xl grid grid-cols-1 md:grid-cols-2
-                   rounded-2xl bg-white/5 backdrop-blur-2xl
+        className="relative z-10 w-full max-w-5xl h-[560px] grid grid-cols-1 md:grid-cols-2
+                   rounded-2xl overflow-hidden bg-white/5 backdrop-blur-2xl
                    border border-white/10
-                   shadow-[0_0_80px_rgba(168,85,247,0.25)]"
+                   shadow-[0_0_80px_rgba(232,169,74,0.18)]"
       >
 
-        {/* LEFT PANEL */}
-        <div className="hidden md:flex flex-col justify-center p-10 text-white">
-          <h1 className="text-4xl font-bold mb-4">
-            Welcome to <span className="text-purple-400">NAC</span>
-          </h1>
-          <p className="text-gray-400 max-w-md">
-            Discover movies, rate content, and build your watchlist.
-          </p>
-        </div>
+        {/* LEFT PANEL: poster collage */}
+        <PosterCollage />
 
-        {/* RIGHT PANEL */}
-        <div className="flex flex-col items-center justify-center p-10 bg-black/40 rounded-2xl">
+        {/* RIGHT PANEL: sign in */}
+        <div className="flex flex-col items-center justify-center p-10 bg-black/40">
           <h2 className="text-2xl text-white font-semibold mb-2">
             Sign in
           </h2>
@@ -159,18 +205,38 @@ export default function Login() {
           </p>
 
           <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
             onClick={() => signIn("google")}
             className="w-full max-w-xs px-6 py-3 rounded-lg
-                       bg-gradient-to-r from-purple-700 to-pink-600
-                       text-white font-semibold shadow-lg"
+                       green-500 bg-gradient-to-r from-[#005df3] to-[#000000]
+                       text-white text-sm sm:text-base
+                       font-semibold shadow-lg
+                       flex items-center justify-center gap-2"
           >
+            <svg viewBox="0 0 24 24" className="size-5" aria-hidden="true">
+              <path
+                fill="#4285F4"
+                d="M23.5 12.3c0-.8-.1-1.6-.2-2.4H12v4.5h6.5a5.6 5.6 0 0 1-2.4 3.7v3h3.9c2.3-2.1 3.5-5.2 3.5-8.8Z"
+              />
+              <path
+                fill="#34A853"
+                d="M12 24c3.2 0 6-1.1 7.9-2.9l-3.9-3c-1.1.7-2.4 1.2-4 1.2-3.1 0-5.7-2.1-6.6-4.9H1.4v3.1A12 12 0 0 0 12 24Z"
+              />
+              <path
+                fill="#FBBC05"
+                d="M5.4 14.4a7.2 7.2 0 0 1 0-4.6V6.7H1.4a12 12 0 0 0 0 10.8l4-3.1Z"
+              />
+              <path
+                fill="#EA4335"
+                d="M12 4.8c1.7 0 3.3.6 4.5 1.8l3.4-3.4A12 12 0 0 0 1.4 6.7l4 3.1c.9-2.8 3.5-5 6.6-5Z"
+              />
+            </svg>
             Continue with Google
           </motion.button>
 
           <p className="text-xs text-gray-500 mt-6 text-center">
-            Terms & Privacy Policy
+            Terms &amp; Privacy Policy
           </p>
         </div>
       </motion.div>

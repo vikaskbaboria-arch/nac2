@@ -20,6 +20,12 @@ const UserSchema =new Schema ({
     coverpic:{
         type:String
     },
+    fav_genres:{
+        type:Array,
+        default:[],
+
+    },
+    
     createdAt:{
         type:Date,
         default:Date.now

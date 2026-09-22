@@ -43,8 +43,8 @@ const Navbar = () => {
 
 
   const handleLnk=(m)=>{
-    if(m.media_type==="movie"){ router.push(`/movie/${m?.id}`) }
-    else{ router.push(`/series/${m.id}`) }
+    if(m.media_type==="movie"){ router.push(`/movie/${m?.id}/?type=movie`) }
+    else{ router.push(`/movie/${m.id}?type=tv`) }
     setSearch(""); setInput(""); setSuggest(""); setSuggestions(null)
     setButton(false); setMobileMenu(false)
   }
@@ -58,7 +58,7 @@ const Navbar = () => {
 
   return (
     <nav className={`
-      sticky top-0 z-50 w-full h-16 px-4 sm:px-6
+      sticky top-0 z-50 w-full h-16 px-4 sm:px-18
       flex items-center justify-between text-white
       transition-all duration-300
       ${scrolled ? "bg-black/60 backdrop-blur-xl shadow-lg" : "bg-black"}
@@ -76,16 +76,16 @@ const Navbar = () => {
       {/* DESKTOP LINKS */}
       
       <ul className="hidden bg-black/5 hover:bg-black/20 border border-white/10 backdrop-blur-md transition sm:flex items-center gap-4 px-2 py-1 text-sm font-medium bg-gray-950 rounded-2xl">
-        <li className="hover:text-purple-400 transition"><Link href="/">Home</Link></li>
+        <li className="hover:text-green-500 transition"><Link href="/">Home</Link></li>
        
-        <li className="hover:text-purple-400 transition"><Link href="/about">About</Link></li>{status === 'authenticated' && session ? (
-        <li className="hover:text-purple-400 transition"><Link href={`/profile/${session.user.email.split("@")[0]}`}>
+        <li className="hover:text-green-400 transition"><Link href="/about">About</Link></li>{status === 'authenticated' && session ? (
+        <li className="hover:text-green-400 transition"><Link href={`/profile/${session.user.email.split("@")[0]}`}>
   Profile
 </Link></li>) : null}
 
         <button
           onClick={()=>setButton(!button)}
-          className="px-1 py-1 rounded-md bg-white/5 hover:bg-gray-600 border border-white/10 backdrop-blur-md transition"
+          className="px-1 py-1 rounded-md bg-black hover:bg-gray-600/50 hover:text-blue-200 border border-white/10 backdrop-blur-md transition"
         >
           Search
         </button>
@@ -108,7 +108,7 @@ const Navbar = () => {
             <button
               onClick={()=>setDropdown2(!dropdown2)}
               className="px-3 py-1.5 rounded-md text-xs sm:text-sm
-              bg-gradient-to-br from-purple-700 to-pink-600
+              bg-gradient-to-br from-purple-800 to-blue-700
               hover:shadow-[0_0_20px_rgba(168,85,247,0.6)] transition"
             >
               {session.user.email.split("@")[0]}
