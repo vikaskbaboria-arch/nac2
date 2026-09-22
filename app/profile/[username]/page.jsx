@@ -1,67 +1,119 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { signOut, useSession } from "next-auth/react";
-// import WatchListData from "@/components/watchListData";
 import Userwatchlist from "@/components/userwatchlist";
-const ProfileClient = ({ username }) => {
+import {ShowRevonProflie} from "@/components/showrevonprofile";
+
+// TODO: replace with real counts once the API/data is wired up.
+const DUMMY_STATS = {
+  reviews: 12,
+};
+
+const NAV_ITEMS = [
+  { key: "watchlist", label: "Watchlist" },
+  { key: "reviews", label: "Reviews" },
+  { key: "settings", label: "Settings" },
+];
+
+const ProfileClient = ({ username, stats = DUMMY_STATS }) => {
   const { data: session } = useSession();
+  const [active, setActive] = useState("watchlist");
 
   return (
-    <div className="px-4 sm:px-8 py-10 min-h-screen text-white">
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+    <div className="min-h-screen text-white px-4 sm:px-8 py-10">
+      <div className="max-w-4xl mx-auto">
 
-        {/* LEFT SIDEBAR */}
-        <div className="lg:col-span-2 rounded-2xl bg-black/70 backdrop-blur-md p-6 flex flex-col justify-between">
-          <div>
-            <div className="flex flex-col items-center text-center">
-              <img
-                src={session?.user?.image || "/avatar.png"}
-                alt="profile"
-                className="w-28 h-28 rounded-full border-4 border-purple-800 shadow-lg"
-              />
+        {/* HEADER */}
+        <div className="flex flex-col sm:flex-row sm:items-center gap-5 sm:gap-6">
+          <img
+            src={session?.user?.image || "/avatar.png"}
+            alt="profile"
+            className="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover border border-white/15"
+          />
 
-              <h2 className="mt-4 text-xl font-semibold">
-                {/* {username} */}
-              </h2>
+          <div className="flex-1">
+            <h1 className="text-2xl sm:text-3xl font-bold">
+              {username || session?.user?.name || "Guest"}
+            </h1>
+            {session?.user?.email && (
+              <p className="text-white/40 text-sm mt-1">
+                {session.user.email}
+              </p>
+            )}
 
-              <button className="mt-4 px-4 py-2 rounded-lg bg-purple-900 hover:bg-purple-700 transition">
-                Edit Profile
-              </button>
-            </div>
-
-            <div className="mt-10 space-y-4">
-              <div className="flex items-center gap-3 text-purple-400">
-                👤 <span>Profile</span>
-              </div>
-              <div className="flex items-center gap-3 hover:text-purple-400 cursor-pointer">
-                ⭐ <span>Watchlist</span>
-              </div>
-              <div className="flex items-center gap-3 hover:text-purple-400 cursor-pointer">
-                ✍️ <span>Reviews</span>
+            <div className="flex items-center gap-4 mt-3">
+              <div className="text-sm">
+                <span className="font-semibold text-white">{stats.reviews}</span>
+                <span className="text-white/50 ml-1">
+                  {stats.reviews === 1 ? "Review" : "Reviews"}
+                </span>
               </div>
             </div>
           </div>
 
-          <button
-            onClick={() => signOut()}
-            className="flex items-center gap-2 text-red-400 hover:text-red-500"
-          >
-            ⏻ Log Out
-          </button>
+          <div className="flex gap-3 sm:self-start">
+            <button
+              className="
+                px-4 py-2 rounded-lg text-sm font-medium
+                border border-white/15
+                hover:bg-white/5
+                transition
+              "
+            >
+              Edit Profile
+            </button>
+            <button
+              onClick={() => signOut()}
+              className="
+                px-4 py-2 rounded-lg text-sm font-medium
+                text-red-400
+                border border-red-400/20
+                hover:bg-red-500/10
+                transition
+              "
+            >
+              Log Out
+            </button>
+          </div>
         </div>
 
-        {/* RIGHT CONTENT */}
-        <div className="lg:col-span-3 rounded-2xl bg-black/60 backdrop-blur-md p-6 overflow-y-auto">
-          <div className="mb-6">
-            <h1 className="text-2xl font-bold">Watchlist</h1>
-            <p className="text-sm text-gray-400">
-              Your saved movies & TV series
-            </p>
-          </div>
-          <Userwatchlist />
-          {/* WATCHLIST */}
-          {/* <WatchListData /> */}
+        {/* NAV TABS */}
+        <div className="flex gap-6 mt-8 border-b border-white/10">
+          {NAV_ITEMS.map((item) => (
+            <button
+              key={item.key}
+              onClick={() => setActive(item.key)}
+              className={`
+                pb-3 text-sm font-medium
+                border-b-2 -mb-px
+                transition-colors
+                ${
+                  active === item.key
+                    ? "border-purple-500 text-white"
+                    : "border-transparent text-white/50 hover:text-white/80"
+                }
+              `}
+            >
+              {item.label}
+              {item.key === "reviews" && (
+                <span className="ml-1.5 text-white/40">({stats.reviews})</span>
+              )}
+            </button>
+          ))}
+        </div>
+
+        {/* CONTENT */}
+        <div className="mt-8">
+          {active === "watchlist" && <Userwatchlist />}
+
+          {active === "reviews" && (
+           <ShowRevonProflie/>
+          )}
+
+          {active === "settings" && (
+            <p className="text-white/50 text-sm">Settings coming soon.</p>
+          )}
         </div>
       </div>
     </div>

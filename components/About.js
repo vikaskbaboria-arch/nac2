@@ -16,12 +16,12 @@ export default function About() {
         className="max-w-5xl mx-auto text-center mb-14 sm:mb-20"
       >
         <h1 className="text-3xl sm:text-5xl font-bold mb-4">
-          About <span className="text-purple-400">NAC</span>
+          About <span className="text-amber-400">NAC</span>
         </h1>
 
         <p className="text-gray-400 text-base sm:text-lg max-w-3xl mx-auto">
           NAC stands for{" "}
-          <span className="text-purple-300 font-semibold">Not A Critic</span> —
+          <span className="text-amber-300 font-semibold">Not A Critic</span> —
           because you don’t need to be a professional critic to judge a movie.
           If you’ve watched it, congratulations… you’re a critic now 😄
         </p>
@@ -37,7 +37,7 @@ export default function About() {
           transition={{ duration: 0.5 }}
           viewport={{ once: true }}
           className="relative p-[1.5px] rounded-2xl
-          bg-gradient-to-br from-purple-600 via-fuchsia-500 to-pink-600"
+          bg-gradient-to-br from-amber-700 via-orange-800 to-stone-900"
         >
           <div className="rounded-2xl bg-black/80 backdrop-blur-xl p-6 sm:p-8 h-full">
             <h2 className="text-xl sm:text-2xl font-semibold mb-4">
@@ -61,7 +61,7 @@ export default function About() {
           transition={{ duration: 0.5 }}
           viewport={{ once: true }}
           className="relative p-[1.5px] rounded-2xl
-          bg-gradient-to-br from-purple-600 via-fuchsia-500 to-pink-600"
+          bg-gradient-to-br from-amber-700 via-orange-800 to-stone-900"
         >
           <div className="rounded-2xl bg-black/80 backdrop-blur-xl p-6 sm:p-8 h-full">
             <h2 className="text-xl sm:text-2xl font-semibold mb-4">
@@ -108,9 +108,9 @@ export default function About() {
           <div
             key={i}
             className="bg-white/5 backdrop-blur-xl rounded-xl p-5 sm:p-6
-            border border-white/10 hover:border-purple-500/50 transition"
+            border border-white/10 hover:border-amber-600/40 transition"
           >
-            <h3 className="text-base sm:text-lg font-semibold mb-2 text-purple-300">
+            <h3 className="text-base sm:text-lg font-semibold mb-2 text-amber-300">
               {item.title}
             </h3>
             <p className="text-gray-400 text-sm">
@@ -142,7 +142,7 @@ export default function About() {
           <Link
             href="mailto:vikaskbaboria@example.com"
             className="px-4 py-2 rounded-md
-            bg-purple-700 hover:bg-purple-600 transition text-sm"
+            bg-amber-800 hover:bg-amber-700 transition text-sm"
           >
             📧 Email
           </Link>
@@ -180,7 +180,7 @@ export default function About() {
           and more features are on the way.
         </p>
 
-        <p className="mt-3 text-purple-400 font-semibold">
+        <p className="mt-3 text-amber-400 font-semibold">
           🎥 Not A Critic — but always an opinion.
         </p>
       </motion.div>

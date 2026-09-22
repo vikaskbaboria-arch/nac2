@@ -1,6 +1,29 @@
 "use client"
 import { useState, useRef, useEffect } from "react"
 
+const MAX_LEN = 1000
+
+// Anchors: 3 = Worst, 5 = Timepass, 6 = Good, 8 = Go for it, 10 = Masterpiece.
+// Gaps between them are filled in so every step on the slider has a label.
+const RATING_LABELS = [
+  { max: 2, label: "Awful", tone: "text-rose-400" },
+  { max: 3.5, label: "Worst", tone: "text-rose-400" },
+  { max: 4.5, label: "Meh", tone: "text-orange-400" },
+  { max: 5.5, label: "Timepass", tone: "text-blue-300" },
+  { max: 6.5, label: "Good", tone: "text-blue-400" },
+  { max: 7.5, label: "Great", tone: "text-violet-400" },
+  { max: 8.5, label: "Go for it", tone: "text-violet-300" },
+  { max: 9.5, label: "Excellent", tone: "text-emerald-400" },
+  { max: 10, label: "Masterpiece", tone: "text-emerald-300" },
+]
+
+function getRatingMeta(rating) {
+  return (
+    RATING_LABELS.find((b) => rating <= b.max) ??
+    RATING_LABELS[RATING_LABELS.length - 1]
+  )
+}
+
 export default function ReviewForm({ movieId, onSuccess }) {
   const [reviewText, setReviewText] = useState("")
   const [rating, setRating] = useState(5)
@@ -9,8 +32,8 @@ export default function ReviewForm({ movieId, onSuccess }) {
   const [success, setSuccess] = useState(null)
 
   const textareaRef = useRef(null)
-  const MAX_LEN = 1000
- 
+  const { label: ratingLabel, tone: ratingTone } = getRatingMeta(rating)
+
   useEffect(() => {
     const ta = textareaRef.current
     if (!ta) return
@@ -52,62 +75,72 @@ export default function ReviewForm({ movieId, onSuccess }) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="max-w-2xl mx-auto p-4 rounded-lg bg-gradient-to-br from-slate-900 to-black border border-neutral-800"
+      className="relative max-w-2xl  rounded-xl bg-black border border-white/10 overflow-hidden"
     >
-      <h2 className="text-white font-bold text-xl mb-3">
-        Write a review
-      </h2>
+      {/* Signature accent bar, matches the rest of the site */}
+      <div className="h-1 w-full" />
 
-      <textarea
-        ref={textareaRef}
-        value={reviewText}
-        maxLength={MAX_LEN}
-        onChange={(e) => setReviewText(e.target.value)}
-        placeholder="Share your thoughts"
-        className="w-full p-3 rounded-lg bg-slate-800 text-white resize-none focus:ring-2 focus:ring-purple-500"
-      />
+      <div className="p-5">
+        <h2 className="text-white font-display text-xl mb-3">
+          Write a review
+        </h2>
 
-      <div className="flex justify-between text-xs text-slate-400 mt-1">
-        <span>Be constructive — your review helps others</span>
-        <span>{reviewText.length}/{MAX_LEN}</span>
-      </div>
-
-      {/* 🎚️ Slider Rating */}
-      <div className="mt-4">
-        <div className="flex justify-between items-center mb-2">
-          <span className="text-slate-300 font-semibold">Rating</span>
-          <span className="text-purple-400 font-bold text-lg">
-            {rating}
-          </span>
-        </div>
-
-        <input
-          type="range"
-          min="0.5"
-          max="10"
-          step="0.5"
-          value={rating}
-          onChange={(e) => setRating(Number(e.target.value))}
-          className="w-full accent-purple-500 cursor-pointer"
+        <textarea
+          ref={textareaRef}
+          value={reviewText}
+          maxLength={MAX_LEN}
+          onChange={(e) => setReviewText(e.target.value)}
+          placeholder="Share your thoughts"
+          className="w-full p-3 rounded-lg bg-white/5 border border-white/10 text-white resize-none placeholder:text-white/30 focus:outline-none focus:ring-1 focus:ring-[#3b82f6]"
         />
 
-        <div className="flex justify-between text-xs text-slate-400 mt-1">
-          <span>0.5</span>
-          <span>10</span>
+        <div className="flex justify-between text-xs text-white/40 mt-1">
+          <span>Be constructive — your review helps others</span>
+          <span>{reviewText.length}/{MAX_LEN}</span>
         </div>
-      </div>
 
-      <div className="flex items-center gap-3 mt-4">
-        <button
-          type="submit"
-          disabled={loading}
-          className="px-4 py-2 bg-emerald-400 hover:bg-emerald-500 rounded-md font-semibold"
-        >
-          {loading ? "Saving..." : "Submit Review"}
-        </button>
+        {/* Rating slider */}
+        <div className="mt-5">
+          <div className="flex items-baseline justify-between mb-2">
+            <span className="text-white/70 text-sm font-medium">Rating</span>
+            <div className="flex items-baseline gap-2">
+              <span className="text-white font-bold text-lg tabular-nums">
+                {rating}
+              </span>
+              <span className={`text-sm font-semibold ${ratingTone}`}>
+                {ratingLabel}
+              </span>
+            </div>
+          </div>
 
-        {error && <span className="text-red-400">{error}</span>}
-        {success && <span className="text-emerald-400">{success}</span>}
+          <input
+            type="range"
+            min="0.5"
+            max="10"
+            step="0.5"
+            value={rating}
+            onChange={(e) => setRating(Number(e.target.value))}
+            className="w-full cursor-pointer accent-[#7c3aed]"
+          />
+
+          <div className="flex justify-between text-[11px] text-white/30 mt-1">
+            <span>0.5</span>
+            <span>10</span>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-3 mt-5">
+          <button
+            type="submit"
+            disabled={loading}
+            className="px-4 py-2 rounded-lg font-semibold text-white bg-purple-500 disabled:opacity-50 transition-opacity"
+          >
+            {loading ? "Saving..." : "Submit Review"}
+          </button>
+
+          {error && <span className="text-rose-400 text-sm">{error}</span>}
+          {success && <span className="text-emerald-400 text-sm">{success}</span>}
+        </div>
       </div>
     </form>
   )

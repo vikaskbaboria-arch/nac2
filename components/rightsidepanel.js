@@ -18,7 +18,7 @@ export default function Rightsidepanel() {
   }, []);
     const handleClick = (m) => {
 
-    router.push(`/movie/${m?.id}`);
+    router.push(`/movie/${m?.id}/type=movie`);
    
   };
 

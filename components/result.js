@@ -16,21 +16,21 @@ const [loading, setLoading] = useState(true);
   const [showFullOverview, setShowFullOverview] = useState(false);
   const [trailerUrl, setTrailerUrl] = useState(null);
   const [showTrailer, setShowTrailer] = useState(false);
-
+  console.log("movies",movies.type)
   /* ================= FETCH DATA ================= */
   useEffect(() => {
     async function loadData() {
       const tvData = await fetchMovies({
         type: "byid",
         id: movies.movie,
-        type_of: "movie",
+        type_of: movies.type ,
       });
 
       setMovie(tvData);
 
-      const creditsData = await fetchCredit(tvData.id, "movie");
+      const creditsData = await fetchCredit(tvData.id, movies?.type);
       setCredits(creditsData);
-
+     
       const trailer = await getTrailerUrl(tvData.id, "movie");
       setTrailerUrl(trailer);
              
@@ -44,7 +44,7 @@ const [loading, setLoading] = useState(true);
   useEffect(() => {
     document.body.style.overflow = showTrailer ? "hidden" : "auto";
   }, [showTrailer]);
-
+  console.log("movies",movies.streamer?.results)
   /* ================= PROVIDERS ================= */
   const providerResults = movies.streamer?.results || {};
   const regionObj =
@@ -67,6 +67,7 @@ const [loading, setLoading] = useState(true);
   const cover = movie?.backdrop_path
     ? `https://image.tmdb.org/t/p/w1920_and_h800_multi_faces/${movie.backdrop_path}`
     : "";
+    
     const director = credits?.crew?.filter( (person) => person.job === "Director" );
 console.log(movie)
 
@@ -87,9 +88,7 @@ if (loading) {
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-transparent" />
 
-        <div className="absolute top-4 right-4 z-20">
-          <Rating movieId={movies.movie} />
-        </div>
+        
 
    
 
@@ -114,11 +113,11 @@ if (loading) {
 
         <div className="flex flex-col  gap-3 text-center md:text-left md:mt-40">
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold">
-            {movie?.title}
+            {movies.type === "movie" ? movie?.title : movie?.name}
           </h1>
 
           <div className="flex gap-2 justify-center md:justify-start">
-            <span className="text-white font-bold">Director:</span>
+            <span className="text-green-500 font-bold">Director:</span>
             {director?.length > 0 ? (
               director.map((c) => (
                 <span key={c.id} className="text-white/50 cursor-pointer">
@@ -212,53 +211,52 @@ w-full
         </div>
       </div>
 
-      {/* ================= CAST =================  and */}
-      <div className="flex flex-col xl:flex-row gap-16 md:justify-center  px-6 sm:px-12 lg:px-36 py-0">
-             
-      <div className="px-6 sm:px-12 pb-12">
-        <h3 className="text-xl font-semibold mb-4">Cast</h3>
+      {/* ================= CAST + REVIEWS ================= */}
+      <div className="relative z-10 px-6 sm:px-12 lg:px-36 mt-6">
+        <div className="flex flex-col gap-12">
 
-        <div
-          ref={castRef}
-          className="
-            flex gap-4 sm:gap-6
-            overflow-x-auto overflow-y-hidden
-            touch-pan-x
-            scroll-smooth
-            overscroll-x-contain
-            [-ms-overflow-style:none]
-            [scrollbar-width:none]
-            [&::-webkit-scrollbar]:hidden
-          "
-          style={{ WebkitOverflowScrolling: "touch" }}
-        >
-          {credits?.cast?.slice(0, 6).map((m) => (
-            <div key={m.id} className="flex-shrink-0 w-18 sm:w-28 text-center">
-              <div className="w-18 h-18 sm:w-28 sm:h-28 rounded-full overflow-hidden mx-auto">
-                <img
-                  src={
-                    m.profile_path
-                      ? `https://image.tmdb.org/t/p/w500${m.profile_path}`
-                      : "/avatar.png"
-                  }
-                  alt={m.name}
-                  className="object-cover w-full h-full"
-                />
-              </div>
-              <p className="mt-2 text-xs font-semibold truncate">{m.name}</p>
+          <div>
+            <h3 className="text-xl font-semibold mb-4">Cast</h3>
+
+            <div
+              ref={castRef}
+              className="
+                flex gap-4 sm:gap-6
+                w-[800px]
+                overflow-x-auto overflow-y-hidden
+                touch-pan-x
+                scroll-smooth
+                overscroll-x-contain
+                [-ms-overflow-style:none]
+                [scrollbar-width:none]
+                [&::-webkit-scrollbar]:hidden
+              "
+              style={{ WebkitOverflowScrolling: "touch" }}
+            >
+              {credits?.cast?.slice(0, 12).map((m) => (
+                <div key={m.id} className="flex-shrink-0 w-18 sm:w-28 text-center">
+                  <div className="w-18 h-18 sm:w-28 sm:h-28 rounded-full overflow-hidden mx-auto">
+                    <img
+                      src={
+                        m.profile_path
+                          ? `https://image.tmdb.org/t/p/w500${m.profile_path}`
+                          : "/avatar.png"
+                      }
+                      alt={m.name}
+                      className="object-cover w-full h-full"
+                    />
+                  </div>
+                  <p className="mt-2 text-xs font-semibold truncate">{m.name}</p>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-      </div>
-      <div>
-        
-      </div>
-      </div>
- 
+          </div>
 
-      {/* ================= REVIEWS ================= */}
-      <div className="bg-black pb-16">
-        <ReviewsSection movieId={movie?.id} />
+          <div className="bg-black pb-16">
+            <ReviewsSection movieId={movie?.id} />
+          </div>
+
+        </div>
       </div>
 
       {/* ================= TRAILER OVERLAY ================= */}

@@ -1,0 +1,801 @@
+diff --git a/app/globals.css b/app/globals.css
+index 63e53b1..ade7035 100644
+--- a/app/globals.css
++++ b/app/globals.css
+@@ -1,15 +1,104 @@
+ @import "tailwindcss";
+ @import "tw-animate-css";
++@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,500;1,9..144,600&family=Special+Elite&display=swap');
+ 
+ @custom-variant dark (&:is(.dark *));
+ 
+ /* @custom-variant dark (&:is(.dark *)); */ 
+ 
++/* =========================================================
++   VINTAGE / RETRO DARK THEME TOKENS
++   Warm sepia, rust, brass and deep petrol on near-black stock.
++   No neon, no bright saturated color — everything sits low
++   and a little worn, like a projector print that's been
++   run a few hundred times.
++   ========================================================= */
++:root {
++  --vhs-bg: #14100c;          /* base near-black, warm not blue */
++  --vhs-bg-raised: #1c1712;   /* cards / panels */
++  --vhs-bg-raised-2: #241d16; /* hovered / nested panels */
++  --vhs-paper: #e7ddc3;       /* cream text on dark */
++  --vhs-paper-dim: #b6ac93;   /* secondary text */
++  --vhs-ink: #100c09;
++  --vhs-rust: #b3502c;        /* primary accent, muted rust-orange */
++  --vhs-rust-dark: #8a3b20;
++  --vhs-brass: #ad9256;       /* secondary accent, aged brass */
++  --vhs-petrol: #3c5c53;      /* deep muted teal, tertiary accent */
++  --vhs-petrol-dark: #26433c;
++  --vhs-line: rgba(231, 221, 195, 0.14);
++  --vhs-line-strong: rgba(231, 221, 195, 0.28);
++  --vhs-shadow: 0 10px 30px rgba(0,0,0,0.55);
++}
++
++.font-display{ font-family: 'Fraunces', serif; }
++.font-type{ font-family: 'Special Elite', monospace; letter-spacing: .02em; }
++
+ .bg_color_home2 {
+-  background: rgba(0, 0, 0, 0.968)
++  background: var(--vhs-bg);
+ }
+ .bg_navbar {
+-  background:#0A0A0A;
++  background: linear-gradient(180deg, #1a1510, #120e0a);
++  border-bottom: 1px solid var(--vhs-line);
++}
++
++/* Film grain + vignette overlay, use on any full-bleed section */
++.vhs-grain{
++  position: relative;
++}
++.vhs-grain::before{
++  content:"";
++  position:absolute; inset:0;
++  pointer-events:none;
++  opacity:.5;
++  z-index: 1;
++  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
++}
++
++/* Perforated / torn top edge, like a card stub */
++.vhs-torn-top{ position: relative; }
++.vhs-torn-top::before{
++  content:"";
++  position:absolute; top:-6px; left:0; right:0; height: 12px;
++  background-image: radial-gradient(circle, var(--vhs-bg) 3.5px, transparent 3.6px);
++  background-size: 16px 12px;
++  background-position: 6px 0;
++  z-index: 2;
++}
++
++/* Filmstrip divider */
++.vhs-filmstrip{
++  height: 12px;
++  background: repeating-linear-gradient(90deg, var(--vhs-paper) 0 8px, transparent 8px 18px);
++  opacity: .18;
++}
++
++/* Sepia/duotone treatment for poster art so nothing reads "bright" */
++.vhs-poster-tone{
++  filter: sepia(.35) saturate(.75) brightness(.85) contrast(1.05);
++}
++.vhs-poster-tone:hover{
++  filter: sepia(.15) saturate(.9) brightness(.95) contrast(1.05);
++}
++
++/* Rating / badge stamp */
++.vhs-stamp{
++  font-family: 'Special Elite', monospace;
++  font-size: 11px;
++  letter-spacing: .04em;
++  color: var(--vhs-paper);
++  background: rgba(20,16,12,0.75);
++  border: 1px solid var(--vhs-brass);
++  padding: 2px 6px;
++  border-radius: 2px;
++}
++
++/* Scanline overlay, use inside TV screens / hero media */
++.vhs-scanlines::after{
++  content:"";
++  position:absolute; inset:0;
++  background: repeating-linear-gradient(180deg, rgba(0,0,0,0.18) 0 1px, transparent 1px 3px);
++  mix-blend-mode: multiply;
++  pointer-events:none;
+ }
+ /* Hide scrollbar but keep scroll */
+ .no-scrollbar::-webkit-scrollbar {
+@@ -49,12 +138,13 @@
+ .group:hover .marquee {
+   animation: marquee 7s linear 1;
+ }
++/* Was a bright purple->black neon gradient. Replaced with a quiet,
++   near-black warm vignette so the body reads like old stock, not a screen glow. */
+ .bg_color_for{
+-  background: #8d2c9e;
+-background: -webkit-linear-gradient(159deg,rgb(144, 35, 163) 0%, rgb(0, 0, 0) 13%, rgb(0, 0, 0) 100%);
+-background: -moz-linear-gradient(159deg,rgba(141, 44, 158, 1) 0%, rgb(0, 0, 0) 13%, rgb(0, 0, 0) 100%);
+-background: linear-gradient(159deg,rgba(141, 44, 158, 1) 0%, rgb(0, 0, 0) 13%, rgb(0, 0, 0) 100%);
+-
++  background: var(--vhs-bg);
++  background:
++    radial-gradient(ellipse at 50% -10%, rgba(179,80,44,0.10), transparent 55%),
++    linear-gradient(180deg, #17120d 0%, #100c09 60%, #0c0a07 100%);
+ }
+ 
+ @theme inline {
+@@ -107,73 +197,76 @@ background: linear-gradient(159deg,rgba(141, 44, 158, 1) 0%, rgb(0, 0, 0) 13%, r
+   }
+ }
+ 
++/* Both :root and .dark now point at the same warm, low-contrast
++   vintage palette — this app is dark-themed everywhere, no light
++   mode toggle, so shadcn components stay in tone by default. */
+ :root {
+-  --radius: 0.625rem;
+-  --background: oklch(1 0 0);
+-  --foreground: oklch(0.145 0 0);
+-  --card: oklch(1 0 0);
+-  --card-foreground: oklch(0.145 0 0);
+-  --popover: oklch(1 0 0);
+-  --popover-foreground: oklch(0.145 0 0);
+-  --primary: oklch(0.205 0 0);
+-  --primary-foreground: oklch(0.985 0 0);
+-  --secondary: oklch(0.97 0 0);
+-  --secondary-foreground: oklch(0.205 0 0);
+-  --muted: oklch(0.97 0 0);
+-  --muted-foreground: oklch(0.556 0 0);
+-  --accent: oklch(0.97 0 0);
+-  --accent-foreground: oklch(0.205 0 0);
+-  --destructive: oklch(0.577 0.245 27.325);
+-  --border: oklch(0.922 0 0);
+-  --input: oklch(0.922 0 0);
+-  --ring: oklch(0.708 0 0);
+-  --chart-1: oklch(0.646 0.222 41.116);
+-  --chart-2: oklch(0.6 0.118 184.704);
+-  --chart-3: oklch(0.398 0.07 227.392);
+-  --chart-4: oklch(0.828 0.189 84.429);
+-  --chart-5: oklch(0.769 0.188 70.08);
+-  --sidebar: oklch(0.985 0 0);
+-  --sidebar-foreground: oklch(0.145 0 0);
+-  --sidebar-primary: oklch(0.205 0 0);
+-  --sidebar-primary-foreground: oklch(0.985 0 0);
+-  --sidebar-accent: oklch(0.97 0 0);
+-  --sidebar-accent-foreground: oklch(0.205 0 0);
+-  --sidebar-border: oklch(0.922 0 0);
+-  --sidebar-ring: oklch(0.708 0 0);
++  --radius: 0.25rem;
++  --background: #14100c;
++  --foreground: #e7ddc3;
++  --card: #1c1712;
++  --card-foreground: #e7ddc3;
++  --popover: #1c1712;
++  --popover-foreground: #e7ddc3;
++  --primary: #b3502c;
++  --primary-foreground: #e7ddc3;
++  --secondary: #241d16;
++  --secondary-foreground: #e7ddc3;
++  --muted: #241d16;
++  --muted-foreground: #b6ac93;
++  --accent: #3c5c53;
++  --accent-foreground: #e7ddc3;
++  --destructive: #8a3b20;
++  --border: rgba(231, 221, 195, 0.14);
++  --input: rgba(231, 221, 195, 0.16);
++  --ring: #ad9256;
++  --chart-1: #b3502c;
++  --chart-2: #3c5c53;
++  --chart-3: #ad9256;
++  --chart-4: #6e4a34;
++  --chart-5: #8a3b20;
++  --sidebar: #1a1510;
++  --sidebar-foreground: #e7ddc3;
++  --sidebar-primary: #b3502c;
++  --sidebar-primary-foreground: #e7ddc3;
++  --sidebar-accent: #241d16;
++  --sidebar-accent-foreground: #e7ddc3;
++  --sidebar-border: rgba(231, 221, 195, 0.14);
++  --sidebar-ring: #ad9256;
+ }
+ 
+ .dark {
+-  --background: oklch(0.145 0 0);
+-  --foreground: oklch(0.985 0 0);
+-  --card: oklch(0.205 0 0);
+-  --card-foreground: oklch(0.985 0 0);
+-  --popover: oklch(0.205 0 0);
+-  --popover-foreground: oklch(0.985 0 0);
+-  --primary: oklch(0.922 0 0);
+-  --primary-foreground: oklch(0.205 0 0);
+-  --secondary: oklch(0.269 0 0);
+-  --secondary-foreground: oklch(0.985 0 0);
+-  --muted: oklch(0.269 0 0);
+-  --muted-foreground: oklch(0.708 0 0);
+-  --accent: oklch(0.269 0 0);
+-  --accent-foreground: oklch(0.985 0 0);
+-  --destructive: oklch(0.704 0.191 22.216);
+-  --border: oklch(1 0 0 / 10%);
+-  --input: oklch(1 0 0 / 15%);
+-  --ring: oklch(0.556 0 0);
+-  --chart-1: oklch(0.488 0.243 264.376);
+-  --chart-2: oklch(0.696 0.17 162.48);
+-  --chart-3: oklch(0.769 0.188 70.08);
+-  --chart-4: oklch(0.627 0.265 303.9);
+-  --chart-5: oklch(0.645 0.246 16.439);
+-  --sidebar: oklch(0.205 0 0);
+-  --sidebar-foreground: oklch(0.985 0 0);
+-  --sidebar-primary: oklch(0.488 0.243 264.376);
+-  --sidebar-primary-foreground: oklch(0.985 0 0);
+-  --sidebar-accent: oklch(0.269 0 0);
+-  --sidebar-accent-foreground: oklch(0.985 0 0);
+-  --sidebar-border: oklch(1 0 0 / 10%);
+-  --sidebar-ring: oklch(0.556 0 0);
++  --background: #14100c;
++  --foreground: #e7ddc3;
++  --card: #1c1712;
++  --card-foreground: #e7ddc3;
++  --popover: #1c1712;
++  --popover-foreground: #e7ddc3;
++  --primary: #b3502c;
++  --primary-foreground: #e7ddc3;
++  --secondary: #241d16;
++  --secondary-foreground: #e7ddc3;
++  --muted: #241d16;
++  --muted-foreground: #b6ac93;
++  --accent: #3c5c53;
++  --accent-foreground: #e7ddc3;
++  --destructive: #8a3b20;
++  --border: rgba(231, 221, 195, 0.14);
++  --input: rgba(231, 221, 195, 0.16);
++  --ring: #ad9256;
++  --chart-1: #b3502c;
++  --chart-2: #3c5c53;
++  --chart-3: #ad9256;
++  --chart-4: #6e4a34;
++  --chart-5: #8a3b20;
++  --sidebar: #1a1510;
++  --sidebar-foreground: #e7ddc3;
++  --sidebar-primary: #b3502c;
++  --sidebar-primary-foreground: #e7ddc3;
++  --sidebar-accent: #241d16;
++  --sidebar-accent-foreground: #e7ddc3;
++  --sidebar-border: rgba(231, 221, 195, 0.14);
++  --sidebar-ring: #ad9256;
+ }
+ 
+ @layer base {
+@@ -182,6 +275,7 @@ background: linear-gradient(159deg,rgba(141, 44, 158, 1) 0%, rgb(0, 0, 0) 13%, r
+   }
+   body {
+     @apply bg-background text-foreground;
++    font-family: 'Fraunces', serif;
+   }
+ }
+ /* Hide scrollbar but allow scroll */
+diff --git a/app/layout.js b/app/layout.js
+index fec64ee..aa74c2d 100644
+--- a/app/layout.js
++++ b/app/layout.js
+@@ -1,7 +1,6 @@
+ import { Geist, Geist_Mono } from "next/font/google";
+ import "./globals.css";
+ import Navbar from "@/components/Navbar";
+-import Starfield from "@/components/starfield";
+ import Sessionwrapper from "@/components/sessionwrapper";
+ const geistSans = Geist({
+   variable: "--font-geist-sans",
+@@ -21,8 +20,7 @@ export const metadata = {
+ export default function RootLayout({ children }) {
+   return (
+     <html lang="en">
+-      <body className="bg_color_for  min-h-screen select-none ">
+-               {/* <Starfield /> */}
++      <body className="bg_color_for vhs-grain min-h-screen select-none ">
+      <Sessionwrapper>
+         <Navbar/>
+         {children}
+diff --git a/components/Navbar.js b/components/Navbar.js
+index 5912bb8..e9c60c6 100644
+--- a/components/Navbar.js
++++ b/components/Navbar.js
+@@ -59,42 +59,45 @@ const Navbar = () => {
+   return (
+     <nav className={`
+       sticky top-0 z-50 w-full h-16 px-4 sm:px-6
+-      flex items-center justify-between text-white
+-      transition-all duration-300
+-      ${scrolled ? "bg-black/60 backdrop-blur-xl shadow-lg" : "bg-black"}
+-    `}>
++      flex items-center justify-between
++      transition-all duration-300 font-type
++      border-b border-[var(--vhs-line)]
++      ${scrolled ? "bg-[#120e0a]/90 backdrop-blur-xl shadow-[0_8px_20px_rgba(0,0,0,0.4)]" : "bg-[#14100c]"}
++    `} style={{ color: "var(--vhs-paper)" }}>
+ 
+       {/* LOGO */}
+       <Link href="/" className="flex items-center w-16 ">
+         <img
+-          className="w-18 h-8 sm:w-22 sm:h-14 hover:scale-105 transition "
++          className="w-18 h-8 sm:w-22 sm:h-14 opacity-90 hover:opacity-100 transition vhs-poster-tone"
+           src="/ChatGPT Image Dec 31, 2025, 07_54_03 PM.png"
+           alt="MOCTALE"
+         />
+       </Link>
+ 
+       {/* DESKTOP LINKS */}
+-      
+-      <ul className="hidden bg-black/5 hover:bg-black/20 border border-white/10 backdrop-blur-md transition sm:flex items-center gap-4 px-2 py-1 text-sm font-medium bg-gray-950 rounded-2xl">
+-        <li className="hover:text-purple-400 transition"><Link href="/">Home</Link></li>
+-       
+-        <li className="hover:text-purple-400 transition"><Link href="/about">About</Link></li>{status === 'authenticated' && session ? (
+-        <li className="hover:text-purple-400 transition"><Link href={`/profile/${session.user.email.split("@")[0]}`}>
++
++      <ul className="hidden sm:flex items-center gap-4 px-3 py-1.5 text-xs uppercase tracking-wider
++        border border-[var(--vhs-line-strong)] bg-[var(--vhs-bg-raised)] rounded-sm">
++        <li className="hover:text-[var(--vhs-rust)] transition"><Link href="/">Home</Link></li>
++
++        <li className="hover:text-[var(--vhs-rust)] transition"><Link href="/about">About</Link></li>{status === 'authenticated' && session ? (
++        <li className="hover:text-[var(--vhs-rust)] transition"><Link href={`/profile/${session.user.email.split("@")[0]}`}>
+   Profile
+ </Link></li>) : null}
+ 
+         <button
+           onClick={()=>setButton(!button)}
+-          className="px-1 py-1 rounded-md bg-white/5 hover:bg-gray-600 border border-white/10 backdrop-blur-md transition"
++          className="px-2 py-1 rounded-sm bg-transparent hover:bg-[var(--vhs-bg-raised-2)] border border-[var(--vhs-brass)] transition"
+         >
+           Search
+         </button>
+       </ul>
+-        
++
+       {/* MOBILE HAMBURGER */}
+       <button
+         onClick={()=>setMobileMenu(!mobileMenu)}
+         className="sm:hidden text-xl"
++        style={{ color: "var(--vhs-paper)" }}
+       >
+         ☰
+       </button>
+@@ -102,62 +105,62 @@ const Navbar = () => {
+       {/* USER / LOGIN */}
+       <div className="hidden sm:flex items-center gap-3">
+         {status === 'loading' ? (
+-          <div className="text-sm text-gray-400">...</div>
++          <div className="text-sm text-[var(--vhs-paper-dim)]">...</div>
+         ) : session ? (
+           <div className="relative">
+             <button
+               onClick={()=>setDropdown2(!dropdown2)}
+-              className="px-3 py-1.5 rounded-md text-xs sm:text-sm
+-              bg-gradient-to-br from-purple-700 to-pink-600
+-              hover:shadow-[0_0_20px_rgba(168,85,247,0.6)] transition"
++              className="px-3 py-1.5 rounded-sm text-xs sm:text-sm
++              bg-[var(--vhs-rust)] text-[var(--vhs-ink)] font-semibold
++              hover:bg-[var(--vhs-rust-dark)] hover:text-[var(--vhs-paper)] transition"
+             >
+               {session.user.email.split("@")[0]}
+             </button>
+ 
+-            <div className={`absolute right-0 mt-3 w-44 rounded-xl
+-              bg-black/90 backdrop-blur-xl border border-white/10
++            <div className={`absolute right-0 mt-3 w-44 rounded-sm
++              bg-[var(--vhs-bg-raised)] border border-[var(--vhs-line-strong)]
+               transition-all origin-top
+               ${dropdown2 ? "scale-100 opacity-100" : "scale-95 opacity-0 pointer-events-none"}`}>
+               <ul className="text-sm">
+-                <li className="p-2 hover:bg-white/5"><Link href={`/profile/${session.user.email.split("@")[0]}`}>
++                <li className="p-2 hover:bg-[var(--vhs-bg-raised-2)]"><Link href={`/profile/${session.user.email.split("@")[0]}`}>
+   Profile
+ </Link></li>
+-                <li className="p-2 hover:bg-white/5"><Link href="/chats">chats</Link></li>
+-                <li className="p-2 hover:bg-white/5"><Link href="#">Earnings</Link></li>
+-                <li className="p-2 hover:bg-red-500/10">
++                <li className="p-2 hover:bg-[var(--vhs-bg-raised-2)]"><Link href="/chats">chats</Link></li>
++                <li className="p-2 hover:bg-[var(--vhs-bg-raised-2)]"><Link href="#">Earnings</Link></li>
++                <li className="p-2 hover:bg-[var(--vhs-rust-dark)]/20">
+                   <button onClick={() => signOut()}>Sign out</button>
+                 </li>
+               </ul>
+             </div>
+           </div>
+         ) : (
+-          <Link href="/login" className="hover:text-purple-400 transition">Login</Link>
++          <Link href="/login" className="hover:text-[var(--vhs-rust)] transition">Login</Link>
+         )}
+       </div>
+ 
+       {/* MOBILE MENU */}
+       <div className={`
+         absolute top-16 left-0 w-full sm:hidden
+-        bg-black/90 backdrop-blur-xl border-t border-white/10
++        bg-[#120e0a]/95 backdrop-blur-xl border-t border-[var(--vhs-line)]
+         transition-all duration-300
+         ${mobileMenu ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4 pointer-events-none"}
+       `}>
+-        <Link onClick={()=>setMobileMenu(false)} className="block p-4 border-b border-white/10" href="/">Home</Link>
+-        <Link onClick={()=>setMobileMenu(false)} className="block p-4 border-b border-white/10" href="/about">About</Link> {session && status === 'authenticated' ? (
+-          <Link onClick={()=>setMobileMenu(false)}  href="/chats" className="hover:text-purple-400 transition">
++        <Link onClick={()=>setMobileMenu(false)} className="block p-4 border-b border-[var(--vhs-line)]" href="/">Home</Link>
++        <Link onClick={()=>setMobileMenu(false)} className="block p-4 border-b border-[var(--vhs-line)]" href="/about">About</Link> {session && status === 'authenticated' ? (
++          <Link onClick={()=>setMobileMenu(false)}  href="/chats" className="hover:text-[var(--vhs-rust)] transition">
+             Chats
+           </Link>):null}
+         <button onClick={()=>{setButton(true); setMobileMenu(false)}} className="block w-full text-left p-4">
+           Search
+         </button>
+         {status === 'loading' ? (
+-          <div className="block p-4 text-sm text-gray-400">...</div>
++          <div className="block p-4 text-sm text-[var(--vhs-paper-dim)]">...</div>
+         ) : status === 'authenticated' && session ? (
+           <>
+-            <Link onClick={()=>setMobileMenu(false)} className="block p-4 border-b border-white/10" href={`/profile/${session.user.email.split("@")[0]}`}>
++            <Link onClick={()=>setMobileMenu(false)} className="block p-4 border-b border-[var(--vhs-line)]" href={`/profile/${session.user.email.split("@")[0]}`}>
+               Profile
+             </Link>
+-            <button onClick={() => signOut()} className="block w-full text-left p-4 text-red-400">
++            <button onClick={() => signOut()} className="block w-full text-left p-4 text-[var(--vhs-rust)]">
+               Sign out
+             </button>
+           </>
+@@ -170,31 +173,32 @@ const Navbar = () => {
+       {button && (
+         <div className="absolute left-0 top-16 w-full flex justify-center z-40">
+           <div className="relative mt-4 w-[95vw] sm:w-[70vw] lg:w-[50vw]">
+-            <div className="flex items-center gap-2 bg-black/80 backdrop-blur-xl rounded-xl border border-white/10 p-2">
++            <div className="flex items-center gap-2 bg-[var(--vhs-bg-raised)] rounded-sm border border-[var(--vhs-line-strong)] p-2">
+               <input
+                 value={search}
+                 onChange={(e)=>{handleChange(e); handleB(e)}}
+                 placeholder="Search movies or series..."
+-                className="flex-1 bg-transparent outline-none text-white px-2"
++                className="flex-1 bg-transparent outline-none px-2 font-type"
++                style={{ color: "var(--vhs-paper)" }}
+               />
+               <button onClick={handleClick}>
+-                <img src="/r.svg" alt="" width={22} />
++                <img src="/r.svg" alt="" width={22} className="opacity-80" />
+               </button>
+             </div>
+ 
+             {suggestions?.results?.slice(0,4).length > 0 && (
+-              <div className="absolute mt-2 w-full bg-black/90 backdrop-blur-xl rounded-xl border border-white/10">
++              <div className="absolute mt-2 w-full bg-[var(--vhs-bg-raised)] rounded-sm border border-[var(--vhs-line-strong)]">
+                 {suggestions.results.slice(0,4).map((m)=>(
+                   <div
+                     key={m.id}
+                     onClick={()=>handleLnk(m)}
+-                    className="flex items-center gap-3 p-2 hover:bg-white/5 cursor-pointer"
++                    className="flex items-center gap-3 p-2 hover:bg-[var(--vhs-bg-raised-2)] cursor-pointer"
+                   >
+-                    <img src={m.poster_path?`https://image.tmdb.org/t/p/w92/${m.poster_path}`:'/placeholder.png'} className="h-12 rounded-md" />
++                    <img src={m.poster_path?`https://image.tmdb.org/t/p/w92/${m.poster_path}`:'/placeholder.png'} className="h-12 rounded-sm vhs-poster-tone" />
+                     <span className="text-sm font-semibold flex-1">
+                       {m?.title || m?.name}
+                     </span>
+-                    <span className="text-xs bg-green-500 px-2 py-0.5 rounded">
++                    <span className="vhs-stamp">
+                   {m.vote_average}
+                     </span>
+                   </div>
+diff --git a/components/Trending.js b/components/Trending.js
+index 1c78990..cbd3336 100644
+--- a/components/Trending.js
++++ b/components/Trending.js
+@@ -1,7 +1,6 @@
+ "use client"
+ import React, { useEffect, useState } from "react"
+ import { fetchMovies } from "@/lib/masterfetch"
+-import { AnimatedShinyText } from "@/components/ui/animated-shiny-text"
+ import { useRouter } from "next/navigation"
+ 
+ const Trending = () => {
+@@ -30,33 +29,30 @@ const Trending = () => {
+         relative grid
+         w-full max-w-[1080px]
+         gap-3
+-       
+         p-3
+-        shadow-[0_0_40px_rgba(0,0,0,0.6)]
+-        border border-white/10 rounded-2xl
+-        bg-gradient-to-b from-black/60 to-black/30
+-        backdrop-blur-2xl
+-
++        vhs-torn-top
++        border rounded-md
+         grid-cols-2
+         sm:grid-cols-3
+         lg:grid-cols-4
+       "
++      style={{
++        borderColor: "var(--vhs-line-strong)",
++        background: "linear-gradient(180deg, var(--vhs-bg-raised), var(--vhs-bg))",
++        boxShadow: "var(--vhs-shadow)",
++      }}
+     >
+       {movies?.slice(0, 8).map((m) => (
+         <div
+           key={m.id}
+           onClick={() => handleClick(m)}
+-          className="
+-            group
+-            cursor-pointer
+-            rounded-xl
+-            p-2
+-            transition-colors
+-            hover:bg-white/10
+-          "
++          className="group cursor-pointer rounded-sm p-2 transition-colors"
++          style={{ background: "transparent" }}
++          onMouseEnter={(e)=>e.currentTarget.style.background="var(--vhs-bg-raised-2)"}
++          onMouseLeave={(e)=>e.currentTarget.style.background="transparent"}
+         >
+           {/* POSTER */}
+-          <div className="relative aspect-[2/3] overflow-hidden rounded-lg">
++          <div className="relative aspect-[2/3] overflow-hidden rounded-sm border" style={{ borderColor: "var(--vhs-line)" }}>
+             <img
+               src={
+                 m.poster_path
+@@ -65,19 +61,19 @@ const Trending = () => {
+               }
+               className="
+                 absolute inset-0
+-                w-full h-full object-cover
++                w-full h-full object-cover vhs-poster-tone
+                 transition-transform duration-300
+                 group-hover:scale-105
+               "
+               alt={m.title || m.name}
+             />
+-
+-            {/* subtle overlay on hover */}
+-            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition" />
++            <div className="absolute top-1.5 right-1.5 vhs-stamp">
++              {m?.vote_average?.toFixed ? m.vote_average.toFixed(1) : m?.vote_average}
++            </div>
+           </div>
+ 
+           {/* TITLE */}
+-          <div className="mt-2 text-sm font-semibold overflow-hidden">
++          <div className="mt-2 text-sm font-semibold overflow-hidden font-display" style={{ color: "var(--vhs-paper)" }}>
+             <div
+               className={`
+                 whitespace-nowrap
+@@ -86,17 +82,13 @@ const Trending = () => {
+                   : ""}
+               `}
+             >
+-              <AnimatedShinyText>
+-                {m?.title || m?.name}
+-              </AnimatedShinyText>
++              {m?.title || m?.name}
+             </div>
+           </div>
+ 
+           {/* MEDIA TYPE */}
+-          <div className="text-white/60 text-xs tracking-wide">
+-            <AnimatedShinyText>
+-              {m.media_type === "movie" ? "Movie" : "Series"}
+-            </AnimatedShinyText>
++          <div className="text-xs tracking-wide font-type" style={{ color: "var(--vhs-brass)" }}>
++            {m.media_type === "movie" ? "Movie" : "Series"}
+           </div>
+         </div>
+       ))}
+diff --git a/components/home.js b/components/home.js
+index f49cb76..cfc2b8d 100644
+--- a/components/home.js
++++ b/components/home.js
+@@ -118,43 +118,87 @@ export default function HomeCarousel() {
+   })
+ 
+   return (
+-    <div className="px-13 my-8 rounded-lg">
+-      <div className="flex items-center justify-between rounded gap-4">
+-        <button aria-label="prev" onClick={prev} className="px-3 hidden sm:flex  text-white py-2 bg-slate-900 rounded">{'<'}</button>
+-
++    <div className="px-3 sm:px-13 my-8 rounded-lg">
++      {/* ===== Retro TV cabinet framing the trending reel ===== */}
++      <div className="mx-auto max-w-[1200px]">
+         <div
+-          ref={containerRef}
+-          onMouseEnter={() => setPaused(true)}
+-          onMouseLeave={() => setPaused(false)}
+-          className="w-full max-w-[1200px]  mx-auto overflow-hidden rounded-md"
+-       
++          className="rounded-2xl p-3 sm:p-5"
++          style={{
++            background: "linear-gradient(180deg, #4a3320, #2f2013)",
++            boxShadow: "0 18px 0 -6px rgba(0,0,0,0.35), 0 22px 30px rgba(0,0,0,0.45)",
++          }}
+         >
+-          {slides.length === 0 ? (
+-            <div className="w-full h-[20vh] md:h-[50vh] lg:h-[60vh] rounded-md flex items-center justify-center bg-gradient-to-tr from-gray-900  to-purple-900 text-white font-bold text-xl">No slides available</div>
+-          ) : (
++          <div className="flex items-center gap-3">
++            <button
++              aria-label="prev"
++              onClick={prev}
++              className="hidden sm:flex items-center justify-center w-10 h-10 rounded-full font-type text-sm
++              border border-[var(--vhs-brass)] text-[var(--vhs-paper)] bg-black/30 hover:bg-black/50 transition"
++            >{'<'}</button>
++
+             <div
+-              ref={trackRef}
+-              className="flex"
+-              style={{ width: `${extended.length * slideWidth}px`, wil2lChange: 'transform' }}
++              className="flex-1 rounded-lg p-2 sm:p-3"
++              style={{ background: "#0e0b08", boxShadow: "inset 0 0 0 3px #443a30" }}
+             >
+-              {extended.map((m, idx) => (
+-                <div key={idx}
+-                  onClick={()=>(handleCick(m))}
+-                className="flex-shrink-0 p-2" style={{ width: `${slideWidth}px` }}>
+-                  <div className="h-[20vh] md:h-[50vh] lg:h-[60vh] relative rounded-lg overflow-hidden border-2 border-white/10">
+-                    <img src={`https://image.tmdb.org/t/p/w1280/${m.backdrop_path}`} alt={m?.title } className="w-full h-full object-cover" />
+-                    <div className="absolute bottom-1.5 left-2 sm:left-4 sm:bottom-6 text-white font-semibold sm:text-3xl">{m?.title || m?.name}</div>
+-                    <div className="absolute top-2 sm:top-4  w-14 h-4 right-2 sm:right-4 text-xs bg-green-700 text-white px-2 rounded flex items-center justify-center"> 
+-                  {m?.vote_average}
+-                    </div>
++              <div
++                ref={containerRef}
++                onMouseEnter={() => setPaused(true)}
++                onMouseLeave={() => setPaused(false)}
++                className="relative w-full mx-auto overflow-hidden rounded-md vhs-scanlines"
++              >
++                {slides.length === 0 ? (
++                  <div className="w-full h-[20vh] md:h-[50vh] lg:h-[60vh] rounded-md flex items-center justify-center font-type text-sm"
++                    style={{ background: "linear-gradient(160deg, #24413c, #172b27 60%, #0f1e1b)", color: "var(--vhs-paper-dim)" }}>
++                    No signal — no slides available
++                  </div>
++                ) : (
++                  <div
++                    ref={trackRef}
++                    className="flex"
++                    style={{ width: `${extended.length * slideWidth}px`, willChange: 'transform' }}
++                  >
++                    {extended.map((m, idx) => (
++                      <div key={idx}
++                        onClick={()=>(handleCick(m))}
++                      className="flex-shrink-0 p-1 cursor-pointer" style={{ width: `${slideWidth}px` }}>
++                        <div className="h-[20vh] md:h-[50vh] lg:h-[60vh] relative rounded-md overflow-hidden">
++                          <img src={`https://image.tmdb.org/t/p/w1280/${m.backdrop_path}`} alt={m?.title } className="w-full h-full object-cover vhs-poster-tone" />
++                          <div className="absolute inset-0" style={{ boxShadow: "inset 0 0 60px 18px rgba(0,0,0,0.55)" }} />
++                          <div className="absolute bottom-1.5 left-2 sm:left-4 sm:bottom-6 font-display italic font-semibold sm:text-3xl"
++                            style={{ color: "var(--vhs-paper)" }}>{m?.title || m?.name}</div>
++                          <div className="absolute top-2 sm:top-4 right-2 sm:right-4 vhs-stamp">
++                        {m?.vote_average?.toFixed ? m.vote_average.toFixed(1) : m?.vote_average}
++                          </div>
++                        </div>
++                      </div>
++                    ))}
+                   </div>
+-                </div>
++                )}
++              </div>
++            </div>
++
++            <button
++              aria-label="next"
++              onClick={next}
++              className="hidden sm:flex items-center justify-center w-10 h-10 rounded-full font-type text-sm
++              border border-[var(--vhs-brass)] text-[var(--vhs-paper)] bg-black/30 hover:bg-black/50 transition"
++            >{'>'}</button>
++          </div>
++
++          {/* cabinet controls */}
++          <div className="flex justify-end items-center gap-3 mt-3 pr-2">
++            <div className="grid grid-cols-6 gap-1 mr-auto">
++              {Array.from({length:6}).map((_,i)=>(
++                <span key={i} className="w-[3px] h-4 rounded-sm" style={{ background: "rgba(0,0,0,0.35)" }} />
+               ))}
+             </div>
+-          )}
++            <span className="w-4 h-4 rounded-full" style={{ background: "radial-gradient(circle at 35% 30%, #d8c48f, var(--vhs-brass) 60%, #6f5d34 100%)" }} />
++            <span className="w-6 h-6 rounded-full" style={{ background: "radial-gradient(circle at 35% 30%, #d8c48f, var(--vhs-brass) 60%, #6f5d34 100%)" }} />
++          </div>
+         </div>
+-
+-        <button aria-label="next" onClick={next} className="px-3 hidden sm:flex py-2 bg-slate-900 text-white rounded">{'>'}</button>
++        <p className="text-center font-type text-xs mt-3" style={{ color: "var(--vhs-paper-dim)" }}>
++          the set only gets a few channels, but they're all trending
++        </p>
+       </div>
+     </div>
+   )
+diff --git a/components/movie.js b/components/movie.js
+index a10c7bb..553d644 100644
+--- a/components/movie.js
++++ b/components/movie.js
+@@ -84,11 +84,17 @@ console.log(movie)
+     <div className='my-1 sm:my-8  mx-auto [92vw] h-52 sm:h-80     '    onMouseEnter={() => setButton(true)}
+   onMouseLeave={() => setButton(false)}>
+       <div className='flex items-center justify-between ' >
+-       <div className='text-white font-bold mx-3 sm:mx-2    text-lg sm:text-3xl'>{names}</div>
+-       <div className='text-white mr-6 text-xs sm:text-xl   flex items-center   gap-2' onClick={()=>handlejust(genere.movie)}> <InteractiveHoverButton>More</InteractiveHoverButton></div>
++       <div className='font-display italic font-bold mx-3 sm:mx-2 text-lg sm:text-3xl' style={{ color: "var(--vhs-paper)" }}>{names}</div>
++       <div className='mr-6 text-xs sm:text-xl flex items-center gap-2' onClick={()=>handlejust(genere.movie)}>
++         <button className="font-type text-xs px-3 py-1.5 rounded-sm border transition"
++           style={{ borderColor: "var(--vhs-brass)", color: "var(--vhs-brass)" }}
++           onMouseEnter={(e)=>{e.currentTarget.style.background="var(--vhs-brass)"; e.currentTarget.style.color="var(--vhs-ink)"}}
++           onMouseLeave={(e)=>{e.currentTarget.style.background="transparent"; e.currentTarget.style.color="var(--vhs-brass)"}}
++         >More</button>
++       </div>
+       </div>
+-      
+-     
++
++
+       <div className="relative ">
+ 
+   {/* LEFT BUTTON */}
+@@ -96,13 +102,14 @@ console.log(movie)
+     onClick={scrollLeft}
+     className={`
+       absolute left-0 top-1/2 -translate-y-1/2 z-10
+-      w-18 h-60 
+-      bg-black/70 hover:bg-black/80
+-      text-white flex items-center justify-center
+-      hidden  hidden ${button?"sm:flex":""}
++      w-14 h-60
++      flex items-center justify-center
++      hidden hidden ${button?"sm:flex":""}
+     `}
++    style={{ background: "linear-gradient(90deg, var(--vhs-bg) 40%, transparent)" }}
+   >
+-    <img src="./left.svg" alt="" />
++    <span className="w-9 h-9 rounded-full flex items-center justify-center border font-type text-sm"
++      style={{ borderColor: "var(--vhs-brass)", color: "var(--vhs-paper)", background: "rgba(0,0,0,0.4)" }}>{'<'}</span>
+   </button>
+ 
+   {/* MOVIE SCROLL AREA */}
+@@ -122,21 +129,22 @@ console.log(movie)
+         onClick={() => handleLink(m)}
+         className="
+           snap-center flex-shrink-0
+-          h-38 rounded-md relative
++          h-38 rounded-sm relative border
+           transition-transform duration-300 hover:scale-105
+           cursor-pointer
+           w-24 sm:w-40
+           sm:h-60
+         "
++        style={{ borderColor: "var(--vhs-line)" }}
+       >
+         <img
+           src={m.poster_path ? `https://image.tmdb.org/t/p/w500${m.poster_path}` : '/placeholder.png'}
+-          className="h-full rounded-md object-cover"
++          className="h-full w-full rounded-sm object-cover vhs-poster-tone"
+           alt={m.title}
+         />
+ 
+-        <span className="absolute top-2 right-1 text-xs bg-green-700 px-0.5 py-0.5 rounded text-white font-bold sm:right-3 ">
+-       {m?.vote_average}
++        <span className="absolute top-1.5 right-1 sm:right-2 vhs-stamp">
++       {m?.vote_average?.toFixed ? m.vote_average.toFixed(1) : m?.vote_average}
+         </span>
+       </div>
+     ))}
+@@ -147,13 +155,14 @@ console.log(movie)
+     onClick={scrollRight}
+     className={`
+       absolute right-0 top-1/2 -translate-y-1/2 z-10
+-      w-18 h-60
+-      bg-black/70 hover:bg-black/80
+-      text-white flex items-center justify-center
++      w-14 h-60
++      flex items-center justify-center
+       hidden ${button?"sm:flex":""}
+     `}
++    style={{ background: "linear-gradient(270deg, var(--vhs-bg) 40%, transparent)" }}
+   >
+-  <img src="./right.svg" alt="" />
++  <span className="w-9 h-9 rounded-full flex items-center justify-center border font-type text-sm"
++      style={{ borderColor: "var(--vhs-brass)", color: "var(--vhs-paper)", background: "rgba(0,0,0,0.4)" }}>{'>'}</span>
+   </button>
+ 
+ </div>

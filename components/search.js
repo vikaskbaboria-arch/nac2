@@ -1,140 +1,179 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { fetchMovies } from "@/lib/masterfetch";
+import { AnimatedShinyText } from "@/components/ui/animated-shiny-text";
 import { useRouter, useSearchParams } from "next/navigation";
 
 const Search = ({ movie }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
-const [showFullOverview, setShowFullOverview] = useState(false);
+
   const pageFromUrl = Number(searchParams.get("page")) || 1;
   const [movies, setMovies] = useState(null);
   const [pages, setPages] = useState(pageFromUrl);
+  const [expandedIds, setExpandedIds] = useState({});
 
   useEffect(() => {
     fetchMovies({
       type: "search",
       query: movie,
-      type_of:"multi",
+      type_of: "multi",
       page: pages,
     }).then((m) => setMovies(m));
   }, [movie, pages]);
-// console.log(movie)
+
   const totalpages = movies?.total_pages;
 
   const handleClick = (m) => {
-    if(m.media_type==="movie"){
-    router.push(`/movie/${m?.id}`);}
-   else{
-    router.push(`/series/${m.id}`);
-   }
+    if (m.media_type === "movie") {
+      router.push(`/movie/${m.id}?type=movie`);
+    } else {
+      router.push(`/movie/${m.id}?type=tv`)
+    }
   };
 
+  const toggleOverview = (e, id) => {
+    e.stopPropagation();
+    setExpandedIds((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
 
   useEffect(() => {
     router.push(`?page=${pages}`, { scroll: true });
   }, [pages]);
-  // const [ratingsMap, setRatingsMap] = useState({});
-// 
- 
-// console.log(movies?.results)
 
   return (
-     <div className="w-full min-h-[89vh] px-4 sm:px-8 py-8">
-      {movies?.results?.map((m) => (
-        <div
-        
-          key={m.id}
-          onClick={() => handleClick(m)}
-          className="
-            cursor-pointer
-            flex  md:flex-row
-            gap-6 md:gap-10
-            items-start
-            bg-gray-900/40
-            hover:bg-gray-900/70
-            transition rounded-xl
-            p-4 sm:p-6
-            my-6
-          "
-        >
-          {/* Poster */}
-         {/* Poster */}
-<div
-  className="
-    w-28
-    sm:w-33
-    md:w-36
-    lg:w-42
-    xl:w-44
-    flex-shrink-0
-  "
->
-  <img
-    src={`https://image.tmdb.org/t/p/w500${m.poster_path}`}
-    alt="movie poster"
-    className="
-      w-full
-      aspect-[2/3]
-      object-cover
-      rounded-lg
-    "
-  />
-</div>
+    <div className="w-full min-h-[89vh] px-4 sm:px-8 py-8 flex flex-col gap-5">
+      {movies?.results?.map((m) => {
+        const isExpanded = !!expandedIds[m.id];
 
+        return (
+          <div
+            key={m.id}
+            onClick={() => handleClick(m)}
+            className="
+              group
+              relative
+              flex flex-row
+              gap-5 sm:gap-8
+              items-start
+              w-full
+              max-w-[1080px]
+              mx-auto
+              p-3 sm:p-5
+              rounded-2xl
+              border border-white/10
+              bg-gradient-to-b from-black/60 to-black/30
+              backdrop-blur-2xl
+              shadow-[0_0_40px_rgba(0,0,0,0.6)]
+              cursor-pointer
+              transition-colors
+              hover:bg-white/10
+            "
+          >
+            {/* POSTER */}
+            <div
+              className="
+                relative flex-shrink-0
+                w-24 sm:w-32 md:w-36 lg:w-40
+                aspect-[2/3]
+                overflow-hidden
+                rounded-lg
+              "
+            >
+              <img
+                src={
+                  m.poster_path
+                    ? `https://image.tmdb.org/t/p/w500${m.poster_path}`
+                    : "/placeholder.png"
+                }
+                alt={m.title || m.name}
+                className="
+                  absolute inset-0
+                  w-full h-full object-cover
+                  transition-transform duration-300
+                  group-hover:scale-105
+                "
+              />
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition" />
+            </div>
 
-          {/* Movie Data */}
-          <div className="text-white w-full">
-            <h2 className="text-xl sm:text-2xl font-bold mb-3">
-              {m.title}
-            </h2>
+            {/* MOVIE DATA */}
+            <div className="text-white w-full min-w-0">
+              <div className="text-lg sm:text-2xl font-bold mb-1 truncate">
+                <AnimatedShinyText>{m?.title || m?.name}</AnimatedShinyText>
+              </div>
 
-          <div className="over flex flex-col gap-3">
+              <div className="text-white/60 text-xs tracking-wide mb-3">
+                <AnimatedShinyText>
+                  {m.media_type === "movie" ? "Movie" : "Series"}
+                </AnimatedShinyText>
+              </div>
 
-  <span className="text-slate-400 font-bold">
-    Overview
-  </span>
+              <div className="flex flex-col gap-2">
+                <span className="text-slate-400 font-semibold text-sm">
+                  Overview
+                </span>
 
-  {/* OVERVIEW TEXT */}
-  <p
-    className={`
-         text-gray-200 leading-relaxed
-      ${showFullOverview ? "" : "line-clamp-3"}
-      md:line-clamp-none text-xs sm:text-md
-      transition-all duration-300
-    `}
-  >
-    {m?.overview}
-  </p>
+                <p
+                  className={`
+                    text-gray-200 leading-relaxed text-xs sm:text-sm
+                    ${isExpanded ? "" : "line-clamp-3"}
+                    md:line-clamp-none
+                    transition-all duration-300
+                  `}
+                >
+                  {m?.overview || "No overview available."}
+                </p>
 
-  {/* TOGGLE BUTTON (ONLY MOBILE) */}
-  {m?.overview?.length > 100 && (
-    <button
-      onClick={() => setShowFullOverview(!showFullOverview)}
-      className="md:hidden text-purple-400 text-sm font-semibold self-start"
-    >
-      {showFullOverview ? "Show less" : "Show more"}
-    </button>
-  )}
-
-</div>
-
-           
+                {m?.overview?.length > 100 && (
+                  <button
+                    onClick={(e) => toggleOverview(e, m.id)}
+                    className="md:hidden text-purple-400 text-sm font-semibold self-start"
+                  >
+                    {isExpanded ? "Show less" : "Show more"}
+                  </button>
+                )}
+              </div>
+            </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
 
-      {/* Pagination */}
-      <div className={ `${totalpages>1?"":"hidden"} flex items-center justify-center gap-6 mt-8 text-white`}>
-        <span>{pages}</span>
-        <button
-          onClick={() => setPages(page + 1)}
-          className="px-4 py-2 rounded-md bg-purple-600 hover:bg-purple-700 transition"
-        >
-          Next
-        </button>
-        <span>{totalpages}</span>
-      </div>
+      {/* PAGINATION */}
+      {totalpages > 1 && (
+        <div className="flex items-center justify-center gap-4 mt-6 text-white">
+          <button
+            onClick={() => setPages((p) => Math.max(1, p - 1))}
+            disabled={pages <= 1}
+            className="
+              px-4 py-2 rounded-md
+              border border-white/10
+              bg-white/5 hover:bg-white/10
+              disabled:opacity-40 disabled:cursor-not-allowed
+              transition
+            "
+          >
+            Prev
+          </button>
+
+          <span className="text-sm text-white/70">
+            {pages} / {totalpages}
+          </span>
+
+          <button
+            onClick={() => setPages((p) => Math.min(totalpages, p + 1))}
+            disabled={pages >= totalpages}
+            className="
+              px-4 py-2 rounded-md
+              bg-black/50 hover:bg-black/70
+              disabled:opacity-40 disabled:cursor-not-allowed
+              transition
+            "
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
 };

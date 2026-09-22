@@ -49,6 +49,7 @@ const [loading, setLoading] = useState(true);
   }, [showTrailer]);
 
   /* ================= PROVIDERS ================= */
+  console.log("movies",movies.streamer?.results)
   const providerResults = movies.streamer?.results || {};
   const regionObj =
     providerResults?.IN ||

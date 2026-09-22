@@ -18,37 +18,43 @@ const Trending = () => {
 
   const handleClick = (m) => {
     if (m.media_type === "movie") {
-      router.push(`/movie/${m.id}`)
+      router.push(`/movie/${m.id}?type=movie`)
     } else {
-      router.push(`/series/${m.id}`)
+      router.push(`/movie/${m.id}?type=tv`)
     }
   }
 
   return (
+    <section className="w-full">
+      <h2 className="font-display font-bold text-slate-200 text-xl sm:text-2xl mb-2 px-12">
+        Trending on NAC
+      </h2>
     <div
       className="
         relative grid
         w-full max-w-[1080px]
-        gap-3
+        gap-4
        
         p-3
-        shadow-[0_0_40px_rgba(0,0,0,0.6)]
-        border border-white/10 rounded-2xl
-        bg-gradient-to-b from-black/60 to-black/30
-        backdrop-blur-2xl
+  
+        
+        
+     
 
         grid-cols-2
         sm:grid-cols-3
-        lg:grid-cols-4
+        lg:grid-cols-5
       "
     >
-      {movies?.slice(0, 8).map((m) => (
+     
+      {movies?.slice(0, 10).map((m) => (
         <div
           key={m.id}
           onClick={() => handleClick(m)}
           className="
             group
             cursor-pointer
+            w-[calc(100%+0.75rem)]
             rounded-xl
             p-2
             transition-colors
@@ -66,8 +72,7 @@ const Trending = () => {
               className="
                 absolute inset-0
                 w-full h-full object-cover
-                transition-transform duration-300
-                group-hover:scale-105
+               
               "
               alt={m.title || m.name}
             />
@@ -101,6 +106,7 @@ const Trending = () => {
         </div>
       ))}
     </div>
+    </section>
   )
 }
 
