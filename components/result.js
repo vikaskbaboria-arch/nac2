@@ -8,7 +8,9 @@ import ReviewsSection from "./parent";
 import { fetchMovies } from "@/lib/masterfetch";
 import { fetchCredit } from "@/fetch/credit";
 import { getTrailerUrl } from "@/lib/gettrailer";
+import { getCountryNames, getLanguageName } from "@/lib/localeNames";
 import SeriesSkeleton from "./SeriesSkeleton";
+import { div } from "framer-motion/client";
 const SeriesR = (movies) => {
   const castRef = useRef(null);
 const [loading, setLoading] = useState(true);
@@ -98,7 +100,7 @@ if (loading) {
       </div>
 
       {/* ================= POSTER + DETAILS ================= */}
-      <div className="relative z-10 grid md:grid-cols-[240px_1fr] gap-6 px-6 sm:px-12  -mt-72 md:ml-28 ">
+      <div className="relative z-10 grid md:grid-cols-[240px_1fr]  px-6 sm:px-12  -mt-72 md:ml-28 ">
 
         <img
           src={poster}
@@ -106,18 +108,32 @@ if (loading) {
           className="w-36 sm:w-40 md:w-52 rounded-xl shadow-2xl mx-auto md:mx-0"
         />
          
-        <div className="flex flex-col  gap-3 text-center md:text-left md:mt-40">
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold">
+        <div className="flex flex-col   text-center md:text-left md:mt-46">
+          {/* { title and duration and type } */}
+          <div >
+            <div className="text-white/60 flex flex-row gap-3">
+            <span>{movies?.type==="movie"?'Movie':'Tv'}</span>
+              <span>{movie?.release_date?.slice(0,4) }</span>
+              <span>{movie?.runtime
+  ? `${Math.floor(movie.runtime / 60)}h ${movie.runtime % 60}m`
+  : "N/A"}</span>
+              
+            </div>
+
+             <h1 className="text-2xl  sm:text-3xl lg:text-4xl text-white/95 font-bold">
             {movies.type === "movie" ? movie?.title : movie?.name}
-          </h1>
-   
-          {movies.type !== "tv" && (
-            <div className="flex gap-2 justify-center md:justify-start">
-              <span className="text-green-500 font-bold">Director:</span>
+          </h1> 
+          </div>
+        
+           <div className="flex flex-row pt-4 gap-22">
+            <div className="flex flex-row gap-12">
+                 {movies.type !== "tv" && (
+            <div className="flex flex-col   justify-center md:justify-start">
+              <span className=" text-white/50">Directed By</span>
               {director?.length > 0 ? (
                 director.map((c) => (
-                  <span key={c.id} className="text-white/50 cursor-pointer">
-                    {c.name}
+                  <span   key={c.id} className=" font-semibold cursor-pointer">
+                    {c.name } 
                     {`${creators.indexOf(c) !== creators.length - 1 ? "," : ""}`}
                   </span>
                 ))
@@ -127,11 +143,11 @@ if (loading) {
             </div>
           )}
           {movies.type === "tv" && (
-            <div className="flex gap-2 justify-center md:justify-start">
-              <span className="text-green-500 font-bold">ShowRunner:</span>
+            <div className="flex flex-col  justify-center md:justify-start">
+              <span className="text-white/50 ">ShowRunner:</span>
               {creators.length > 0 ? (
-                creators.map((c) => (
-                  <span key={c.id} className="text-white/50 cursor-pointer">
+                creators.slice(0,1).map((c) => (
+                  <span key={c.id} className="font-semibold cursor-pointer">
                     {c.name}  
                     {`${creators.indexOf(c) !== creators.length - 1 ? "," : ""}`}
                   </span>
@@ -141,12 +157,24 @@ if (loading) {
               )}
             </div>
           )}
-            <div className=" flex gap-1">  Release Year:
-              {movie?.release_date && (  
-                <span className="text-white/50 ">
-               
-                  {new Date(movie.release_date).getFullYear() }
-                </span>)}
+            <div className=" flex  flex-col"> 
+              <span className="text-white/50">Country </span>
+             {movie?.origin_country &&
+             <div className="text-white font-semibold">
+              {getCountryNames(movie?.origin_country)}
+             </div>
+             }
+              </div>
+                </div>
+           
+           
+                <div className=" flex  flex-col"> 
+              <span className="text-white/50">language </span>
+             {movie?.original_language &&
+             <div className="text-white font-semibold">
+              {getLanguageName(movie?.original_language)}
+             </div>
+             }
               </div>  
           {/* <div className=" flex gap-1">  Duration:
               {movie?.runtime && (  
@@ -154,12 +182,9 @@ if (loading) {
                   {movie.runtime} min
                 </span>)}
               </div>   */}
-          <div className=" flex gap-1">  Genres:
-              {movie?.genres && (  
-                <span className="text-white/50 ">  
-                  {movie.genres.map((genre) => genre.name).join(", ")}
-                </span>)}
-              </div>  
+        
+           </div>
+          
               </div>
          <div className="absolute  right-86 hidden lg:flex bottom-30 mr-18  z-20">
           <Watchlist movieId={movie?.id} />
