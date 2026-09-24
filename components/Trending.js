@@ -26,7 +26,7 @@ const Trending = () => {
 
   return (
     <section className="w-full">
-      <h2 className="font-display font-bold text-slate-200 text-xl sm:text-2xl mb-2 px-12">
+      <h2 className="font-display font-bold text-slate-300 text-xl sm:text-2xl mb-2 px-6">
         Trending on NAC
       </h2>
     <div

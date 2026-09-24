@@ -43,7 +43,8 @@ const Search = ({ movie }) => {
 
   return (
     <div className="w-full min-h-[89vh] px-4 sm:px-8 py-8 flex flex-col gap-5">
-      {movies?.results?.map((m) => {
+       <div className=" lg:grid grid-cols-[4fr_2fr] gap-10 items-start" >
+ <div class="flex flex-col gap-8">  {movies?.results?.map((m) => {
         const isExpanded = !!expandedIds[m.id];
 
         return (
@@ -62,7 +63,7 @@ const Search = ({ movie }) => {
               p-3 sm:p-5
               rounded-2xl
               border border-white/10
-              bg-gradient-to-b from-black/60 to-black/30
+             bg-[#121111]
               backdrop-blur-2xl
               shadow-[0_0_40px_rgba(0,0,0,0.6)]
               cursor-pointer
@@ -90,8 +91,7 @@ const Search = ({ movie }) => {
                 className="
                   absolute inset-0
                   w-full h-full object-cover
-                  transition-transform duration-300
-                  group-hover:scale-105
+                
                 "
               />
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition" />
@@ -118,17 +118,17 @@ const Search = ({ movie }) => {
                   className={`
                     text-gray-200 leading-relaxed text-xs sm:text-sm
                     ${isExpanded ? "" : "line-clamp-3"}
-                    md:line-clamp-none
+                    
                     transition-all duration-300
                   `}
                 >
                   {m?.overview || "No overview available."}
                 </p>
 
-                {m?.overview?.length > 100 && (
+                {m?.overview?.length > 50 && (
                   <button
                     onClick={(e) => toggleOverview(e, m.id)}
-                    className="md:hidden text-purple-400 text-sm font-semibold self-start"
+                    className=" text-purple-400 text-sm font-semibold self-start"
                   >
                     {isExpanded ? "Show less" : "Show more"}
                   </button>
@@ -137,7 +137,10 @@ const Search = ({ movie }) => {
             </div>
           </div>
         );
-      })}
+      })}</div>
+
+       </div>
+    
 
       {/* PAGINATION */}
       {totalpages > 1 && (

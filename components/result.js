@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import Rating from "./rating";
+import InterestedButton from "./interestedbutton";
 import Watchlist from "./watchlist";
 import ReviewsSection from "./parent";
 import { fetchMovies } from "@/lib/masterfetch";
@@ -44,7 +45,7 @@ const [loading, setLoading] = useState(true);
   useEffect(() => {
     document.body.style.overflow = showTrailer ? "hidden" : "auto";
   }, [showTrailer]);
-  console.log("movies",movies.streamer?.results)
+  console.log("movies",movies.streamer)
   /* ================= PROVIDERS ================= */
   const providerResults = movies.streamer?.results || {};
   const regionObj =
@@ -68,7 +69,8 @@ const [loading, setLoading] = useState(true);
     ? `https://image.tmdb.org/t/p/w1920_and_h800_multi_faces/${movie.backdrop_path}`
     : "";
     
-    const director = credits?.crew?.filter( (person) => person.job === "Director" );
+    const creators = movie?.created_by || [];
+    const director = credits?.crew?.filter((person) => person.job === "Director");
 console.log(movie)
 
 if (loading) {
@@ -77,7 +79,7 @@ if (loading) {
   return (
     <div className="w-full overflow-x-hidden bg-black text-white">
       {/* ================= HERO ================= */}
-      <div className="relative min-h-[60vh] md:min-h-[70vh] w-full overflow-hidden">
+      <div className="relative min-h-[60vh] md:min-h-[85vh] w-full overflow-hidden">
 
         <img
           src={cover}
@@ -85,21 +87,14 @@ if (loading) {
           className="absolute inset-0 h-full w-full object-cover scale-105"
         />
 
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/5 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/5 via-transparent to-transparent" />
 
         
 
    
 
-        <div className="absolute inset-0 hidden lg:flex items-center justify-center z-20">
-          <button
-            onClick={() => setShowTrailer(true)}
-            className="w-12 h-12 rounded-full bg-black/80 flex items-center justify-center hover:scale-110 transition"
-          >
-            <img src="/play.svg" alt="Play" />
-          </button>
-        </div>
+ 
       </div>
 
       {/* ================= POSTER + DETAILS ================= */}
@@ -110,24 +105,42 @@ if (loading) {
           alt=""
           className="w-36 sm:w-40 md:w-52 rounded-xl shadow-2xl mx-auto md:mx-0"
         />
-
+         
         <div className="flex flex-col  gap-3 text-center md:text-left md:mt-40">
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold">
             {movies.type === "movie" ? movie?.title : movie?.name}
           </h1>
-
-          <div className="flex gap-2 justify-center md:justify-start">
-            <span className="text-green-500 font-bold">Director:</span>
-            {director?.length > 0 ? (
-              director.map((c) => (
-                <span key={c.id} className="text-white/50 cursor-pointer">
-                  {c.name}
-                </span>
-              ))
-            ) : (
-              <span className="text-white/50">N/A</span>
-            )}
-          </div>
+   
+          {movies.type !== "tv" && (
+            <div className="flex gap-2 justify-center md:justify-start">
+              <span className="text-green-500 font-bold">Director:</span>
+              {director?.length > 0 ? (
+                director.map((c) => (
+                  <span key={c.id} className="text-white/50 cursor-pointer">
+                    {c.name}
+                    {`${creators.indexOf(c) !== creators.length - 1 ? "," : ""}`}
+                  </span>
+                ))
+              ) : (
+                <span className="text-white/50">N/A</span>
+              )}
+            </div>
+          )}
+          {movies.type === "tv" && (
+            <div className="flex gap-2 justify-center md:justify-start">
+              <span className="text-green-500 font-bold">ShowRunner:</span>
+              {creators.length > 0 ? (
+                creators.map((c) => (
+                  <span key={c.id} className="text-white/50 cursor-pointer">
+                    {c.name}  
+                    {`${creators.indexOf(c) !== creators.length - 1 ? "," : ""}`}
+                  </span>
+                ))
+              ) : (
+                <span className="text-white/50">N/A</span>
+              )}
+            </div>
+          )}
             <div className=" flex gap-1">  Release Year:
               {movie?.release_date && (  
                 <span className="text-white/50 ">
@@ -148,17 +161,26 @@ if (loading) {
                 </span>)}
               </div>  
               </div>
-         <div className="absolute  right-86 hidden lg:flex bottom-10 mr-18  z-20">
+         <div className="absolute  right-86 hidden lg:flex bottom-30 mr-18  z-20">
           <Watchlist movieId={movie?.id} />
+      
         </div>
+  <div className="absolute  right-86 hidden lg:flex bottom-20 mr-18  z-20">
+          <InterestedButton
+            movieID={movie?.id}
+            type={movies?.type === "tv" ? "series" : movies?.type}
+          />
+      
+        </div>
+
       </div>
 
 
       
       {/* ================= OVERVIEW + WATCH ================= */}
-      <div className="flex flex-col xl:flex-row gap-16 px-6 sm:px-12 lg:px-36 py-12">
+      <div className=" flex  flex-col xl:flex-row gap-16 px-6 sm:px-12 lg:px-40 py-12">
 
-        <div className="max-w-4xl">
+        <div className="max-w-3xl">
           <h3 className="text-slate-400 text-xl sm:text-3xl font-bold mb-4">
             Overview
           </h3>
@@ -212,7 +234,7 @@ w-full
       </div>
 
       {/* ================= CAST + REVIEWS ================= */}
-      <div className="relative z-10 px-6 sm:px-12 lg:px-36 mt-6">
+      <div className="relative z-10 px-6 sm:px-12 lg:px-40 mt-6">
         <div className="flex flex-col gap-12">
 
           <div>
@@ -233,7 +255,7 @@ w-full
               "
               style={{ WebkitOverflowScrolling: "touch" }}
             >
-              {credits?.cast?.slice(0, 12).map((m) => (
+              { credits?.cast?.slice(0, 12).map((m) => (
                 <div key={m.id} className="flex-shrink-0 w-18 sm:w-28 text-center">
                   <div className="w-18 h-18 sm:w-28 sm:h-28 rounded-full overflow-hidden mx-auto">
                     <img
@@ -242,6 +264,7 @@ w-full
                           ? `https://image.tmdb.org/t/p/w500${m.profile_path}`
                           : "/avatar.png"
                       }
+                      onClick={() => window.location.assign(`/person/${m.id}`)}
                       alt={m.name}
                       className="object-cover w-full h-full"
                     />

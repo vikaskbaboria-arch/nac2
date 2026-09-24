@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { signOut, useSession } from "next-auth/react";
 import Userwatchlist from "@/components/userwatchlist";
 import {ShowRevonProflie} from "@/components/showrevonprofile";
-
+import MyInterested from "@/components/myinterested";
 // TODO: replace with real counts once the API/data is wired up.
 const DUMMY_STATS = {
   reviews: 12,
@@ -14,6 +14,7 @@ const NAV_ITEMS = [
   { key: "watchlist", label: "Watchlist" },
   { key: "reviews", label: "Reviews" },
   { key: "settings", label: "Settings" },
+  {key:"interested", label:"Interested"}
 ];
 
 const ProfileClient = ({ username, stats = DUMMY_STATS }) => {
@@ -21,7 +22,7 @@ const ProfileClient = ({ username, stats = DUMMY_STATS }) => {
   const [active, setActive] = useState("watchlist");
 
   return (
-    <div className="min-h-screen text-white px-4 sm:px-8 py-10">
+    <div className="min-h-screen bg-[#0A0A0A] text-white px-4 sm:px-8 py-10">
       <div className="max-w-4xl mx-auto">
 
         {/* HEADER */}
@@ -109,6 +110,9 @@ const ProfileClient = ({ username, stats = DUMMY_STATS }) => {
 
           {active === "reviews" && (
            <ShowRevonProflie/>
+          )}
+           {active === "interested" && (
+           <MyInterested/>
           )}
 
           {active === "settings" && (

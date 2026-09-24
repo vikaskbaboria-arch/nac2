@@ -30,7 +30,7 @@ const EditorsPick = ({
 
   return (
     <section className="w-full  ">
-      <h2 className="font-display text-white text-2xl sm:text-3xl mb-3 px-1">
+      <h2 className="font-display font-bold text-slate-300 text-xl sm:text-2xl mb-2 px-6">
         Editor&apos;s Pick
       </h2>
 

@@ -155,11 +155,9 @@ export default function Login() {
   }
 
   return (
-    <div className="relative mt-12 overflow-hidden flex items-center justify-center bg-black px-4">
+    <div className="relative mt-12 overflow-hidden flex items-center justify-center  px-4">
 
-      {/* Starfield */}
-      <Starfield />
-
+   
       {/* Mobile Intro */}
       <AnimatePresence>
         {showIntro && (

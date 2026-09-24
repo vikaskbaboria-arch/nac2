@@ -49,7 +49,7 @@ const [loading, setLoading] = useState(true);
   }, [showTrailer]);
 
   /* ================= PROVIDERS ================= */
-  console.log("movies",movies.streamer?.results)
+  console.log("movies",movies?.streamer)
   const providerResults = movies.streamer?.results || {};
   const regionObj =
     providerResults?.IN ||
@@ -230,6 +230,7 @@ w-full
                       ? `https://image.tmdb.org/t/p/w500${m.profile_path}`
                       : "/avatar.png"
                   }
+                  onClick={() => window.location.assign(`/person/${m.id}`)}
                   alt={m.name}
                   className="object-cover w-full h-full"
                 />

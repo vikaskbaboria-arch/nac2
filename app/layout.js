@@ -21,7 +21,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className="blackgreengrad min-h-screen select-none ">
+      <body className="bg-black min-h-screen select-none ">
                {/* <Starfield /> */}
      <Sessionwrapper>
         <Navbar/>
