@@ -67,7 +67,7 @@ function initials(name = "") {
 
 function Avatar({ name, src }) {
   return (
-    <span className="grid size-9 shrink-0 place-items-center overflow-hidden rounded-full bg-secondary text-xs font-medium text-secondary-foreground ring-1 ring-border">
+    <span className="grid size-9 shrink-0 place-items-center overflow-hidden rounded-full bg-white/10 text-xs font-medium text-white ring-1 ring-white/10">
       {src ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img src={src} alt="" className="size-full object-cover" />
@@ -92,14 +92,15 @@ function ReviewCard({ review, onSaveChange }) {
     <article
       className={cn(
         "flex flex-col justify-between gap-8 rounded-xl border p-6",
+        "shadow-md shadow-black/40",
         featured
-          ? "border-primary/40 bg-white/50 shadow-[0_16px_40px_-20px_rgba(232,169,74,0.35)]"
-          : "border-border bg-card"
+          ? "border-[#7c3aed]/40 bg-[#7c3aed]/10 shadow-[0_8px_28px_-16px_rgba(124,58,237,0.45)]"
+          : "border-white/10 bg-black"
       )}
     >
       <div className="space-y-5">
         <div className="flex items-start  justify-between gap-3">
-     <p className="text-black">yarr chale bahar</p>
+     <p className="text-white">yarr chale bahar</p>
 
           <button
             type="button"
@@ -107,15 +108,15 @@ function ReviewCard({ review, onSaveChange }) {
             aria-pressed={saved}
             aria-label={saved ? "Remove from saved reviews" : "Save review"}
             className={cn(
-              "-mr-2 -mt-2 grid size-8 place-items-center rounded-md transition-colors hover:bg-accent",
-              saved ? "text-primary" : "text-muted-foreground hover:text-foreground"
+              "-mr-2 -mt-2 grid size-8 place-items-center rounded-md transition-colors hover:bg-white/10",
+              saved ? "text-[#a78bfa]" : "text-white/50 hover:text-white"
             )}
           >
             <Bookmark className={cn("size-4", saved && "fill-current")} aria-hidden="true" />
           </button>
         </div>
 
-    <p className="text-sm text-black line-clamp-3">
+    <p className="text-sm text-white/70 line-clamp-3">
             {review.review }
     </p>
       </div>
@@ -123,10 +124,10 @@ function ReviewCard({ review, onSaveChange }) {
       <footer className="flex items-center gap-3">
         <Avatar name={review.author} src={review.avatarUrl} />
         <div className="min-w-0">
-          <p className="truncate text-sm font-medium text-black">{review.user.username}</p>
-          <p className="flex items-center gap-3 text-xs text-muted-foreground">
+          <p className="truncate text-sm font-medium text-white">{review.user.username}</p>
+          <p className="flex items-center gap-3 text-xs text-white/50">
             <span className="inline-flex items-center gap-1">
-              <Star className="size-3 fill-primary text-primary" aria-hidden="true" />
+              <Star className="size-3 fill-[#a78bfa] text-[#a78bfa]" aria-hidden="true" />
               {Number(review.rating).toFixed(1)}
               <span className="sr-only">rating</span>
             </span>

@@ -5,59 +5,91 @@ import { AnimatedShinyText } from "@/components/ui/animated-shiny-text"
 import { useRouter } from "next/navigation"
 
 /**
- * Shared row for "Don't Miss on <provider>" sections. I don't know the
- * exact param shape masterfetch expects for provider filtering — this
- * assumes { type: "provider", provider_id, watch_region, type_of }.
- * Adjust fetchParams (or the fetch call itself) to match your real API.
+ * Same visual style as TrendingOnNAC, but sourced from the signed-in
+ * user's own /api/interested list instead of TMDB trending. The stored
+ * `type` ("movie" | "series") drives both the fetch and the click
+ * target, so — unlike MostInterested before this change — nothing is
+ * guessed here.
  */
-const DontMissRow = ({ title, accentColor, fetchParams }) => {
+const MyInterested = () => {
   const [movies, setMovies] = useState(null)
   const router = useRouter()
 
   useEffect(() => {
-    fetchMovies(fetchParams).then((m) => setMovies(m.results))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fetchParams.type, fetchParams.provider_id, fetchParams.watch_region, fetchParams.type_of])
+    let mounted = true
+
+    fetch("/api/intrested")
+      .then((res) => (res.ok ? res.json() : { interested: [] }))
+      .then(async (data) => {
+        const items = data?.interested || []
+        const results = await Promise.all(
+          items
+            .filter((it) => it.movie?.movieid)
+            .map((it) =>
+              fetchMovies({
+                type: "byid",
+                id: it.movie.movieid,
+                type_of: it.type === "series" ? "tv" : "movie",
+              })
+                .then((m) => ({ ...m, interestedType: it.type }))
+                .catch(() => null)
+            )
+        )
+        if (mounted) setMovies(results.filter(Boolean))
+      })
+      .catch(() => mounted && setMovies([]))
+
+    return () => {
+      mounted = false
+    }
+  }, [])
 
   const handleClick = (m) => {
-    if (m.media_type === "movie" || fetchParams.type_of === "movie") {
-      router.push(`/movie/${m.id}?type=movie`)
-    } else {
-      router.push(`/movie/${m.id}?type=tv`)
-    }
+    router.push(`/movie/${m.id}?type=${m.interestedType === "series" ? "tv" : "movie"}`)
+  }
+
+  if (movies && movies.length === 0) {
+    return (
+      <section className="w-full">
+        <h2 className="font-display font-bold text-slate-300 text-xl sm:text-2xl mb-2 px-6">
+          Your Interested List
+        </h2>
+        <p className="text-white/40 text-sm px-6">
+          Nothing here yet — mark a movie or series as interested to see it in this row.
+        </p>
+      </section>
+    )
   }
 
   return (
     <section className="w-full">
-      <h2 className="font-display font-bold text-slate-300 text-xl sm:text-2xl mb-2 px-6">
-        <span
-         
-        />
-        {title}
-      </h2>
+  
 
       <div
         className="
-          relative grid
+          relative flex
           w-full
           gap-4
           p-3
           rounded-xl
-       
 
-          grid-cols-2
-          sm:grid-cols-3
-          lg:grid-cols-5
+          overflow-x-auto
+          snap-x snap-mandatory
+          scroll-px-3
         "
       >
-        {movies?.slice(0, 5).map((m) => (
+        {movies?.map((m) => (
           <div
             key={m.id}
             onClick={() => handleClick(m)}
             className="
               group
               cursor-pointer
-              w-[calc(100%+0.75rem)]
+              shrink-0
+              snap-start
+              w-[38vw] xs:w-[30vw]
+              sm:w-[22vw]
+              lg:w-[160px]
               rounded-xl
               p-2
               transition-colors
@@ -100,10 +132,10 @@ const DontMissRow = ({ title, accentColor, fetchParams }) => {
               </div>
             </div>
 
-            {/* MEDIA TYPE */}
+            {/* MEDIA TYPE, from the stored value — not guessed */}
             <div className="text-muted-foreground text-xs tracking-wide">
               <AnimatedShinyText>
-                {(m.media_type ?? fetchParams.type_of) === "movie" ? "Movie" : "Series"}
+                {m.interestedType === "series" ? "Series" : "Movie"}
               </AnimatedShinyText>
             </div>
           </div>
@@ -113,4 +145,4 @@ const DontMissRow = ({ title, accentColor, fetchParams }) => {
   )
 }
 
-export default DontMissRow
+export default MyInterested

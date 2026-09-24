@@ -15,6 +15,11 @@ const InterestedSchema = new mongoose.Schema(
       required: true,
       index: true,
     },
+    type:{
+      type: String,
+      enum: ["movie", "series"],
+      required: true,
+    }
   },
   { timestamps: true }
 );

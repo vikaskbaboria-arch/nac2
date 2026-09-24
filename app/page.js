@@ -2,6 +2,7 @@ import Image from "next/image";
 import First from "@/components/home";
 import DontMissOnNetflix from "@/components/dontmissonnetflix";
 import DontMissOnPrimeVideo from "@/components/dontmissonprime";
+import MostInterested from "@/components/mostInterested";
 import { Footer } from "@/components/footer";
 import EditorsPick from "@/components/EditorsPick";
 import { AuroraText } from "@/components/ui/aurora-text";
@@ -16,7 +17,7 @@ import TrendingonNac from "@/components/TrendingonNac";
 export default function Home() {
   return (
     <>
-    <div className="">
+    <div className="blackgreengrad">
 
    
 {/* <Starfield/> */}
@@ -24,7 +25,7 @@ export default function Home() {
 <First/>
      </div>
  
- <div className="relative  z-10    mx-auto px-8 lg:px-24 mt-6">
+ <div className="relative  z-10    mx-auto px-8 lg:px-24 pt-6">
   <div className=" lg:grid grid-cols-[4fr_2fr] gap-10 items-start" >
 
 
@@ -34,6 +35,7 @@ export default function Home() {
       <TrendingonNac />
       <DontMissOnNetflix />
       <DontMissOnPrimeVideo />
+      <MostInterested />
       
     </div>
 

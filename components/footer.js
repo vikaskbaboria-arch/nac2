@@ -32,7 +32,7 @@ function RedditIcon(props) {
 function GooglePlayGlyph(props) {
   return (
     <svg viewBox="0 0 24 24" {...props}>
-      <path d="M4 2.9c-.3.2-.5.6-.5 1v16.2c0 .4.2.8.5 1l9.3-9.1L4 2.9Z" fill="#00d3ff" />
+      <path d="M4 2.9c-.3.2-.5.6-.5 1v16.2c0 .4.2.8.5 1l9.3-9.1L4 2.9Z" fill="white" />
       <path d="M13.3 12 4 2.9c.1 0 .2 0 .3.1l11 6.3-2 2.7Z" fill="#00f076" />
       <path d="M4.3 21c-.1 0-.2 0-.3.1l9.3-9.1 2 2.7-11 6.3Z" fill="#ff3a44" />
       <path d="M15.3 9.3l2.9-1.7c.7-.4 1.2-.9 1.2-1.6s-.5-1.2-1.2-1.6l-2.9-1.7-2.4 2.9 2.4 2.7Z" fill="#ffcf00" />
@@ -43,7 +43,7 @@ function GooglePlayGlyph(props) {
 
 function AppleGlyph(props) {
   return (
-    <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
+    <svg viewBox="0 0 24 24" fill="white" {...props}>
       <path d="M16.4 12.6c0-2.1 1.7-3.1 1.8-3.2-1-1.4-2.5-1.6-3-1.6-1.3-.1-2.5.8-3.1.8-.6 0-1.6-.7-2.7-.7-1.4 0-2.7.8-3.4 2-1.4 2.5-.4 6.2 1 8.3.7 1 1.5 2.1 2.6 2.1 1 0 1.4-.7 2.7-.7 1.2 0 1.6.7 2.7.6 1.1 0 1.8-1 2.5-2 .8-1.2 1.1-2.3 1.1-2.4-.1 0-2.2-.8-2.2-3.2ZM14.3 6.1c.6-.7 1-1.7.9-2.7-.9 0-2 .6-2.6 1.3-.6.6-1.1 1.7-.9 2.6.9.1 1.9-.5 2.6-1.2Z" />
     </svg>
   );
@@ -91,14 +91,14 @@ export function Footer({
             <div className="flex flex-wrap items-center gap-3">
               <a
                 href={playStoreHref}
-                className="flex items-center gap-2 rounded-md border border-border bg-card px-3 py-1.5 transition-colors hover:bg-accent"
+                className="flex items-center gap-2 rounded-md border border-gray-500 bg-black px-3 py-1.5 transition-colors hover:border-gray-100"
               >
                 <GooglePlayGlyph className="size-5 shrink-0" aria-hidden="true" />
                 <span className="leading-tight">
                   <span className="block text-[10px] text-muted-foreground">
                     GET IT ON
                   </span>
-                  <span className="block text-sm font-medium text-foreground">
+                  <span className="block text-sm font-medium text-white">
                     Google Play
                   </span>
                 </span>
@@ -106,14 +106,14 @@ export function Footer({
 
               <a
                 href={appStoreHref}
-                className="flex items-center gap-2 rounded-md border border-border bg-card px-3 py-1.5 transition-colors hover:bg-accent"
+                className="flex items-center gap-2 rounded-md border border-gray-500 bg-black px-3 py-1.5 border-gray-300 transition-colors hover:border-gray-50"
               >
                 <AppleGlyph className="size-5 shrink-0 text-foreground" aria-hidden="true" />
                 <span className="leading-tight">
                   <span className="block text-[10px] text-muted-foreground">
                     Download on the
                   </span>
-                  <span className="block text-sm font-medium text-foreground">
+                  <span className="block text-sm font-medium text-white">
                     App Store
                   </span>
                 </span>
@@ -129,7 +129,7 @@ export function Footer({
                 target="_blank"
                 rel="noreferrer noopener"
                 aria-label={label}
-                className="text-muted-foreground transition-colors hover:text-foreground"
+                className="text-muted-foreground transition-colors hover:text-gray-100"
               >
                 <Icon className="size-5" aria-hidden="true" />
               </a>

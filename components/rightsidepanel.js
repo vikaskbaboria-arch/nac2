@@ -1,25 +1,70 @@
 "use client";
+
 import { useEffect, useState } from "react";
 import { fetchMovies } from "@/lib/masterfetch";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
+
 const IMAGE_BASE = "https://image.tmdb.org/t/p/w185";
 
 export default function Rightsidepanel() {
   const [movies, setMovies] = useState([]);
   const router = useRouter();
-  useEffect(() => {
-    async function loadMovies() {
-      const data = await fetchMovies(
-        "/api/tmdb/popular?region=IN&page=1"
-      );
-      setMovies(data?.results || []);
-    }
-    loadMovies();
-  }, []);
-    const handleClick = (m) => {
 
-    router.push(`/movie/${m?.id}/type=movie`);
-   
+  useEffect(() => {
+    let mounted = true;
+
+    async function loadMovies() {
+      try {
+        const res = await fetch("/api/intrested/top?limit=12");
+        const data = await res.json();
+
+        const top = data?.top || [];
+
+        const results = await Promise.all(
+          top.map(async (t) => {
+            try {
+              const movie = await fetchMovies({
+                type: "byid",
+                id: t.movieid,
+                type_of: t.type === "series" ? "tv" : "movie",
+              });
+
+              return {
+                ...movie,
+                interestedCount: t.count,
+                interestedType: t.type,
+              };
+            } catch {
+              return null;
+            }
+          })
+        );
+
+        if (mounted) {
+          setMovies(results.filter(Boolean));
+        }
+      } catch (error) {
+        console.error("Failed to load interested movies:", error);
+
+        if (mounted) {
+          setMovies([]);
+        }
+      }
+    }
+
+    loadMovies();
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  const handleClick = (m) => {
+    router.push(
+      `/movie/${m.id}?type=${
+        m.interestedType === "series" ? "tv" : "movie"
+      }`
+    );
   };
 
   return (
@@ -36,10 +81,11 @@ export default function Rightsidepanel() {
       {/* Header */}
       <div className="px-6 py-4 border-b border-white/10">
         <h2 className="text-white text-lg font-semibold tracking-wide">
-          🇮🇳 Trending in India
+          🔥 Most Interested
         </h2>
+
         <p className="text-xs text-white/40 mt-0.5">
-          Popular right now
+          Popular with users right now
         </p>
       </div>
 
@@ -57,15 +103,17 @@ export default function Rightsidepanel() {
 
           return (
             <div
-              key={m.id}
+              key={`${m.interestedType}-${m.id}`}
+              onClick={() => handleClick(m)}
               className="
                 group flex gap-3 p-3 rounded-xl
                 bg-white/[0.02]
                 hover:bg-white/[0.06]
                 transition-all duration-300 ease-out
                 cursor-pointer
-              " onClick={()=>handleClick(m)}
+              "
             >
+              {/* Poster */}
               <img
                 src={
                   m.poster_path
@@ -82,24 +130,40 @@ export default function Rightsidepanel() {
                 "
               />
 
+              {/* Details */}
               <div className="flex flex-col justify-between flex-1 overflow-hidden">
-                <p
-                  className="
-                    text-white text-sm font-medium
-                    leading-snug truncate
-                    group-hover:text-white
-                  "
-                >
-                  {title}
-                </p>
+                <div>
+                  <p
+                    className="
+                      text-white text-sm font-medium
+                      leading-snug truncate
+                    "
+                  >
+                    {title}
+                  </p>
+
+                  <p className="text-xs text-white/40 mt-1">
+                    {m.interestedType === "series"
+                      ? "Series"
+                      : "Movie"}
+                  </p>
+                </div>
 
                 <span className="text-xs text-white/60">
-                  ⭐ {m.vote_average?.toFixed(1)}
+                  🔥 {m.interestedCount} interested
                 </span>
               </div>
             </div>
           );
         })}
+
+        {movies.length === 0 && (
+          <div className="flex items-center justify-center h-full">
+            <p className="text-sm text-white/40">
+              No data available
+            </p>
+          </div>
+        )}
       </div>
     </aside>
   );
