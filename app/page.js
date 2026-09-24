@@ -35,11 +35,11 @@ export default function Home() {
       <TrendingonNac />
       <DontMissOnNetflix />
       <DontMissOnPrimeVideo />
-      <MostInterested />
+    
       
     </div>
 
-    <div className="">
+    <div className="mt-14">
       <Rightsidepanel />
     </div>
 
@@ -51,7 +51,7 @@ export default function Home() {
 
 <div>
 
-  <ReviewsSection/>
+  {/* <ReviewsSection/> */}
 </div>
 
 

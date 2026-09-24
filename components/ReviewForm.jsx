@@ -75,7 +75,7 @@ export default function ReviewForm({ movieId, onSuccess }) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="relative max-w-2xl  rounded-xl bg-black border border-white/10 overflow-hidden"
+      className="relative max-w-2xl  rounded-xl bg-black  border-white/10 overflow-hidden"
     >
       {/* Signature accent bar, matches the rest of the site */}
       <div className="h-1 w-full" />
