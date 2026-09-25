@@ -116,7 +116,7 @@ const Navbar = () => {
       <ul className="hidden z-50 backdrop-blur-xl bg-black/5 hover:bg-white/5 border border-white/10 backdrop-blur-md transition sm:flex items-center gap-4 px-2 py-1 text-sm font-medium bg-gray-950 rounded-2xl">
         <li className="hover:text-gray-500 transition"><Link href="/">Home</Link></li>
        
-        <li className="hover:text-gray-500 transition"><Link href="/about">About</Link></li>{status === 'authenticated' && session ? (
+       {status === 'authenticated' && session ? (
         <li className="hover:text-gray-500 transition"><Link href={`/profile/${session.user.email.split("@")[0]}`}>
   Profile
 </Link></li>) : null}
@@ -181,7 +181,7 @@ const Navbar = () => {
         ${mobileMenu ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4 pointer-events-none"}
       `}>
         <Link onClick={()=>setMobileMenu(false)} className="block p-4 border-b border-white/10" href="/">Home</Link>
-        <Link onClick={()=>setMobileMenu(false)} className="block p-4 border-b border-white/10" href="/about">About</Link> {session && status === 'authenticated' ? (
+        {session && status === 'authenticated' ? (
           <Link onClick={()=>setMobileMenu(false)}  href="/chats" className="hover:text-purple-400 transition">
             Chats
           </Link>):null}
