@@ -86,7 +86,7 @@ const EditorsPick = ({
             {/* TITLE */}
             <div className="mt-2 text-sm font-semibold overflow-hidden">
               <div
-                className={`
+                className={` 
                   whitespace-nowrap
                   ${(m?.title?.length > 22 || m?.name?.length > 22)
                     ? "marquee"

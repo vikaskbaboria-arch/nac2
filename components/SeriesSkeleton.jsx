@@ -1,5 +1,5 @@
 const Skeleton = ({ className }) => (
-  <div className={`animate-pulse bg-gray-800/80 rounded ${className}`} />
+  <div className={`animate-pulse bg-gray-900 rounded ${className}`} />
 );
 
 const SeriesSkeleton = () => {

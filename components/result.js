@@ -89,7 +89,7 @@ if (loading) {
           className="absolute inset-0 h-full w-full object-cover scale-105"
         />
 
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/5 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/10 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-b from-black/5 via-transparent to-transparent" />
 
         
@@ -110,17 +110,17 @@ if (loading) {
          
         <div className="flex flex-col   text-center md:text-left md:mt-46">
           {/* { title and duration and type } */}
-          <div >
-            <div className="text-white/60 flex flex-row gap-3">
+          <div className=" gap-0">
+            <div className="text-gray-400 font-semibold   pl-1 flex flex-row gap-3">
             <span>{movies?.type==="movie"?'Movie':'Tv'}</span>
               <span>{movie?.release_date?.slice(0,4) }</span>
               <span>{movie?.runtime
   ? `${Math.floor(movie.runtime / 60)}h ${movie.runtime % 60}m`
-  : "N/A"}</span>
+  : `${movie?.number_of_seasons || "N/A"} Seasons`}</span>
               
             </div>
 
-             <h1 className="text-2xl  sm:text-3xl lg:text-4xl text-white/95 font-bold">
+             <h1 className="pt-0 text-2xl w-fit sm:text-3xl lg:text-4xl text-white/95 font-bold">
             {movies.type === "movie" ? movie?.title : movie?.name}
           </h1> 
           </div>

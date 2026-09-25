@@ -58,28 +58,66 @@ const Navbar = () => {
 
   return (
     <nav className={`
-      sticky top-0 z-50 w-full h-16 px-4 sm:px-18
+      sticky top-0 z-50 w-full h-16 px-4 sm:px-24 
       flex items-center justify-between text-white
       transition-all duration-300
+      border-b border-white/10 backdrop-blur-md
       ${scrolled ? "bg-black/60 backdrop-blur-xl shadow-lg" : "bg-black"}
     `}>
 
       {/* LOGO */}
       <Link href="/" className="flex items-center w-16 ">
-        <img
-          className="w-18 h-8 sm:w-22 sm:h-14 hover:scale-105 transition "
-          src="/ChatGPT Image Dec 31, 2025, 07_54_03 PM.png"
-          alt="MOCTALE"
-        />
+       <svg
+      viewBox="0 0 170 68"
+      role="img"
+      aria-label="NAC"
+    
+      
+    >
+      <title>NAC</title>
+      <defs>
+        <linearGradient id="nac-accent" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stopColor="#7c3aed" />
+          <stop offset="50%" stopColor="#3b82f6" />
+          <stop offset="100%" stopColor="#10b981" />
+        </linearGradient>
+      </defs>
+ 
+      <g
+        fill="none"
+        stroke="#ffffff"
+        strokeWidth="11"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        {/* N */}
+        <path d="M10,54 L10,10 L48,54 L48,10" />
+        {/* A (legs only; crossbar drawn separately in the accent color) */}
+        <path d="M64,54 L84,10 L104,54" />
+        {/* C (a squared bracket, open on the right — matches N/A's straight-line construction) */}
+        <path d="M158,10 L118,10 L118,54 L158,54" />
+      </g>
+ 
+      {/* The one accent: the A's crossbar, in the site's signature gradient */}
+      <line
+        x1="72"
+        y1="37"
+        x2="96"
+        y2="37"
+        stroke="url(#nac-accent)"
+        strokeWidth="9"
+        strokeLinecap="round"
+      />
+    </svg>
       </Link>
 
       {/* DESKTOP LINKS */}
       
-      <ul className="hidden bg-black/5 hover:bg-black/20 border border-white/10 backdrop-blur-md transition sm:flex items-center gap-4 px-2 py-1 text-sm font-medium bg-gray-950 rounded-2xl">
-        <li className="hover:text-green-500 transition"><Link href="/">Home</Link></li>
+      <ul className="hidden z-50 backdrop-blur-xl bg-black/5 hover:bg-white/5 border border-white/10 backdrop-blur-md transition sm:flex items-center gap-4 px-2 py-1 text-sm font-medium bg-gray-950 rounded-2xl">
+        <li className="hover:text-gray-500 transition"><Link href="/">Home</Link></li>
        
-        <li className="hover:text-green-400 transition"><Link href="/about">About</Link></li>{status === 'authenticated' && session ? (
-        <li className="hover:text-green-400 transition"><Link href={`/profile/${session.user.email.split("@")[0]}`}>
+        <li className="hover:text-gray-500 transition"><Link href="/about">About</Link></li>{status === 'authenticated' && session ? (
+        <li className="hover:text-gray-500 transition"><Link href={`/profile/${session.user.email.split("@")[0]}`}>
   Profile
 </Link></li>) : null}
 
@@ -122,7 +160,7 @@ const Navbar = () => {
                 <li className="p-2 hover:bg-white/5"><Link href={`/profile/${session.user.email.split("@")[0]}`}>
   Profile
 </Link></li>
-                <li className="p-2 hover:bg-white/5"><Link href="/chats">chats</Link></li>
+             
                 <li className="p-2 hover:bg-white/5"><Link href="#">Earnings</Link></li>
                 <li className="p-2 hover:bg-red-500/10">
                   <button onClick={() => signOut()}>Sign out</button>

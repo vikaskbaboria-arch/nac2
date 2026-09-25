@@ -148,7 +148,10 @@ export default function HomeCarousel() {
                   <div className="h-full relative overflow-hidden">
                     <img src={`https://image.tmdb.org/t/p/w1280/${m.backdrop_path}`} alt={m?.title } className="w-full h-full object-cover sepia-[0.25] contrast-110" />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-                    <div className="absolute bottom-1.5 left-2 sm:left-4 sm:bottom-6 text-[var(--paper)] font-[var(--font-alfa-slab)] font-normal sm:text-2xl drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">{m?.title || m?.name}</div>
+                    <div className="absolute bottom-1.5 left-2 sm:left-4 sm:bottom-6  font-[var(--font-alfa-slab)] font-normal sm:text-2xl drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
+                      <span className='text-gray-200'>{m?.title || m?.name}</span>
+                      
+                      </div>
                     <div className="absolute top-2 sm:top-4 min-w-10 h-5 right-2 sm:right-4 text-xs rating-tag px-2 rounded flex items-center justify-center">
                   {m?.vote_average?.toFixed?.(1) ?? m?.vote_average}
                     </div>

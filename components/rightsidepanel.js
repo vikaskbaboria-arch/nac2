@@ -70,16 +70,16 @@ export default function Rightsidepanel() {
   return (
     <aside
       className="
-        hidden lg:block w-[420px]
+        hidden lg:block w-[370px]
         h-[626px] rounded-2xl
         bg-gradient-to-b from-black/60 to-black/30
         backdrop-blur-2xl
-        border border-white/10
+        border border-white/20
         shadow-[0_0_40px_rgba(0,0,0,0.6)]
       "
     >
       {/* Header */}
-      <div className="px-6 py-4 border-b border-white/10">
+      <div className="px-6 py-4 border-b border-white/20">
         <h2 className="text-white text-lg font-semibold tracking-wide">
           🔥 Most Interested
         </h2>
