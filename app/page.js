@@ -2,6 +2,7 @@ import Image from "next/image";
 import First from "@/components/home";
 import DontMissOnNetflix from "@/components/dontmissonnetflix";
 import DontMissOnPrimeVideo from "@/components/dontmissonprime";
+import HomeSkeleton from "@/components/HomeSkeleton";
 import MostInterested from "@/components/mostInterested";
 import { Footer } from "@/components/footer";
 import EditorsPick from "@/components/EditorsPick";
@@ -15,6 +16,7 @@ import Starfield from "@/components/starfield";
 import Rightsidepanel from "@/components/rightsidepanel";
 import TrendingonNac from "@/components/TrendingonNac";
 export default function Home() {
+
   return (
     <>
     <div className="blackgreengrad">
@@ -25,8 +27,8 @@ export default function Home() {
 <First/>
      </div>
  
- <div className="relative  z-10    mx-auto px-8 lg:px-24 pt-6">
-  <div className=" lg:grid grid-cols-[4fr_2fr] gap-10 items-start" >
+ <div className="relative  z-10    mx-auto px-8 lg:px-24 lg:pt-6">
+  <div className=" lg:grid grid-cols-[4fr_2fr] gap-8 items-start" >
 
 
       <div className="flex flex-col gap-8">
