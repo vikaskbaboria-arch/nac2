@@ -236,7 +236,7 @@ export default function About() {
           features are on the way.
         </p>
 
-        <p className="mt-3 text-[#C9A227] font-medium">
+        <p className="mt-3 text-[#1d59e5] font-medium">
           Not A Critic — but always an opinion.
         </p>
       </motion.div>
