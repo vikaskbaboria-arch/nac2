@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import SearchFilters from "./SearchFilters";
 import { fetchMovies } from "@/lib/masterfetch";
 import { AnimatedShinyText } from "@/components/ui/animated-shiny-text";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -42,7 +43,14 @@ const Search = ({ movie }) => {
   const allResults = movies?.results || [];
   const titleResults = allResults.filter((m) => m.media_type !== "person");
   const peopleResults = allResults.filter((m) => m.media_type === "person");
+ const [filters, setFilters] = useState({ type: "all", country: "all", language: "all" })
 
+const filteredResults = (movies?.results || []).filter((m) => {
+  if (filters.type !== "all" && m.media_type !== filters.type) return false
+  if (filters.language !== "all" && m.original_language !== filters.language) return false
+  if (filters.country !== "all" && !(m.origin_country || []).includes(filters.country)) return false
+  return true
+})
   const handleClick = (m) => {
     if (m.media_type === "movie") {
       router.push(`/movie/${m.id}?type=movie`);
@@ -102,9 +110,16 @@ const Search = ({ movie }) => {
   //     );
   //  }
   return (
-    <div className="w-full min-h-[89vh] px-4 sm:px-8 py-8 flex flex-col gap-5 w-full px-auto">
-       <div className=" lg:grid grid-cols-[4fr_2fr] gap-10 items-start " >
- <div className="flex flex-col gap-8 pl-14">  {titleResults.map((m) => {
+    <div className=" w-full mx-auto relative  z-10    mx-auto px-8 lg:px-24 lg:pt-6">
+       <div className=" lg:grid grid-cols-[1fr_4fr] items-start justify-center " >
+
+
+
+  {/* <SearchTips people={peopleResults} /> */}
+    <SearchFilters onFilterChange={setFilters} />
+
+      <div className="flex flex-col gap-8 pl-14"> 
+         {filteredResults.map((m) => {
         const isExpanded = !!expandedIds[m.id];
 
         return (
@@ -122,13 +137,13 @@ const Search = ({ movie }) => {
               mx-auto
               p-3 sm:p-5
               rounded-2xl
-              border border-white/10
-             bg-[#121111]
+              border border-white/20
+             bg-[#000000]
               backdrop-blur-2xl
               shadow-[0_0_40px_rgba(0,0,0,0.6)]
               cursor-pointer
               transition-colors
-              hover:bg-white/10
+              hover:bg-white/5
             "
           >
             {/* POSTER */}
@@ -145,7 +160,8 @@ const Search = ({ movie }) => {
                 src={
                   m.poster_path
                     ? `https://image.tmdb.org/t/p/w500${m.poster_path}`
-                    : "/placeholder.png"
+                    : `https://image.tmdb.org/t/p/w500${m.profile_path}`
+                    
                 }
                 alt={m.title || m.name}
                 className="
@@ -160,11 +176,12 @@ const Search = ({ movie }) => {
             {/* MOVIE DATA */}
             <div className="text-white w-full min-w-0">
               <div className="text-lg sm:text-2xl font-bold mb-1 truncate">
-                <AnimatedShinyText>{m?.title || m?.name}</AnimatedShinyText>
+                <AnimatedShinyText>{m?.title || m?.name }</AnimatedShinyText>
               </div>
 
               <div className="text-white/60 text-xs tracking-wide mb-3">
                 <AnimatedShinyText>
+        
                   {m.media_type === "movie" ? "Movie" : "Series"}
                 </AnimatedShinyText>
               </div>
@@ -198,11 +215,6 @@ const Search = ({ movie }) => {
           </div>
         );
       })}</div>
-
-<div>
-  <SearchTips people={peopleResults} />
-</div>
-     
        </div>
     
 

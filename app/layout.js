@@ -21,11 +21,13 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className="bg-black min-h-screen select-none ">
+      <body className="bg-[#020000] min-h-screen  ">
                {/* <Starfield /> */}
      <Sessionwrapper>
-        <Navbar/>
-        {children}
+      <div className="mb-16">        <Navbar/></div>
+
+  
+        {children }
         </Sessionwrapper>
       </body>
     </html>

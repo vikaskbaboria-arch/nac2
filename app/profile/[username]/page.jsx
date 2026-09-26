@@ -22,7 +22,7 @@ const ProfileClient = ({ username, stats = DUMMY_STATS }) => {
   const [active, setActive] = useState("watchlist");
 
   return (
-    <div className="min-h-screen bg-[#0A0A0A] text-white px-4 sm:px-8 py-10">
+    <div className="min-h-screen bg-[#020000] text-white px-4 sm:px-8 py-10">
       <div className="max-w-4xl mx-auto">
 
         {/* HEADER */}
