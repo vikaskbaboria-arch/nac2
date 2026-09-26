@@ -3,7 +3,23 @@ import React, { useEffect, useState } from "react";
 import { fetchMovies } from "@/lib/masterfetch";
 import { AnimatedShinyText } from "@/components/ui/animated-shiny-text";
 import { useRouter, useSearchParams } from "next/navigation";
+import SearchTips from "@/components/searchTips";
 
+
+const EXAMPLES = [
+  { label: "Actor names", example: "Zendaya" },
+  { label: "Movie titles", example: "Dune: Part Two" },
+  { label: "TV series", example: "The Bear" },
+];
+const PANEL_CLASSES = `
+  hidden lg:flex flex-col gap-6
+  w-full max-w-[400px] p-6 
+  p-6 rounded-2xl
+  border border-white/10
+  bg-[#121111]
+  shadow-[0_0_40px_rgba(0,0,0,0.6)]
+  sticky  top-8
+`;
 const Search = ({ movie }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -23,6 +39,9 @@ const Search = ({ movie }) => {
   }, [movie, pages]);
 
   const totalpages = movies?.total_pages;
+  const allResults = movies?.results || [];
+  const titleResults = allResults.filter((m) => m.media_type !== "person");
+  const peopleResults = allResults.filter((m) => m.media_type === "person");
 
   const handleClick = (m) => {
     if (m.media_type === "movie") {
@@ -40,11 +59,52 @@ const Search = ({ movie }) => {
   useEffect(() => {
     router.push(`?page=${pages}`, { scroll: true });
   }, [pages]);
-
+  //  if(allResults.length==0){
+  //   return (
+  //       <div className={PANEL_CLASSES + " mx-auto my-[200px] " }>
+  //         <div className=""> 
+  //           <div className="text-lg font-bold text-white mb-1">
+  //             <AnimatedShinyText>Search tips</AnimatedShinyText>
+  //           </div>
+  //           <p className="text-gray-400 text-sm leading-relaxed">
+  //             Try actor names, movie titles, or TV series.
+  //           </p>
+  //         </div>
+    
+  //         <div className="flex flex-col">
+  //           {EXAMPLES.map((item, i) => (
+  //             <button
+  //               key={item.label}
+  //               type="button"
+  //               onClick={() => handleExampleClick(item.example)}
+  //               className={`
+  //                 group flex items-center justify-between gap-3
+  //                 py-3 text-left cursor-pointer
+  //                 ${i !== 0 ? "border-t border-white/10" : ""}
+  //               `}
+  //             >
+  //               <span className="text-slate-400 text-xs font-semibold">
+  //                 {item.label}
+  //               </span>
+  //               <span
+  //                 className="
+  //                   text-sm text-white
+  //                   group-hover:text-purple-400
+  //                   transition-colors
+  //                 "
+  //               >
+  //                 {item.example}
+  //               </span>
+  //             </button>
+  //           ))}
+  //         </div>
+  //       </div>
+  //     );
+  //  }
   return (
-    <div className="w-full min-h-[89vh] px-4 sm:px-8 py-8 flex flex-col gap-5">
-       <div className=" lg:grid grid-cols-[4fr_2fr] gap-10 items-start" >
- <div class="flex flex-col gap-8">  {movies?.results?.map((m) => {
+    <div className="w-full min-h-[89vh] px-4 sm:px-8 py-8 flex flex-col gap-5 w-full px-auto">
+       <div className=" lg:grid grid-cols-[4fr_2fr] gap-10 items-start " >
+ <div className="flex flex-col gap-8 pl-14">  {titleResults.map((m) => {
         const isExpanded = !!expandedIds[m.id];
 
         return (
@@ -139,6 +199,10 @@ const Search = ({ movie }) => {
         );
       })}</div>
 
+<div>
+  <SearchTips people={peopleResults} />
+</div>
+     
        </div>
     
 
