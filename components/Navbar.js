@@ -58,9 +58,9 @@ const Navbar = () => {
 
   return (
     <nav className={`
-      sticky top-0 z-50 w-full h-16 px-4 sm:px-24 
+      fixed  top-0 z-50 w-full h-16 px-4 sm:px-24 
       flex items-center justify-between text-white
-      transition-all duration-300
+      transition-all duration-300 
       border-b border-white/10 backdrop-blur-md
       ${scrolled ? "bg-black/60 backdrop-blur-xl shadow-lg" : "bg-black"}
     `}>
