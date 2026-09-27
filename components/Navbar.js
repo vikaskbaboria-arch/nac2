@@ -113,17 +113,29 @@ const Navbar = () => {
 
       {/* DESKTOP LINKS */}
       
-      <ul className="hidden z-50 backdrop-blur-xl bg-black/5 hover:bg-white/5 border border-white/10 backdrop-blur-md transition sm:flex items-center gap-4 px-2 py-1 text-sm font-medium bg-gray-950 rounded-2xl">
-        <li className="hover:text-gray-500 transition"><Link href="/">Home</Link></li>
+      <ul className="hidden z-50 backdrop-blur-xl bg-black/5 hover:bg-white/5 border border-white/10 backdrop-blur-md transition sm:flex items-center gap-4 px-3 py-1 text-sm font-medium bg-gray-950 rounded-2xl">
+        <li className="hover:text-gray-400 transition"><Link href="/">Home</Link></li>
+        <li className="hover:text-gray-400 transition"><Link href="/collection">Collection</Link></li>
        
        {status === 'authenticated' && session ? (
-        <li className="hover:text-gray-500 transition"><Link href={`/profile/${session.user.email.split("@")[0]}`}>
+        <li className="hover:text-gray-400 transition"><Link href={`/profile/${session.user.email.split("@")[0]}`}>
   Profile
 </Link></li>) : null}
 
+        {status === 'authenticated' && session?.user?.isAdmin ? (
+          <li>
+            <Link
+              href="/admin"
+              className="px-2 py-0.5 text-xs font-semibold rounded-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-[0_0_12px_rgba(147,51,234,0.4)] hover:shadow-[0_0_18px_rgba(147,51,234,0.7)] transition"
+            >
+              Admin
+            </Link>
+          </li>
+        ) : null}
+
         <button
           onClick={()=>setButton(!button)}
-          className="px-1 py-1 rounded-md bg-black hover:bg-gray-600/50 hover:text-blue-200 border border-white/10 backdrop-blur-md transition"
+          className="px-2 py-1 rounded-md bg-black hover:bg-gray-600/50 hover:text-blue-200 border border-white/10 backdrop-blur-md transition text-xs"
         >
           Search
         </button>
@@ -147,12 +159,15 @@ const Navbar = () => {
               onClick={()=>setDropdown2(!dropdown2)}
               className="px-3 py-1.5 rounded-md text-xs sm:text-sm
               bg-gradient-to-br from-purple-800 to-blue-700
-              hover:shadow-[0_0_20px_rgba(168,85,247,0.6)] transition"
+              hover:shadow-[0_0_20px_rgba(168,85,247,0.6)] transition flex items-center gap-1.5"
             >
-              {session.user.email.split("@")[0]}
+              <span>{session.user.email.split("@")[0]}</span>
+              {session.user.isAdmin && (
+                <span className="text-[10px] bg-black/40 px-1 rounded uppercase tracking-wider font-bold">Admin</span>
+              )}
             </button>
 
-            <div className={`absolute right-0 mt-3 w-44 rounded-xl
+            <div className={`absolute right-0 mt-3 w-48 rounded-xl
               bg-black/90 backdrop-blur-xl border border-white/10
               transition-all origin-top
               ${dropdown2 ? "scale-100 opacity-100" : "scale-95 opacity-0 pointer-events-none"}`}>
@@ -160,7 +175,12 @@ const Navbar = () => {
                 <li className="p-2 hover:bg-white/5"><Link href={`/profile/${session.user.email.split("@")[0]}`}>
   Profile
 </Link></li>
-             
+                {session.user.isAdmin && (
+                  <li className="p-2 hover:bg-purple-500/20 text-purple-300 font-medium border-t border-b border-white/10">
+                    <Link href="/admin">🛡️ Admin Dashboard</Link>
+                  </li>
+                )}
+                <li className="p-2 hover:bg-white/5"><Link href="/collection">NAC Collection</Link></li>
                 <li className="p-2 hover:bg-white/5"><Link href="#">Earnings</Link></li>
                 <li className="p-2 hover:bg-red-500/10">
                   <button onClick={() => signOut()}>Sign out</button>
@@ -181,10 +201,16 @@ const Navbar = () => {
         ${mobileMenu ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4 pointer-events-none"}
       `}>
         <Link onClick={()=>setMobileMenu(false)} className="block p-4 border-b border-white/10" href="/">Home</Link>
+        <Link onClick={()=>setMobileMenu(false)} className="block p-4 border-b border-white/10" href="/collection">NAC Collection</Link>
         {session && status === 'authenticated' ? (
-          <Link onClick={()=>setMobileMenu(false)}  href="/chats" className="hover:text-purple-400 transition">
+          <Link onClick={()=>setMobileMenu(false)}  href="/chats" className="block p-4 border-b border-white/10 hover:text-purple-400 transition">
             Chats
           </Link>):null}
+        {session?.user?.isAdmin && (
+          <Link onClick={()=>setMobileMenu(false)} href="/admin" className="block p-4 border-b border-white/10 text-purple-300 font-semibold bg-purple-950/30">
+            🛡️ Admin Dashboard
+          </Link>
+        )}
         <button onClick={()=>{setButton(true); setMobileMenu(false)}} className="block w-full text-left p-4">
           Search
         </button>
