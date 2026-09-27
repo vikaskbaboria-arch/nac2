@@ -33,10 +33,11 @@ const Trending = () => {
       className="
         relative grid
         w-full max-w-[1080px]
-        gap-4
+        gap-2
+        sm:gap-4
        
-        p-3
-  
+        sm:p-3
+        
         
         
      

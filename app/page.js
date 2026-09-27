@@ -28,8 +28,8 @@ export default function Home() {
 <First/>
      </div>
  
- <div className="relative  z-10    mx-auto px-8 lg:px-24 lg:pt-6">
-  <div className=" lg:grid grid-cols-[4fr_2fr] gap-8 items-start" >
+ <div className="relative  z-10    mx-auto px-4 lg:px-24 lg:pt-6">
+  <div className=" lg:grid sm:grid-cols-[4fr_2fr] gap-8 items-start" >
 
 
       <div className="flex flex-col gap-8">
