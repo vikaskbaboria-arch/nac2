@@ -34,7 +34,7 @@ export default function Home() {
       <div className="flex flex-col gap-8">
       <Trending />
       <EditorsPick />
-      <TrendingonNac />
+    
       <DontMissOnNetflix />
       <DontMissOnPrimeVideo />
     

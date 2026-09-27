@@ -160,7 +160,7 @@ if (loading) {
             <div className=" flex  flex-col"> 
               <span className="text-white/50">Country </span>
              {movie?.origin_country &&
-             <div className="text-white font-semibold">
+             <div onClick={() => window.location.assign(`/explore/country/${movie?.origin_country}`)} className="text-white font-semibold">
               {getCountryNames(movie?.origin_country)}
              </div>
              }
