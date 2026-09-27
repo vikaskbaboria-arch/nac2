@@ -34,6 +34,12 @@ import { ChevronDown, SlidersHorizontal, Circle, Play } from "lucide-react";
  *   including on mount with the initial state. filters shape:
  *   { sort, type, country, language, providers: string[], moctaleSelect, familyFriendly }
  * - className — merged onto the outer panel.
+ * - types — override the Content Type pills (defaults to All/Movies/Shows/People).
+ *   Pass a narrower list on a page where a type doesn't apply — e.g. a
+ *   country page built on /discover has no "People" results.
+ * - showCountryFilter — set false to hide the Country selector on a page
+ *   that's already scoped to one country (its own route param), so the
+ *   panel isn't asking the same question twice. Defaults to true.
  */
 const SORTS = [
   { value: "newest", label: "Newest" },
@@ -42,7 +48,7 @@ const SORTS = [
   { value: "az", label: "A–Z" },
 ];
 
-const TYPES = [
+const DEFAULT_TYPES = [
   { value: "all", label: "All" },
   { value: "movie", label: "Movies" },
   { value: "tv", label: "Shows" },
@@ -50,7 +56,10 @@ const TYPES = [
 ];
 
 // ISO 3166-1 alpha-2 codes, matching TMDB's origin_country field.
-const COUNTRIES = [
+// Exported so other pages (e.g. a /country/[code] page) can reuse the
+// same list — for looking up a country's display label from its code,
+// for instance — without duplicating it.
+export const COUNTRIES = [
   { value: "all", label: "All countries" },
   { value: "US", label: "United States" },
   { value: "IN", label: "India" },
@@ -109,10 +118,10 @@ const PROVIDERS = [
 // Matches SearchTips.jsx's panel shell, so the two read as one system
 // on either side of the results grid.
 const PANEL_CLASSES = `
-  hidden lg:flex  flex-col gap-4
+  hidden lg:flex flex-col gap-4
   p-4 rounded-2xl
   w-76
-    backdrop-blur-2xl
+  backdrop-blur-2xl
         border border-white/20
         shadow-[0_0_40px_rgba(0,0,0,0.6)]
   fixed top-22
@@ -175,7 +184,12 @@ function ToggleBadge({ active, onClick, colorClass, children }) {
   );
 }
 
-const SearchFilters = ({ onFilterChange, className = "" }) => {
+const Filters = ({
+  onFilterChange,
+  className = "",
+  types = DEFAULT_TYPES,
+  showCountryFilter = true,
+}) => {
   const [sort, setSort] = useState("newest");
   const [type, setType] = useState("all");
   const [country, setCountry] = useState("all");
@@ -241,7 +255,7 @@ const SearchFilters = ({ onFilterChange, className = "" }) => {
       <div className="border-t border-white/10 pt-5">
         <p className="text-slate-400 text-sm mb-3">Content Type</p>
         <div className="flex flex-wrap gap-2">
-          {TYPES.map((t) => {
+          {types.map((t) => {
             const active = type === t.value;
             return (
               <button
@@ -266,19 +280,74 @@ const SearchFilters = ({ onFilterChange, className = "" }) => {
       </div>
 
       {/* COUNTRY */}
-      <div className="border-t border-white/10 pt-5">
-        <PillSelect label="Country" options={COUNTRIES} value={country} onChange={setCountry} />
-      </div>
+      {showCountryFilter && (
+        <div className="border-t border-white/10 pt-5">
+          <PillSelect label="Country" options={COUNTRIES} value={country} onChange={setCountry} />
+        </div>
+      )}
 
       {/* LANGUAGE */}
-      <div className="border-t border-white/10 pt-5">
+      {/* <div className="border-t border-white/10 pt-5">
         <PillSelect label="Language" options={LANGUAGES} value={language} onChange={setLanguage} />
-      </div>
+      </div> */}
 
       {/* OTT */}
+      <div className="border-t border-white/10 pt-5">
+        <p className="text-slate-400 text-sm mb-3">OTT</p>
+        <div className="grid grid-cols-2 gap-2">
+          {PROVIDERS.map((p) => {
+            const active = providers.includes(p.value);
+            return (
+              <button
+                key={p.value}
+                type="button"
+                onClick={() => toggleProvider(p.value)}
+                className={`
+                  flex items-center gap-2 px-3 py-2 rounded-lg border transition-colors
+                  ${
+                    active
+                      ? "border-purple-500 bg-purple-600/10"
+                      : "border-white/15 bg-white/5 hover:bg-white/10"
+                  }
+                `}
+              >
+                <span
+                  className={`size-5 rounded flex items-center justify-center flex-shrink-0 ${p.color}`}
+                >
+                  {p.mono ? (
+                    <span className="text-[10px] font-bold text-white">{p.mono}</span>
+                  ) : (
+                    <Play className="size-3 text-white fill-current" aria-hidden="true" />
+                  )}
+                </span>
+                <span className="text-xs sm:text-sm font-semibold text-white truncate">
+                  {p.label}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
 
+      {/* BADGES */}
+{/* {      <div className="border-t border-white/10 pt-5 flex flex-wrap gap-2">
+        <ToggleBadge
+          active={moctaleSelect}
+          onClick={() => setMoctaleSelect((v) => !v)}
+          colorClass="border-amber-400/60 text-amber-400"
+        >
+          Moctale Select
+        </ToggleBadge>
+        <ToggleBadge
+          active={familyFriendly}
+          onClick={() => setFamilyFriendly((v) => !v)}
+          colorClass="border-sky-400/60 text-sky-400"
+        >
+          Family Friendly
+        </ToggleBadge>
+      </div>} */}
     </div>
   );
 };
 
-export default SearchFilters;
+export default Filters;

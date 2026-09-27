@@ -110,111 +110,89 @@ const filteredResults = (movies?.results || []).filter((m) => {
   //     );
   //  }
   return (
-    <div className=" w-full mx-auto relative  z-10    mx-auto px-8 lg:px-24 lg:pt-6">
-       <div className=" lg:grid grid-cols-[1fr_4fr] items-start justify-center " >
+    <div className=" w-full mx-auto relative   z-10    mx-auto px-8 lg:px-24  lg:pt-6">
+       <div className=" lg:grid gap-4 grid-cols-[1.5fr_4fr] items-start justify-center " >
 
 
 
   {/* <SearchTips people={peopleResults} /> */}
-    <SearchFilters onFilterChange={setFilters} />
-
-      <div className="flex flex-col gap-8 pl-14"> 
+  <div> <SearchFilters onFilterChange={setFilters} /></div>
+   
+<div>
+            <div className="mb-6 pl-6">
+          <p className="text-xs font-semibold tracking-widest text-slate-400 uppercase">
+            Country
+          </p>
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-white truncate">
+            <AnimatedShinyText>countryLabel</AnimatedShinyText>
+          </h1>
+        </div>
+  <div className="flex  grid grid-cols-2
+        sm:grid-cols-3
+        lg:grid-cols-5 gap-1 "> 
          {filteredResults.map((m) => {
         const isExpanded = !!expandedIds[m.id];
 
         return (
-          <div
-            key={m.id}
-            onClick={() => handleClick(m)}
-            className="
-              group
-              relative
-              flex flex-row
-              gap-5 sm:gap-8
-              items-start
-              w-full
-              max-w-[1080px]
-              mx-auto
-              p-3 sm:p-5
-              rounded-2xl
-              border border-white/20
-             bg-[#000000]
-              backdrop-blur-2xl
-              shadow-[0_0_40px_rgba(0,0,0,0.6)]
-              cursor-pointer
-              transition-colors
-              hover:bg-white/5
-            "
-          >
-            {/* POSTER */}
-            <div
-              className="
-                relative flex-shrink-0
-                w-24 sm:w-32 md:w-36 lg:w-40
-                aspect-[2/3]
-                overflow-hidden
-                rounded-lg
-              "
-            >
-              <img
-                src={
-                  m.poster_path
-                    ? `https://image.tmdb.org/t/p/w500${m.poster_path}`
-                    : `https://image.tmdb.org/t/p/w500${m.profile_path}`
-                    
-                }
-                alt={m.title || m.name}
+           <div
+                key={m.id}
+                onClick={() => handleClick(m)}
                 className="
-                  absolute inset-0
-                  w-full h-full object-cover
-                
+                  group
+                  cursor-pointer
+                  w-[calc(90%+0.75rem)]
+                  rounded-xl
+                  p-2
+                  transition-colors
+                  hover:bg-white/10
                 "
-              />
-              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition" />
-            </div>
-
-            {/* MOVIE DATA */}
-            <div className="text-white w-full min-w-0">
-              <div className="text-lg sm:text-2xl font-bold mb-1 truncate">
-                <AnimatedShinyText>{m?.title || m?.name }</AnimatedShinyText>
-              </div>
-
-              <div className="text-white/60 text-xs tracking-wide mb-3">
-                <AnimatedShinyText>
-        
-                  {m.media_type === "movie" ? "Movie" : "Series"}
-                </AnimatedShinyText>
-              </div>
-
-              <div className="flex flex-col gap-2">
-                <span className="text-slate-400 font-semibold text-sm">
-                  Overview
-                </span>
-
-                <p
-                  className={`
-                    text-gray-200 leading-relaxed text-xs sm:text-sm
-                    ${isExpanded ? "" : "line-clamp-3"}
-                    
-                    transition-all duration-300
-                  `}
-                >
-                  {m?.overview || "No overview available."}
-                </p>
-
-                {m?.overview?.length > 50 && (
-                  <button
-                    onClick={(e) => toggleOverview(e, m.id)}
-                    className=" text-purple-400 text-sm font-semibold self-start"
+              >
+                {/* POSTER */}
+                <div className="relative aspect-[2/3] overflow-hidden rounded-lg">
+                  <img
+                    src={
+                      m.poster_path
+                        ? `https://image.tmdb.org/t/p/w500${m.poster_path}`
+                        : `https://image.tmdb.org/t/p/w500${m.profile_path}`
+                    }
+                    className="
+                      absolute inset-0
+                      w-full h-full object-cover
+                     
+                    "
+                    alt={m.title || m.name}
+                  />
+      
+                  {/* subtle overlay on hover */}
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition" />
+                </div>
+      
+                {/* TITLE */}
+                <div className="mt-2 text-sm font-semibold overflow-hidden">
+                  <div
+                    className={`
+                      whitespace-nowrap
+                      ${(m?.title?.length > 22 || m?.name?.length > 22)
+                        ? "marquee"
+                        : ""}
+                    `}
                   >
-                    {isExpanded ? "Show less" : "Show more"}
-                  </button>
-                )}
+                    <AnimatedShinyText>
+                      {m?.title || m?.name}
+                    </AnimatedShinyText>
+                  </div>
+                </div>
+      
+                {/* MEDIA TYPE */}
+                <div className="text-white/60 text-xs tracking-wide">
+                  <AnimatedShinyText>
+                    {m.media_type === "movie" ? "Movie" : "Series"}
+                  </AnimatedShinyText>
+                </div>
               </div>
-            </div>
-          </div>
         );
-      })}</div>
+      })}</div></div>
+      
        </div>
     
 
