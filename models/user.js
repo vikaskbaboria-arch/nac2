@@ -6,6 +6,10 @@ const UserSchema =new Schema ({
         required:true,
 
     },
+    isAdmin:{
+        type:Boolean,
+        default:false
+    },
        email:{
         type:String,
         required:true
@@ -25,7 +29,12 @@ const UserSchema =new Schema ({
         default:[],
 
     },
-    
+ 
+    role:{
+        type:String,
+        default:"user",
+        enum:["user", "admin"],
+    },
     createdAt:{
         type:Date,
         default:Date.now

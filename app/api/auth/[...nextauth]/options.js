@@ -17,30 +17,55 @@ export const authOptions = {
     }),
   ],
   callbacks: {
-    async signIn({ user, account, profile, email }) {
+    async signIn({ user, account, profile }) {
       if (account.provider === "google") {
         await connectDB();
-        const currentUser = await User.findOne({ email: email });
+        const userEmail = user?.email || profile?.email;
+        if (!userEmail) return false;
+
+        const adminEmails = (process.env.ADMIN_EMAIL || "")
+          .split(",")
+          .map((e) => e.trim().toLowerCase())
+          .filter(Boolean);
+        const shouldBeAdmin = adminEmails.includes(userEmail.toLowerCase());
+
+        let currentUser = await User.findOne({ email: userEmail });
         if (!currentUser) {
-          const newUser = await User.create({
-            email: user.email,
-            username: user.email.split("@")[0],
+          currentUser = await User.create({
+            email: userEmail,
+            username: userEmail.split("@")[0],
+            isAdmin: shouldBeAdmin,
+            role: shouldBeAdmin ? "admin" : "user",
           });
-          await newUser.save();
+        } else if (shouldBeAdmin && !currentUser.isAdmin) {
+          currentUser.isAdmin = true;
+          currentUser.role = "admin";
+          await currentUser.save();
         }
 
-        return profile.email_verified && profile.email.endsWith("@gmail.com");
+        return profile?.email_verified && profile?.email?.endsWith("@gmail.com");
       }
       return true;
     },
     async session({ session }) {
-    
-    
-      const dbUser = await User.findOne({ email: session.user.email });
-      if (dbUser) {session.user.name = dbUser.username;
-session.user.id = await dbUser._id ;
-      }; 
-       
+      if (session?.user?.email) {
+        await connectDB();
+        const dbUser = await User.findOne({ email: session.user.email });
+        if (dbUser) {
+          session.user.name = dbUser.username;
+          session.user.id = dbUser._id;
+
+          const adminEmails = (process.env.ADMIN_EMAIL || "")
+            .split(",")
+            .map((e) => e.trim().toLowerCase())
+            .filter(Boolean);
+          const isAdmin = Boolean(
+            dbUser.isAdmin || adminEmails.includes(dbUser.email?.toLowerCase())
+          );
+          session.user.isAdmin = isAdmin;
+          session.user.role = isAdmin ? "admin" : (dbUser.role || "user");
+        }
+      }
       return session;
     },
   },

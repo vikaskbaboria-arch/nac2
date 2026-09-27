@@ -6,6 +6,7 @@ import HomeSkeleton from "@/components/HomeSkeleton";
 import MostInterested from "@/components/mostInterested";
 import { Footer } from "@/components/footer";
 import EditorsPick from "@/components/EditorsPick";
+import NacCollection from "@/components/NacCollection";
 import { AuroraText } from "@/components/ui/aurora-text";
 import Navbar from "@/components/Navbar";
 import { ReviewsSection } from "@/components/homereviews";
@@ -34,6 +35,7 @@ export default function Home() {
       <div className="flex flex-col gap-8">
       <Trending />
       <EditorsPick />
+      
     
       <DontMissOnNetflix />
       <DontMissOnPrimeVideo />
