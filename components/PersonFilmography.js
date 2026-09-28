@@ -7,7 +7,7 @@ import { fetchPerson } from "@/fetch/person";
 /* ---------- small skeleton, same spirit as SeriesSkeleton ---------- */
 function PersonSkeleton() {
   return (
-    <div className="w-full min-h-screen bg-[#0A0A0A] px-6 sm:px-12 lg:px-24 py-16">
+    <div className="w-full min-h-screen bg-[#0A0A0A] px-4 sm:px-8 lg:px-24 py-12 sm:py-16">
       <div className="grid md:grid-cols-[240px_1fr] gap-8 max-w-[1200px] mx-auto">
         <div className="w-40 sm:w-52 aspect-[2/3] rounded-xl bg-white/5 animate-pulse mx-auto md:mx-0" />
         <div className="space-y-4">
@@ -148,7 +148,7 @@ export default function PersonFilmography({ personId }) {
   return (
     <div className="w-full min-h-screen bg-[#0A0A0A] text-[#F2F0EA]">
       {/* ================= HEADER ================= */}
-      <div className="max-w-[1200px] mx-auto px-6 sm:px-12 lg:px-24 pt-16 pb-4">
+      <div className="max-w-[1200px] mx-auto px-4 sm:px-8 lg:px-24 pt-12 sm:pt-16 pb-4">
         <div className="grid md:grid-cols-[220px_1fr] gap-8">
           <img
             src={profile}
@@ -197,7 +197,7 @@ export default function PersonFilmography({ personId }) {
       </div>
 
       {/* ================= FILMOGRAPHY ================= */}
-      <div className="max-w-[1200px] mx-auto px-6 sm:px-12 lg:px-24 py-10">
+      <div className="max-w-[1200px] mx-auto px-4 sm:px-8 lg:px-24 py-8 sm:py-10">
         <h2 className="text-xl sm:text-2xl font-semibold mb-6 border-b border-white/8 pb-3">
           Filmography
         </h2>

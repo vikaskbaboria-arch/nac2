@@ -125,7 +125,7 @@ export function ChatListSkeleton({ count = 5 }) {
 
 export function MessageThreadSkeleton() {
   return (
-    <div aria-busy="true" aria-label="Loading messages" className="flex h-screen flex-col bg-[#0b0b0c] px-4 text-white sm:px-6">
+    <div aria-busy="true" aria-label="Loading messages" className="flex h-[calc(100dvh-4rem)] min-h-0 flex-col bg-[#0b0b0c] px-4 text-white sm:px-6">
       <div className="flex items-center gap-3 border-b border-white/5 py-3">
         <SkeletonBlock className="h-10 w-10 rounded-full" />
         <div>
@@ -230,14 +230,16 @@ export function InterestedPanelSkeleton() {
     <aside
       aria-busy="true"
       aria-label="Loading most interested movies"
-      className="hidden h-[626px] w-full rounded-2xl border border-white/20 bg-white/[0.03] p-6 lg:block"
+      className="w-full min-w-0 overflow-hidden rounded-lg border border-white/20 bg-white/[0.03] lg:h-[626px] lg:rounded-2xl lg:p-6"
     >
-      <SkeletonBlock className="h-6 w-44" />
-      <SkeletonBlock className="mt-2 h-3 w-52" />
-      <div className="mt-8 space-y-3">
+      <div className="border-b border-white/10 px-4 py-3 lg:border-0 lg:p-0">
+        <SkeletonBlock className="h-6 w-44" />
+        <SkeletonBlock className="mt-2 h-3 w-52" />
+      </div>
+      <div className="scrollbar-hidden flex gap-3 overflow-x-auto px-3 py-3 lg:mt-8 lg:block lg:h-[520px] lg:space-y-3 lg:overflow-x-hidden lg:overflow-y-auto lg:px-0 lg:py-0">
         {Array.from({ length: 4 }, (_, index) => (
-          <div key={index} className="flex gap-3 rounded-xl bg-white/[0.02] p-3">
-            <SkeletonBlock className="h-[95px] w-[65px] shrink-0 rounded-lg" />
+          <div key={index} className="flex w-[min(78vw,280px)] shrink-0 gap-3 rounded-lg bg-white/[0.02] p-2.5 lg:w-full lg:rounded-xl lg:p-3">
+            <SkeletonBlock className="h-[82px] w-[56px] shrink-0 rounded-lg lg:h-[95px] lg:w-[65px]" />
             <div className="flex flex-1 flex-col justify-between py-1">
               <div>
                 <SkeletonBlock className="h-4 w-3/4" />

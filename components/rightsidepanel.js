@@ -76,18 +76,17 @@ export default function Rightsidepanel() {
   return (
     <aside
       className="
-        hidden lg:block 
-        w-full max-w-full
-        h-[626px] rounded-2xl
+        w-full min-w-0 overflow-hidden rounded-lg
         bg-gradient-to-b from-black/60 to-black/30
         backdrop-blur-2xl
         border border-white/20
         shadow-[0_0_40px_rgba(0,0,0,0.6)]
+        lg:h-[626px] lg:rounded-2xl
       "
     >
       {/* Header */}
-      <div className="px-6 py-4 border-b border-white/20">
-        <h2 className="text-white text-lg font-semibold tracking-wide">
+      <div className="border-b border-white/20 px-4 py-3 sm:px-6 lg:py-4">
+        <h2 className="text-base font-semibold tracking-wide text-white lg:text-lg">
           🔥 Most Interested
         </h2>
 
@@ -98,12 +97,7 @@ export default function Rightsidepanel() {
 
       {/* Scroll Area */}
       <div
-        className="
-          h-[520px]
-          overflow-y-auto
-          px-4 py-4 space-y-3
-          scrollbar-hidden
-        "
+        className="scrollbar-hidden flex gap-3 overflow-x-auto px-3 py-3 lg:block lg:h-[520px] lg:space-y-3 lg:overflow-x-hidden lg:overflow-y-auto lg:px-4 lg:py-4"
       >
         {movies.slice(0, 12).map((m) => {
           const title = m.title || m.name || "Untitled";
@@ -113,11 +107,12 @@ export default function Rightsidepanel() {
               key={`${m.interestedType}-${m.id}`}
               onClick={() => handleClick(m)}
               className="
-                group flex gap-3 p-3 rounded-xl
+                group flex w-[min(78vw,280px)] shrink-0 gap-3 rounded-lg p-2.5
                 bg-white/[0.02]
                 hover:bg-white/[0.06]
                 transition-all duration-300 ease-out
                 cursor-pointer
+                lg:w-full lg:rounded-xl lg:p-3
               "
             >
               {/* Poster */}
@@ -129,16 +124,17 @@ export default function Rightsidepanel() {
                 }
                 alt={title}
                 className="
-                  w-[65px] h-[95px]
+                  h-[82px] w-[56px] shrink-0
                   rounded-lg object-cover
                   shadow-md
                   group-hover:scale-[1.03]
                   transition-transform duration-300
+                  lg:h-[95px] lg:w-[65px]
                 "
               />
 
               {/* Details */}
-              <div className="flex flex-col justify-between flex-1 overflow-hidden">
+              <div className="flex min-w-0 flex-1 flex-col justify-between overflow-hidden">
                 <div>
                   <p
                     className="
@@ -165,7 +161,7 @@ export default function Rightsidepanel() {
         })}
 
         {movies.length === 0 && (
-          <div className="flex items-center justify-center h-full">
+          <div className="flex h-20 w-full shrink-0 items-center justify-center lg:h-full">
             <p className="text-sm text-white/40">
               No data available
             </p>

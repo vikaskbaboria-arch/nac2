@@ -20,7 +20,7 @@ const Trending = () => {
     console.log(movies)
   if (movies === null) return <SearchGridSkeleton count={10} />
   return (
-    <div className='text-amber-50  w-[1080px] h-[750px] grid py-10 gap-4 grid-rows-2 grid-cols-5 p-2'>
+    <div className='grid min-h-[50vh] w-full max-w-6xl grid-cols-2 gap-4 px-4 py-10 text-amber-50 sm:grid-cols-3 lg:grid-cols-5'>
     {movies?.slice(0,10).map((m)=>{
         return(
 <div key={m.id} className='

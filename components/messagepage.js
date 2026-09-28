@@ -95,7 +95,7 @@ const receiverName = receiver?.username;
  
    console.log(messages)
   return (
-<div className="h-screen flex flex-col bg-[#0b0b0c] text-white">
+<div className="flex h-[calc(100dvh-4rem)] min-h-0 flex-col bg-[#0b0b0c] text-white">
 
   {/* HEADER */}
   <div className="sticky top-0 z-40 px-4 sm:px-6 py-3 border-b border-white/5 bg-[#0b0b0c]/90 backdrop-blur">
