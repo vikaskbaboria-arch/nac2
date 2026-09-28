@@ -20,16 +20,16 @@ export default function Home() {
 
   return (
     <>
-    <div className="blackgreengrad">
+    <div className="blackgreengradforp lg:blackgreengrad">
 
    
 {/* <Starfield/> */}
-     <div className=" sm:hidden">
-<First/>
+    <div className="lg:hidden">
+      <Rightsidepanel  classN={"block"}/>
      </div>
  
- <div className="relative  z-10    mx-auto px-4 lg:px-24 lg:pt-6">
-  <div className=" lg:grid sm:grid-cols-[4fr_2fr] gap-8 items-start" >
+ <div className="relative  z-10    mx-auto px-4 lg:20 xl:px-24 pt-4 lg:pt-6">
+  <div className="lg:grid lg:grid-cols-[minmax(0,4fr)_minmax(0,1.5fr)] sm:gap-4 lg:gap-8 items-start" >
 
 
       <div className="flex flex-col gap-8">
@@ -44,7 +44,7 @@ export default function Home() {
     </div>
 
     <div className="mt-14">
-      <Rightsidepanel />
+      <Rightsidepanel classN={"lg:block"}/>
     </div>
 
     

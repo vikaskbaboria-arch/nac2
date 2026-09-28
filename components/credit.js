@@ -3,6 +3,7 @@ import React from 'react'
 
 import { useEffect, useState ,useRef } from 'react'
 import { fetchCredit } from '@/fetch/credit'
+import { CreditRailSkeleton } from '@/components/skeletons/HomeSectionSkeletons'
 const Credit = ({movie}) => {
     const castRef = useRef(null);
         const scrollLeft = () => {
@@ -17,13 +18,19 @@ const Credit = ({movie}) => {
      useEffect(() => {
   if (!movie) return;
 
-  fetchCredit(movie, "tv").then(setCredits).catch((e)=>console.error(e));
+  fetchCredit(movie, "tv")
+    .then(setCredits)
+    .catch((error) => {
+      console.error(error)
+      setCredits({ crew: [] })
+    });
     
   // Fetch average rating for this title (reviews API uses numeric id)
 
 }, [movie]);
 
 console.log(credits)
+if (movie && credits === null) return <CreditRailSkeleton />
   return (
     <div>  <div
     ref={castRef} 

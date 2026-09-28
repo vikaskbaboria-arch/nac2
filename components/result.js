@@ -269,7 +269,7 @@ w-full
               ref={castRef}
               className="
                 flex gap-4 sm:gap-6
-                w-[800px]
+                w-full max-w-[800px]
                 overflow-x-auto overflow-y-hidden
                 touch-pan-x
                 scroll-smooth

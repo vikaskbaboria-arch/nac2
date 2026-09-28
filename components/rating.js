@@ -1,8 +1,10 @@
 "use client"
 import React, { useEffect, useState } from 'react'
+import { RatingSkeleton } from '@/components/skeletons/HomeSectionSkeletons'
 
 const Rating = ({movieId}) => {
     const  [rating,setRating]=useState(null)
+    const [loadedMovieId, setLoadedMovieId] = useState(null)
 useEffect(()=>{
         
     const loadRating =async()=>{
@@ -11,11 +13,14 @@ useEffect(()=>{
        const res = await data.json();
       const rate = await res.averageRating
       setRating(rate)
+      setLoadedMovieId(movieId)
        
        return  rate
         }
         catch(err){
             console.log(err)
+            setRating(null)
+            setLoadedMovieId(movieId)
 
         }
     }
@@ -24,8 +29,7 @@ useEffect(()=>{
 },[movieId])
   return (
     <div>
-          {!rating?(<div className="w-12 h-6   rounded-md animate-pulse blur-sm "><div className="w-10 h-10 border-4 border-gray-600 border-t-purple-500 rounded-full animate-spin"></div>
-</div>):(!rating?(<div  >N/A</div>): (<div> {rating}</div>))  }
+          {loadedMovieId !== movieId ? <RatingSkeleton /> : rating ? <div>{rating}</div> : <div>N/A</div>}
     </div>
 
     

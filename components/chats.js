@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react'
 import { useState } from 'react';
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from 'react';
+import { ChatListSkeleton } from '@/components/skeletons/HomeSectionSkeletons';
 const Chats = () => {
  const { data: session, status } = useSession();
 const router = useRouter();
@@ -23,6 +24,7 @@ const [name,setName]=useState(null)
 
       } catch (err) {
         console.error(err);
+        setConversations([]);
       }}
 fetchConversations();  
   },[]);
@@ -31,6 +33,8 @@ console.log("conversations",conversations)
 const handleClick = (id) => {
     router.push(`/message/${id}`);
 };
+
+if (conversations === null) return <ChatListSkeleton />
 
 
 

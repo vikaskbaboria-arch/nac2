@@ -2,9 +2,11 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { fetchMovies } from "@/lib/masterfetch";
+import { RetroTvSkeleton } from "@/components/skeletons/HomeSectionSkeletons";
 
 export default function RetroTV() {
   const [shows, setShows] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [channel, setChannel] = useState(0);
   const [paused, setPaused] = useState(false);
   const router = useRouter();
@@ -12,9 +14,14 @@ export default function RetroTV() {
   useEffect(() => {
     let mounted = true;
     (async () => {
-      const res = await fetchMovies({ type: "trending", type_of: "all" });
-      if (!mounted) return;
-      setShows((res?.results || []).filter((m) => m.backdrop_path).slice(0, 6));
+      try {
+        const res = await fetchMovies({ type: "trending", type_of: "all" });
+        if (mounted) setShows((res?.results || []).filter((m) => m.backdrop_path).slice(0, 6));
+      } catch (error) {
+        console.error("Failed to load featured TV titles:", error);
+      } finally {
+        if (mounted) setLoading(false);
+      }
     })();
     return () => {
       mounted = false;
@@ -42,6 +49,8 @@ export default function RetroTV() {
     if (current.media_type === "movie") router.push(`/movie/${current.id}?type=movie`);
     else router.push(`/series/${current.id}?type=tv`);
   };
+
+  if (loading) return <RetroTvSkeleton />
 
   return (
     <div className="w-full flex flex-col  items-center px-4 pt-8 pb-4 sm:pt-14">

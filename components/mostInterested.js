@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react"
 import { fetchMovies } from "@/lib/masterfetch"
 import { AnimatedShinyText } from "@/components/ui/animated-shiny-text"
 import { useRouter } from "next/navigation"
+import { PosterRailSkeleton } from "@/components/skeletons/HomeSectionSkeletons"
 
 /**
  * The aggregate endpoint now returns each title's stored `type`
@@ -43,6 +44,8 @@ const MostInterested = ({ limit = 10 }) => {
   const handleClick = (m) => {
     router.push(`/movie/${m.id}?type=${m.interestedType === "series" ? "tv" : "movie"}`)
   }
+
+  if (movies === null) return <PosterRailSkeleton label="most interested titles" count={limit} />
 
   return (
     <section className="w-full bg-black">

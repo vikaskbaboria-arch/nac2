@@ -5,6 +5,7 @@ import { useState, useEffect,useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button"
 import { fetchgenere,generename , getGenreNames} from '@/fetch/genre'
+import { PosterRailSkeleton } from '@/components/skeletons/HomeSectionSkeletons'
 
 const Series = (genere) => {
     const movieRef = useRef(null);
@@ -24,6 +25,10 @@ const Series = (genere) => {
 useEffect(() => {
  fetchgenere(genere.movie,"tv")
  .then((m)=>(setMovie(m)))
+ .catch((error) => {
+   console.error("Failed to load series for genre:", error)
+   setMovie({ results: [] })
+ })
     
  
 }, [genere])
@@ -75,6 +80,7 @@ const handlejust=(m)=>{
   router.push(`tv/genre/${m}`)
 }
 console.log(movie)
+if (movie === null) return <PosterRailSkeleton label="series" />
   return (
     <>
     

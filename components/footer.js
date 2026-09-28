@@ -79,7 +79,7 @@ export function Footer({
   className,
 }) {
   return (
-    <footer className={cn("border-t border-gray-800 footerbg px-28 text-white/90", className)}>
+    <footer className={cn("border-t border-gray-800 footerbg px-4 sm:px-8 lg:px-28 text-white/90", className)}>
       <div className="container-page py-8">
         <div className="flex flex-wrap items-center justify-between gap-6">
           <div className="flex flex-wrap items-center gap-4">

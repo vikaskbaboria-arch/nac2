@@ -3,11 +3,13 @@
 import { useEffect, useState } from "react";
 import { fetchMovies } from "@/lib/masterfetch";
 import { useRouter } from "next/navigation";
+import { InterestedPanelSkeleton } from "@/components/skeletons/HomeSectionSkeletons";
 
 const IMAGE_BASE = "https://image.tmdb.org/t/p/w185";
 
 export default function Rightsidepanel() {
   const [movies, setMovies] = useState([]);
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
@@ -42,12 +44,14 @@ export default function Rightsidepanel() {
 
         if (mounted) {
           setMovies(results.filter(Boolean));
+          setLoading(false);
         }
       } catch (error) {
         console.error("Failed to load interested movies:", error);
 
         if (mounted) {
           setMovies([]);
+          setLoading(false);
         }
       }
     }
@@ -67,10 +71,13 @@ export default function Rightsidepanel() {
     );
   };
 
+  if (loading) return <InterestedPanelSkeleton />;
+
   return (
     <aside
       className="
-        hidden lg:block w-[370px]
+        hidden lg:block 
+        w-full max-w-full
         h-[626px] rounded-2xl
         bg-gradient-to-b from-black/60 to-black/30
         backdrop-blur-2xl

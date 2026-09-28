@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react"
 import { fetchMovies } from "@/lib/masterfetch"
 import { AnimatedShinyText } from "@/components/ui/animated-shiny-text"
 import { useRouter } from "next/navigation"
+import { ProviderRowSkeleton } from "@/components/skeletons/HomeSectionSkeletons"
 
 /**
  * Shared row for "Don't Miss on <provider>" sections. I don't know the
@@ -15,7 +16,12 @@ const DontMissRow = ({ title, accentColor, fetchParams }) => {
   const router = useRouter()
 
   useEffect(() => {
-    fetchMovies(fetchParams).then((m) => setMovies(m.results))
+    fetchMovies(fetchParams)
+      .then((m) => setMovies(m?.results ?? []))
+      .catch((error) => {
+        console.error(`Failed to load ${title}:`, error)
+        setMovies([])
+      })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fetchParams.type, fetchParams.provider_id, fetchParams.watch_region, fetchParams.type_of])
 
@@ -26,6 +32,8 @@ const DontMissRow = ({ title, accentColor, fetchParams }) => {
       router.push(`/movie/${m.id}?type=tv`)
     }
   }
+
+  if (movies === null) return <ProviderRowSkeleton />
 
   return (
     <section className="w-full">
@@ -40,8 +48,9 @@ const DontMissRow = ({ title, accentColor, fetchParams }) => {
         className="
           relative grid
           w-full
-          gap-4
-          p-3
+          gap-2
+          sm:gap-4
+          sm:p-3
           rounded-xl
        
 
@@ -57,7 +66,7 @@ const DontMissRow = ({ title, accentColor, fetchParams }) => {
             className="
               group
               cursor-pointer
-              w-[calc(100%+0.75rem)]
+              w-full
               rounded-xl
               p-2
               transition-colors
