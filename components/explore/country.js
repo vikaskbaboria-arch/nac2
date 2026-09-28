@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { getCountryNames, getLanguageName } from "@/lib/localeNames";
+import MovieCard from "../MovieCard";
 import Filters, { COUNTRIES } from "../helpers/Filters";
 import { fetchMovies } from "@/lib/masterfetch";
 import { AnimatedShinyText } from "@/components/ui/animated-shiny-text";
@@ -161,50 +162,7 @@ const Country = ({ country }) => {
               <MediaListSkeleton label="country titles" count={5} />
             </div>
           ) : results.map((m) => (
-            <div
-              key={`${m.media_type}-${m.id}`}
-              onClick={() => handleClick(m)}
-              className="
-                group cursor-pointer
-                w-[calc(90%+0.75rem)]
-                rounded-xl p-2
-                transition-colors
-                hover:bg-white/10
-              "
-            >
-              {/* POSTER */}
-              <div className="relative aspect-[2/3] overflow-hidden rounded-lg">
-                <img
-                  src={
-                    m.poster_path
-                      ? `https://image.tmdb.org/t/p/w500${m.poster_path}`
-                      : "/placeholder.png"
-                  }
-                  className="absolute inset-0 w-full h-full object-cover"
-                  alt={m.title || m.name}
-                />
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition" />
-              </div>
-
-              {/* TITLE */}
-              <div className="mt-2 text-sm font-semibold overflow-hidden">
-                <div
-                  className={`
-                    whitespace-nowrap
-                    ${(m?.title?.length > 22 || m?.name?.length > 22) ? "marquee" : ""}
-                  `}
-                >
-                  <AnimatedShinyText>{m?.title || m?.name}</AnimatedShinyText>
-                </div>
-              </div>
-
-              {/* MEDIA TYPE */}
-              <div className="text-white/60 text-xs tracking-wide">
-                <AnimatedShinyText>
-                  {m.media_type === "movie" ? "Movie" : "Series"}
-                </AnimatedShinyText>
-              </div>
-            </div>
+            <MovieCard key={m.id} movie={m} />
           ))}
 
           {!loading && results.length === 0 && (

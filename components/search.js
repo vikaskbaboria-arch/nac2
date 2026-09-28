@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import SearchFilters from "./SearchFilters";
 import { fetchMovies } from "@/lib/masterfetch";
 import { AnimatedShinyText } from "@/components/ui/animated-shiny-text";
+import MovieCard from "./MovieCard";
 import { useRouter, useSearchParams } from "next/navigation";
 import SearchTips from "@/components/searchTips";
 import { SearchGridSkeleton } from "@/components/skeletons/HomeSectionSkeletons";
