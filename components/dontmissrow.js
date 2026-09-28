@@ -1,5 +1,6 @@
 "use client"
 import React, { useEffect, useState } from "react"
+import MovieCard from "@/components/MovieCard"
 import { fetchMovies } from "@/lib/masterfetch"
 import { AnimatedShinyText } from "@/components/ui/animated-shiny-text"
 import { useRouter } from "next/navigation"
@@ -60,62 +61,7 @@ const DontMissRow = ({ title, accentColor, fetchParams }) => {
         "
       >
         {movies?.slice(0, 5).map((m) => (
-          <div
-            key={m.id}
-            onClick={() => handleClick(m)}
-            className="
-              group
-              cursor-pointer
-              w-full
-              rounded-xl
-              p-2
-              transition-colors
-              hover:bg-white/10
-            "
-          >
-            {/* POSTER */}
-            <div className="relative aspect-[2/3] overflow-hidden rounded-poster">
-              <img
-                src={
-                  m.poster_path
-                    ? `https://image.tmdb.org/t/p/w500${m.poster_path}`
-                    : "/placeholder.png"
-                }
-                className="
-                  absolute inset-0
-                  w-full h-full object-cover
-                  rounded-xl
-                "
-                alt={m.title || m.name}
-              />
-
-              {/* subtle overlay on hover */}
-              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition" />
-            </div>
-
-            {/* TITLE */}
-            <div className="mt-2 text-sm font-semibold overflow-hidden">
-              <div
-                className={`
-                  whitespace-nowrap
-                  ${(m?.title?.length > 22 || m?.name?.length > 22)
-                    ? "marquee"
-                    : ""}
-                `}
-              >
-                <AnimatedShinyText>
-                  {m?.title || m?.name}
-                </AnimatedShinyText>
-              </div>
-            </div>
-
-            {/* MEDIA TYPE */}
-            <div className="text-muted-foreground text-xs tracking-wide">
-              <AnimatedShinyText>
-                {(m.media_type ?? fetchParams.type_of) === "movie" ? "Movie" : "Series"}
-              </AnimatedShinyText>
-            </div>
-          </div>
+         <MovieCard key={m.id} movie={m} />
         ))}
       </div>
     </section>
