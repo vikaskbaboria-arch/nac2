@@ -32,7 +32,7 @@ const handleClick=((m)=>{
 })
   if (loading || movie === null) return <MediaListSkeleton label="genre titles" />
   return (
-      <div className="w-full min-h-[89vh] px-4 sm:px-8 py-8">
+      <div className="min-h-[89vh] w-full min-w-0 px-4 py-6 sm:px-8 sm:py-8">
       {movie?.results?.map((m) => (
         <div
         
@@ -41,7 +41,7 @@ const handleClick=((m)=>{
           className="
             cursor-pointer
             flex  md:flex-row
-            gap-6 md:gap-10
+            min-w-0 gap-4 md:gap-10
             items-start
             bg-gray-900/40
             hover:bg-gray-900/70
@@ -54,7 +54,7 @@ const handleClick=((m)=>{
          {/* Poster */}
 <div
   className="
-    w-28
+    w-24 sm:w-28
     sm:w-33
     md:w-36
     lg:w-42
@@ -76,8 +76,8 @@ const handleClick=((m)=>{
 
 
           {/* Movie Data */}
-          <div className="text-white w-full">
-            <h2 className="text-xl sm:text-2xl font-bold mb-3">
+          <div className="min-w-0 flex-1 text-white">
+            <h2 className="mb-3 break-words text-lg font-bold sm:text-2xl">
               {m.title}
             </h2>
 

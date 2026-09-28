@@ -109,13 +109,12 @@ const PROVIDERS = [
 // Matches SearchTips.jsx's panel shell, so the two read as one system
 // on either side of the results grid.
 const PANEL_CLASSES = `
-  hidden lg:flex  flex-col gap-4
-  p-4 rounded-2xl
-  w-76
+  flex w-full max-w-full flex-col gap-4
+  rounded-lg p-4
     backdrop-blur-2xl
         border border-white/20
         shadow-[0_0_40px_rgba(0,0,0,0.6)]
-  fixed top-22
+  lg:fixed lg:top-22 lg:w-76 lg:rounded-2xl
 `;
 
 // Full-rounded pill dropdown, matching the "Sort By" control shape.

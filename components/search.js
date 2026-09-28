@@ -121,8 +121,8 @@ const filteredResults = (movies?.results || []).filter((m) => {
   //     );
   //  }
   return (
-    <div className=" w-full mx-auto relative   z-10    mx-auto px-8 lg:px-24  lg:pt-6">
-       <div className=" lg:grid gap-4 grid-cols-[1.5fr_4fr] items-start justify-center " >
+     <div className="relative z-10 mx-auto w-full px-4 pt-4 sm:px-6 lg:px-24 lg:pt-6">
+       <div className="grid items-start justify-center gap-4 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,4fr)]" >
 
 
 
@@ -138,9 +138,9 @@ const filteredResults = (movies?.results || []).filter((m) => {
             <AnimatedShinyText>countryLabel</AnimatedShinyText>
           </h1>
         </div>
-  <div className="flex  grid grid-cols-2
+  <div className="grid grid-cols-2 gap-1
         sm:grid-cols-3
-        lg:grid-cols-5 gap-1 "> 
+        lg:grid-cols-5 "> 
          {filteredResults.map((m) => {
         const isExpanded = !!expandedIds[m.id];
 

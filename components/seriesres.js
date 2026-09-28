@@ -113,7 +113,7 @@ if (loading) {
       </div>
 
       {/* ================= POSTER + DETAILS ================= */}
-      <div className=" animate-left [animation-delay:0.3s]relative z-10 grid md:grid-cols-[240px_1fr] gap-6 px-6 sm:px-12  -mt-64 md:ml-28 ">
+      <div className="animate-left [animation-delay:0.3s] relative z-10 grid min-w-0 gap-6 px-4 sm:px-8 lg:px-12 -mt-48 sm:-mt-56 md:grid-cols-[240px_minmax(0,1fr)] md:-mt-64 md:ml-28">
 
         <img
           src={poster}
@@ -121,12 +121,12 @@ if (loading) {
           className="w-36 sm:w-40 md:w-52 rounded-xl  shadow-2xl mx-auto md:mx-0"
         />
 
-        <div className="flex flex-col gap-4 text-center md:text-left md:mt-40">
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold">
+        <div className="flex min-w-0 flex-col gap-4 text-center md:mt-40 md:text-left">
+          <h1 className="break-words text-2xl font-extrabold sm:text-3xl lg:text-4xl">
             {movie?.name}
           </h1>
 
-          <div className="flex gap-2 justify-center md:justify-start">
+          <div className="flex flex-wrap justify-center gap-2 md:justify-start">
             <span className="text-white/50 font-bold">Created by:</span>
             {movie?.created_by?.length > 0 ? (
               movie.created_by.map((c) => (
@@ -138,6 +138,9 @@ if (loading) {
               <span className="text-white/40">N/A</span>
             )}
           </div>
+          <div className="flex justify-center pt-2 md:justify-start lg:hidden">
+            <Watchlist movieId={movie?.id} />
+          </div>
         </div>
            <div className="absolute  right-52 hidden lg:flex bottom-10 mr-18  z-20">
           <Watchlist movieId={movie?.id} />
@@ -145,7 +148,7 @@ if (loading) {
       </div>
 
       {/* ================= OVERVIEW + WATCH ================= */}
-      <div className="flex flex-col xl:flex-row gap-16 px-6 sm:px-12 lg:px-36 py-12">
+      <div className="flex flex-col gap-8 px-4 py-10 sm:gap-12 sm:px-8 lg:flex-row lg:px-16 xl:px-36">
 
         <div className="max-w-4xl">
           <h3 className="text-slate-400 text-xl sm:text-3xl font-bold mb-4">
@@ -202,9 +205,9 @@ w-full
       </div>
 
       {/* ================= CAST ================= */}
-  <div className="flex flex-col xl:flex-row gap-16  md:justify-center px-6 sm:px-12 lg:px-36 py-0">
+  <div className="flex flex-col gap-8 px-4 sm:gap-12 sm:px-8 lg:flex-row lg:justify-center lg:px-16 xl:px-36">
              
-      <div className="px-6 sm:px-12 pb-12">
+      <div className="w-full pb-12">
         <h3 className="text-xl font-semibold mb-4">Cast</h3>
 
         <div

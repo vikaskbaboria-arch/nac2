@@ -24,15 +24,11 @@ export default function Home() {
 
    
 {/* <Starfield/> */}
-    <div className="lg:hidden">
-      <Rightsidepanel  classN={"block"}/>
-     </div>
- 
- <div className="relative  z-10    mx-auto px-4 lg:20 xl:px-24 pt-4 lg:pt-6">
-  <div className="lg:grid lg:grid-cols-[minmax(0,4fr)_minmax(0,1.5fr)] sm:gap-4 lg:gap-8 items-start" >
+ <div className="relative z-10 mx-auto px-4 pt-4 sm:px-6 lg:px-20 lg:pt-6 xl:px-24">
+  <div className="flex flex-col items-start gap-8 lg:grid lg:grid-cols-[minmax(0,4fr)_minmax(0,1.5fr)] lg:gap-8" >
 
 
-      <div className="flex flex-col gap-8">
+      <div className="order-2 flex min-w-0 flex-col gap-8 lg:order-1">
       <Trending />
       <EditorsPick />
       
@@ -43,8 +39,8 @@ export default function Home() {
       
     </div>
 
-    <div className="mt-14">
-      <Rightsidepanel classN={"lg:block"}/>
+    <div className="order-1 w-full min-w-0 lg:order-2 lg:mt-14">
+      <Rightsidepanel />
     </div>
 
     

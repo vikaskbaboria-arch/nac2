@@ -594,7 +594,7 @@ export default function AdminPage() {
                   <span>Homepage Live Preview</span>
                 </div>
 
-                <div className="grid grid-cols-5 gap-3">
+                <div className="grid grid-cols-3 gap-2 sm:grid-cols-5 sm:gap-3">
                   {[0, 1, 2, 3, 4].map((idx) => {
                     const pick = editorsPicks[idx]
                     return (

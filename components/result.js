@@ -100,7 +100,7 @@ if (loading) {
       </div>
 
       {/* ================= POSTER + DETAILS ================= */}
-      <div className="relative z-10 grid md:grid-cols-[240px_1fr]  px-6 sm:px-12  -mt-72 md:ml-28 ">
+      <div className="relative z-10 grid min-w-0 md:grid-cols-[240px_minmax(0,1fr)] px-4 sm:px-8 lg:px-12 -mt-48 sm:-mt-60 md:-mt-72 md:ml-28">
 
         <img
           src={poster}
@@ -111,7 +111,7 @@ if (loading) {
         <div className="flex flex-col   text-center md:text-left md:mt-46">
           {/* { title and duration and type } */}
           <div className=" gap-0">
-            <div className="text-gray-400 font-semibold   pl-1 flex flex-row gap-3">
+            <div className="flex flex-wrap justify-center gap-x-3 gap-y-1 pl-1 font-semibold text-gray-400 md:justify-start">
             <span>{movies?.type==="movie"?'Movie':'Tv'}</span>
               <span>{movie?.release_date?.slice(0,4) }</span>
               <span>{movie?.runtime
@@ -120,13 +120,13 @@ if (loading) {
               
             </div>
 
-             <h1 className="pt-0 text-2xl w-fit sm:text-3xl lg:text-4xl text-white/95 font-bold">
+             <h1 className="min-w-0 break-words pt-0 text-2xl font-bold text-white/95 sm:text-3xl lg:text-4xl">
             {movies.type === "movie" ? movie?.title : movie?.name}
           </h1> 
           </div>
         
-           <div className="flex flex-row pt-4 gap-22">
-            <div className="flex flex-row gap-12">
+           <div className="flex flex-col gap-4 pt-4 sm:flex-row sm:flex-wrap sm:gap-8">
+            <div className="flex flex-wrap justify-center gap-6 md:justify-start sm:gap-12">
                  {movies.type !== "tv" && (
             <div className="flex flex-col   justify-center md:justify-start">
               <span className=" text-white/50">Directed By</span>
@@ -164,6 +164,13 @@ if (loading) {
               {getCountryNames(movie?.origin_country)}
              </div>
              }
+              </div>
+              <div className="flex flex-wrap justify-center gap-3 pt-2 md:justify-start lg:hidden">
+                <Watchlist movieId={movie?.id} />
+                <InterestedButton
+                  movieID={movie?.id}
+                  type={movies?.type === "tv" ? "series" : movies?.type}
+                />
               </div>
                 </div>
            
@@ -203,7 +210,7 @@ if (loading) {
 
       
       {/* ================= OVERVIEW + WATCH ================= */}
-      <div className=" flex  flex-col xl:flex-row gap-16 px-6 sm:px-12 lg:px-40 py-12">
+      <div className="flex flex-col gap-8 px-4 py-10 sm:gap-12 sm:px-8 lg:flex-row lg:px-16 xl:px-40">
 
         <div className="max-w-3xl">
           <h3 className="text-slate-400 text-xl sm:text-3xl font-bold mb-4">
