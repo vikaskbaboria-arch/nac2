@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useEffect } from "react";
 import { Bookmark, Heart, Star } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { ProfileReviewsSkeleton } from "@/components/skeletons/HomeSectionSkeletons";
 
 
 /**
@@ -158,16 +159,25 @@ export function ShowRevonProflie({
 }) {
 
  const [reviews, setReviews] = useState([]);
+ const [loading, setLoading] = useState(true);
      useEffect(() => {
     const writtenReview = async ()=>{
-        const res = await fetch(`/api/review/user/`)
-        const data = await res.json()
-        console.log(data.reviews) 
-        setReviews(data.reviews)
+        try {
+          const res = await fetch(`/api/review/user/`)
+          const data = await res.json()
+          setReviews(data.reviews || [])
+        } catch (error) {
+          console.error("Failed to load profile reviews:", error)
+          setReviews([])
+        } finally {
+          setLoading(false)
+        }
     }
     writtenReview()
    
   },[])
+
+  if (loading) return <ProfileReviewsSkeleton />
 
   return (
     <section className={cn("bg-black   py-8  mt-6 sm:py-16", className)}>

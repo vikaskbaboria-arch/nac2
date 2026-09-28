@@ -2,26 +2,35 @@
 import React, { useEffect, useState } from 'react'
 import { fetchMovies } from '@/lib/masterfetch'
 import { useRouter, useSearchParams } from "next/navigation";
+import { MediaListSkeleton } from "@/components/skeletons/HomeSectionSkeletons";
 const Genre = ({no,type}) => {
       const searchParams = useSearchParams();
       const [showFullOverview, setShowFullOverview] = useState(false);
     const router =useRouter()
       const pageFromUrl = Number(searchParams.get("page")) || 1;
     const[movie,setMovie]=useState(null)
+    const[loading,setLoading]=useState(true)
     const[page,setPage]=useState(pageFromUrl)
 const num =no
 const typeo = type
 
 // console.log(num)
 useEffect(()=>{
-  fetchMovies({type_of:typeo,genre:num,page:page}).
-  then((m)=>setMovie(m))
-},[movie,page])
+  let active = true
+  fetchMovies({type_of:typeo,genre:num,page:page})
+    .then((m)=>{ if (active) { setMovie(m); setLoading(false) } })
+    .catch((error)=>{
+      console.error("Failed to load genre titles:", error)
+      if (active) { setMovie({ results: [], total_pages: 1 }); setLoading(false) }
+    })
+  return () => { active = false }
+},[num,page,typeo])
 const totalpages = movie?.total_pages;
 // console.log(movie)
 const handleClick=((m)=>{
     router.push('/movie/'+m.id)
 })
+  if (loading || movie === null) return <MediaListSkeleton label="genre titles" />
   return (
       <div className="w-full min-h-[89vh] px-4 sm:px-8 py-8">
       {movie?.results?.map((m) => (
@@ -111,7 +120,7 @@ const handleClick=((m)=>{
       <div className={ `${totalpages>1?"":"hidden"} flex items-center justify-center gap-6 mt-8 text-white`}>
         <span>{page}</span>
         <button
-          onClick={() => setPage(page + 1)}
+          onClick={() => { setLoading(true); setPage(page + 1) }}
           className="px-4 py-2 rounded-md bg-purple-600 hover:bg-purple-700 transition"
         >
           Next

@@ -5,6 +5,7 @@ import { useState, useEffect,useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button"
 import { fetchgenere,generename , getGenreNames} from '@/fetch/genre'
+import { PosterRailSkeleton } from '@/components/skeletons/HomeSectionSkeletons'
 
 const Movie = (genere) => {
     const movieRef = useRef(null);
@@ -24,6 +25,10 @@ const Movie = (genere) => {
 useEffect(() => {
  fetchgenere(genere.movie,"movie")
  .then((m)=>(setMovie(m)))
+ .catch((error) => {
+   console.error("Failed to load movies for genre:", error)
+   setMovie({ results: [] })
+ })
     
  
 }, [genere])
@@ -78,6 +83,7 @@ const mouseenter=()=>{
     setButton(()=>(!button))
 }
 console.log(movie)
+if (movie === null) return <PosterRailSkeleton label="movies" />
   return (
     <>
     

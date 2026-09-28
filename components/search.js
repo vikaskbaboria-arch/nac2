@@ -5,6 +5,7 @@ import { fetchMovies } from "@/lib/masterfetch";
 import { AnimatedShinyText } from "@/components/ui/animated-shiny-text";
 import { useRouter, useSearchParams } from "next/navigation";
 import SearchTips from "@/components/searchTips";
+import { SearchGridSkeleton } from "@/components/skeletons/HomeSectionSkeletons";
 
 
 const EXAMPLES = [
@@ -36,7 +37,12 @@ const Search = ({ movie }) => {
       query: movie,
       type_of: "multi",
       page: pages,
-    }).then((m) => setMovies(m));
+    })
+      .then((m) => setMovies({ ...m, __query: movie, __page: pages }))
+      .catch((error) => {
+        console.error("Failed to load search results:", error)
+        setMovies({ results: [], total_pages: 1, __query: movie, __page: pages })
+      });
   }, [movie, pages]);
 
   const totalpages = movies?.total_pages;
@@ -67,6 +73,10 @@ const filteredResults = (movies?.results || []).filter((m) => {
   useEffect(() => {
     router.push(`?page=${pages}`, { scroll: true });
   }, [pages]);
+
+  if (movies?.__query !== movie || movies?.__page !== pages) {
+    return <SearchGridSkeleton />;
+  }
   //  if(allResults.length==0){
   //   return (
   //       <div className={PANEL_CLASSES + " mx-auto my-[200px] " }>
@@ -140,7 +150,7 @@ const filteredResults = (movies?.results || []).filter((m) => {
                 className="
                   group
                   cursor-pointer
-                  w-[calc(90%+0.75rem)]
+                  w-full
                   rounded-xl
                   p-2
                   transition-colors

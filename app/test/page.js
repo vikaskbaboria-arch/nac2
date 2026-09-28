@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import { fetchMovies } from '@/lib/masterfetch'
 import { m } from 'framer-motion'
+import { SearchGridSkeleton } from '@/components/skeletons/HomeSectionSkeletons'
 const Trending = () => {
     const [movies,setMovies]=useState(null)
     const url =`https://image.tmdb.org/t/p/w500/`
@@ -9,9 +10,15 @@ const Trending = () => {
         fetchMovies({type:'trending',
             time:'day',
             type_of:'all'
-        }).then((m)=>(setMovies(m.results)))
+        })
+          .then((m)=>(setMovies(m?.results ?? [])))
+          .catch((error) => {
+            console.error("Failed to load test trending titles:", error)
+            setMovies([])
+          })
     },[])
     console.log(movies)
+  if (movies === null) return <SearchGridSkeleton count={10} />
   return (
     <div className='text-amber-50  w-[1080px] h-[750px] grid py-10 gap-4 grid-rows-2 grid-cols-5 p-2'>
     {movies?.slice(0,10).map((m)=>{

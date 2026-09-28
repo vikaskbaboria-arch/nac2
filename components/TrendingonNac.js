@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react"
 import { fetchMovies } from "@/lib/masterfetch"
 import { AnimatedShinyText } from "@/components/ui/animated-shiny-text"
 import { useRouter } from "next/navigation"
+import { PosterRailSkeleton } from "@/components/skeletons/HomeSectionSkeletons"
 
 /**
  * Same source as the original Trending component (trending/day/all), just
@@ -16,7 +17,12 @@ const TrendingOnNAC = ({
   const router = useRouter()
 
   useEffect(() => {
-    fetchMovies(fetchParams).then((m) => setMovies(m.results))
+    fetchMovies(fetchParams)
+      .then((m) => setMovies(m?.results ?? []))
+      .catch((error) => {
+        console.error("Failed to load NAC trending titles:", error)
+        setMovies([])
+      })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fetchParams.type, fetchParams.type_of, fetchParams.time])
 
@@ -27,6 +33,8 @@ const TrendingOnNAC = ({
       router.push(`/movie/${m.id}?type=tv`)
     }
   }
+
+  if (movies === null) return <PosterRailSkeleton label="trending titles" />
 
   return (
     <section className="w-full">

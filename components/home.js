@@ -4,8 +4,10 @@ import { fetchMovies } from '@/lib/masterfetch'
 import RetroTv from '@/components/RetroTv'
 
 import { useRouter } from 'next/navigation'
+import { HeroCarouselSkeleton } from '@/components/skeletons/HomeSectionSkeletons'
 export default function HomeCarousel() {
   const [slides, setSlides] = useState([])
+  const [loading, setLoading] = useState(true)
   const [currentIndex, setCurrentIndex] = useState(1) // 1 == first real slide
   const [paused, setPaused] = useState(false)
   const containerRef = useRef(null)
@@ -26,6 +28,8 @@ export default function HomeCarousel() {
         setCurrentIndex(1)
       } catch (err) {
         console.error('HomeCarousel fetch failed', err)
+      } finally {
+        if (mounted) setLoading(false)
       }
     })()
     return () => {
@@ -97,7 +101,8 @@ export default function HomeCarousel() {
     const onResize = () => {
       const track = trackRef.current
       if (!track) return
-      const w = slideWidth
+      const w = getSlideWidth()
+      setSlideWidth(w)
       track.style.transition = 'none'
       track.style.transform = `translateX(-${currentIndex * w}px)`
       setTimeout(() => {
@@ -122,9 +127,11 @@ export default function HomeCarousel() {
     ? String(((currentIndex - 1 + slides.length) % slides.length) + 1).padStart(2, '0')
     : '00'
 
+  if (loading) return <HeroCarouselSkeleton />
+
   return (
-    <div className="px-4 sm:px-13 my-8 rounded-lg">
-      <RetroTv onPrev={prev} onNext={next} channel={channelNumber}>
+    <div className="px-4 sm:px-13 pt-32 rounded-lg">
+
         <div
           ref={containerRef}
           onMouseEnter={() => setPaused(true)}
@@ -161,7 +168,7 @@ export default function HomeCarousel() {
             </div>
           )}
         </div>
-      </RetroTv>
+  
     </div>
   )
 }

@@ -22,6 +22,7 @@ import {
   Eye,
 } from "lucide-react"
 import { AnimatedShinyText } from "@/components/ui/animated-shiny-text"
+import { AdminRowsSkeleton, SkeletonBlock } from "@/components/skeletons/HomeSectionSkeletons"
 
 const CURATOR_TAGS = [
   "NAC Vault",
@@ -511,13 +512,13 @@ export default function AdminPage() {
           <div className="p-4 rounded-xl bg-black/40 backdrop-blur-md border border-white/5">
             <p className="text-[11px] text-slate-400 uppercase tracking-wider font-semibold">Editor&apos;s Picks</p>
             <p className="text-2xl font-bold text-purple-400 mt-1">
-              {editorsPicks.length} <span className="text-xs text-slate-500 font-normal">/ 5 featured</span>
+              {loadingData ? <SkeletonBlock className="inline-block h-7 w-8 align-middle" /> : editorsPicks.length} <span className="text-xs text-slate-500 font-normal">/ 5 featured</span>
             </p>
           </div>
           <div className="p-4 rounded-xl bg-black/40 backdrop-blur-md border border-white/5">
             <p className="text-[11px] text-slate-400 uppercase tracking-wider font-semibold">NAC Collection</p>
             <p className="text-2xl font-bold text-amber-400 mt-1">
-              {nacCollection.length} <span className="text-xs text-slate-500 font-normal">titles vaulted</span>
+              {loadingData ? <SkeletonBlock className="inline-block h-7 w-8 align-middle" /> : nacCollection.length} <span className="text-xs text-slate-500 font-normal">titles vaulted</span>
             </p>
           </div>
           <div className="p-4 rounded-xl bg-black/40 backdrop-blur-md border border-white/5">
@@ -551,7 +552,7 @@ export default function AdminPage() {
               <Film size={16} />
               <span>Editor&apos;s Pick</span>
               <span className="text-[10px] px-2 py-0.5 rounded-full bg-black/40">
-                {editorsPicks.length}
+                {loadingData ? <SkeletonBlock className="inline-block h-3 w-4 align-middle" /> : editorsPicks.length}
               </span>
             </button>
 
@@ -566,7 +567,7 @@ export default function AdminPage() {
               <Sparkles size={16} />
               <span>NAC Collection</span>
               <span className="text-[10px] px-2 py-0.5 rounded-full bg-black/40">
-                {nacCollection.length}
+                {loadingData ? <SkeletonBlock className="inline-block h-3 w-4 align-middle" /> : nacCollection.length}
               </span>
             </button>
           </div>
@@ -634,7 +635,7 @@ export default function AdminPage() {
 
               {/* LIST OF CURRENT PICKS */}
               <div className="flex flex-col gap-3">
-                {editorsPicks.length === 0 ? (
+                {loadingData ? <AdminRowsSkeleton count={3} /> : editorsPicks.length === 0 ? (
                   <div className="text-center py-10 rounded-xl bg-white/[0.02] border border-white/5">
                     <Film className="mx-auto text-slate-600 mb-2" size={28} />
                     <p className="text-sm text-slate-400 font-medium">No custom Editor&apos;s Picks added yet</p>
@@ -743,7 +744,7 @@ export default function AdminPage() {
 
               {/* LIST OF NAC COLLECTION ITEMS */}
               <div className="flex flex-col gap-3">
-                {nacCollection.length === 0 ? (
+                {loadingData ? <AdminRowsSkeleton count={3} /> : nacCollection.length === 0 ? (
                   <div className="text-center py-10 rounded-xl bg-white/[0.02] border border-white/5">
                     <Sparkles className="mx-auto text-slate-600 mb-2" size={28} />
                     <p className="text-sm text-slate-400 font-medium">No movies in NAC Collection yet</p>
@@ -876,10 +877,7 @@ export default function AdminPage() {
             {/* SEARCH RESULTS LIST */}
             <div className="max-h-[500px] overflow-y-auto space-y-3 pr-1 scrollbar-hidden">
               {searching ? (
-                <div className="text-center py-10">
-                  <div className="w-8 h-8 rounded-full border-2 border-purple-500 border-t-transparent animate-spin mx-auto mb-2" />
-                  <p className="text-xs text-slate-400">Searching TMDB...</p>
-                </div>
+                <AdminRowsSkeleton count={3} label="TMDB search results" />
               ) : searchQuery && searchResults.length === 0 ? (
                 <div className="text-center py-10 text-xs text-slate-500">
                   No movies or series found for &ldquo;{searchQuery}&rdquo;

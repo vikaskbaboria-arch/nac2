@@ -3,6 +3,7 @@ import { useEffect, useState } from "react"
 import { useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { getRatingMeta } from "@/lib/ratinglabels";
+import { ReviewListSkeleton } from "@/components/skeletons/HomeSectionSkeletons";
 
 /* =========================
    Review Data Component
@@ -10,7 +11,7 @@ import { getRatingMeta } from "@/lib/ratinglabels";
 export default function Reviewdata({ movieId, refreshKey }) {
 const router = useRouter();
   const [reviews, setReviews] = useState([])
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [pop, setPop] = useState(null) // holds the review id pending delete, or null
   const [error, setError] = useState(null)
   const [average, setAverage] = useState(null)
@@ -22,9 +23,6 @@ const currentUserId = session?.user?.id;
     if (!movieId) return
     let mounted = true
 
-    setLoading(true)
-    setError(null)
-
     fetch(`/api/review?movieId=${movieId}`)
       .then(async (res) => {
         const text = await res.text()
@@ -33,6 +31,7 @@ const currentUserId = session?.user?.id;
       })
       .then((data) => {
         if (!mounted) return
+        setError(null)
         setReviews(data.reviews || [])
         setAverage(data.averageRating ?? null)
         setCount(data.count ?? data.reviews?.length ?? 0)
@@ -44,7 +43,7 @@ const currentUserId = session?.user?.id;
   }, [movieId, refreshKey])
 
   if (!movieId) return null
-  if (loading) return <p className="text-white">Loading reviews...</p>
+  if (loading) return <ReviewListSkeleton />
   if (error) return <p className="text-rose-400">{error}</p>
   if (!reviews.length) return <p className="text-white/50">No reviews yet</p>
 
@@ -132,14 +131,14 @@ const handleClickk = (id) => {
   className={`
     fixed inset-0 z-50
     ${pop === rv._id ? "flex" : "hidden"}
-    items-center justify-center
+    items-center justify-center p-4
     bg-black/60 backdrop-blur-sm
   `}
 >
   {/* Popup Card */}
   <div
     className="
-      w-[320px]
+      w-full max-w-[320px]
       rounded-2xl
       bg-black
       p-6

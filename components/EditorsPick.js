@@ -5,6 +5,7 @@ import { AnimatedShinyText } from "@/components/ui/animated-shiny-text"
 import { useRouter } from "next/navigation"
 import { useSession } from "next-auth/react"
 import Link from "next/link"
+import { EditorsPickSkeleton } from "@/components/skeletons/HomeSectionSkeletons"
 
 /**
  * Displays custom Admin-curated Editor's Picks if configured.
@@ -48,12 +49,19 @@ const EditorsPick = ({
       }
 
       // Fallback to top_rated
-      fetchMovies(fetchParams).then((m) => {
+      try {
+        const m = await fetchMovies(fetchParams)
         if (isMounted) {
-          setMovies(m?.results || [])
+          setMovies(m?.results ?? [])
           setIsCustom(false)
         }
-      })
+      } catch (err) {
+        console.error("Failed to load editor's picks:", err)
+        if (isMounted) {
+          setMovies([])
+          setIsCustom(false)
+        }
+      }
     }
 
     loadPicks()
@@ -72,6 +80,8 @@ const EditorsPick = ({
       router.push(`/movie/${id}?type=tv`)
     }
   }
+
+  if (movies === null) return <EditorsPickSkeleton />
 
   return (
     <section className="w-full">
@@ -102,8 +112,9 @@ const EditorsPick = ({
         className="
           relative grid
           w-full
-          gap-8
-          p-3
+          gap-1
+          sm:gap-4
+          sm:p-3
           rounded-xl
           grid-cols-2
           sm:grid-cols-3
@@ -117,7 +128,7 @@ const EditorsPick = ({
             className="
               group
               cursor-pointer
-              w-[calc(100%+0.75rem)]
+              w-full
               rounded-xl
               p-2
               transition-colors

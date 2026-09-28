@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react"
 import { fetchMovies } from "@/lib/masterfetch"
 import { AnimatedShinyText } from "@/components/ui/animated-shiny-text"
 import { useRouter } from "next/navigation"
+import { TrendingSkeleton } from "@/components/skeletons/HomeSectionSkeletons"
 
 const Trending = () => {
   const [movies, setMovies] = useState(null)
@@ -13,7 +14,12 @@ const Trending = () => {
       type: "trending",
       time: "day",
       type_of: "all",
-    }).then((m) => setMovies(m.results))
+    })
+      .then((m) => setMovies(m?.results ?? []))
+      .catch((error) => {
+        console.error("Failed to load trending movies:", error)
+        setMovies([])
+      })
   }, [])
 
   const handleClick = (m) => {
@@ -24,8 +30,10 @@ const Trending = () => {
     }
   }
 
+  if (movies === null) return <TrendingSkeleton />
+
   return (
-    <section className="w-full">
+    <section className="w-full ">
       <h2 className="font-display font-bold text-slate-300 text-xl sm:text-2xl mb-2 px-6">
         Trending on NAC
       </h2>
@@ -33,9 +41,9 @@ const Trending = () => {
       className="
         relative grid
         w-full max-w-[1080px]
-        gap-2
+        gap-1
         sm:gap-4
-       
+        
         sm:p-3
         
         
@@ -55,9 +63,9 @@ const Trending = () => {
           className="
             group
             cursor-pointer
-            w-[calc(100%+0.75rem)]
+            w-full
             rounded-xl
-            p-2
+            p-1
             transition-colors
             hover:bg-white/10
           "

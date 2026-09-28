@@ -85,21 +85,26 @@ function sortByYearDesc(list) {
 
 export default function PersonFilmography({ personId }) {
   const [person, setPerson] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loadedPersonId, setLoadedPersonId] = useState(null);
   const [showFullBio, setShowFullBio] = useState(false);
 
   useEffect(() => {
     let mounted = true;
-    setLoading(true);
     fetchPerson(personId).then((data) => {
       if (!mounted) return;
       setPerson(data);
-      setLoading(false);
+      setLoadedPersonId(personId);
+    }).catch((error) => {
+      console.error("Failed to load person:", error);
+      if (mounted) {
+        setPerson(null);
+        setLoadedPersonId(personId);
+      }
     });
     return () => (mounted = false);
   }, [personId]);
 
-  if (loading) return <PersonSkeleton />;
+  if (loadedPersonId !== personId) return <PersonSkeleton />;
   if (!person || person.success === false) {
     return (
       <div className="w-full min-h-screen bg-[#0A0A0A] flex items-center justify-center text-[#9A968C]">

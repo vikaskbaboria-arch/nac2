@@ -5,6 +5,7 @@ import Filters, { COUNTRIES } from "../helpers/Filters";
 import { fetchMovies } from "@/lib/masterfetch";
 import { AnimatedShinyText } from "@/components/ui/animated-shiny-text";
 import { useRouter, useSearchParams } from "next/navigation";
+import { MediaListSkeleton } from "@/components/skeletons/HomeSectionSkeletons";
 
 // This page is already scoped to one country (its own route param), so
 // the panel's own Country selector is hidden and only Movies/Shows are
@@ -81,6 +82,12 @@ const Country = ({ country }) => {
         totalPagesTv: tvRes?.total_pages || 1,
       });
       setLoading(false);
+    }).catch((error) => {
+      console.error("Failed to load country titles:", error)
+      if (!cancelled) {
+        setMovies({ movie: [], tv: [], totalPagesMovie: 1, totalPagesTv: 1 })
+        setLoading(false)
+      }
     });
 
     return () => {
@@ -96,6 +103,11 @@ const Country = ({ country }) => {
     movies.totalPagesMovie || 1,
     movies.totalPagesTv || 1
   );
+
+  const handleFilterChange = (nextFilters) => {
+    setLoading(true);
+    setFilters(nextFilters);
+  };
 
   const results = [...movies.movie, ...movies.tv].filter((m) => {
     if (filters.language !== "all" && m.original_language !== filters.language) return false;
@@ -125,7 +137,7 @@ const Country = ({ country }) => {
       <div className="lg:grid gap-4 grid-cols-[1.5fr_4fr] items-start justify-center">
         <div>
           <Filters
-            onFilterChange={setFilters}
+            onFilterChange={handleFilterChange}
             types={COUNTRY_PAGE_TYPES}
             showCountryFilter={false}
           />
@@ -144,7 +156,11 @@ const Country = ({ country }) => {
       </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-1">
           
-          {results.map((m) => (
+          {loading ? (
+            <div className="col-span-full">
+              <MediaListSkeleton label="country titles" count={5} />
+            </div>
+          ) : results.map((m) => (
             <div
               key={`${m.media_type}-${m.id}`}
               onClick={() => handleClick(m)}

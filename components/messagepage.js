@@ -4,10 +4,13 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 import { useSession } from 'next-auth/react'
 import { useRouter, useSearchParams } from "next/navigation";
+import { MessageThreadSkeleton } from "@/components/skeletons/HomeSectionSkeletons";
 const MessagePage = ({conversationid}) => {
 
   const [message, setMessage] = useState("");
   const [messagess, setMessages] = useState([]);
+  const [loadingMessages, setLoadingMessages] = useState(true);
+  const [loadingConversation, setLoadingConversation] = useState(true);
     const { data: session, status } = useSession();
    
   console.log(conversationid);
@@ -23,6 +26,8 @@ const MessagePage = ({conversationid}) => {
       setMessages(data.message);
     } catch (err) {
       console.error(err);
+    } finally {
+      setLoadingMessages(false);
     }
     
    }
@@ -62,9 +67,16 @@ fetchmessages();
   useEffect(()=>{
     try {
       const fetchname =async()=>{
-        const res = await  fetch(`/api/conversation?conversationId=${conversationid}`)
-        const data = await res.json();
-        setName(data.conversation?.members)
+        try {
+          const res = await  fetch(`/api/conversation?conversationId=${conversationid}`)
+          const data = await res.json();
+          setName(data.conversation?.members || [])
+        } catch (error) {
+          console.error("Failed to load conversation:", error)
+          setName([])
+        } finally {
+          setLoadingConversation(false)
+        }
       }
       fetchname();
     } catch (error) {
@@ -79,6 +91,7 @@ const receiver = name?.find(
 
 const receiverName = receiver?.username;
 
+  if (loadingMessages || loadingConversation) return <MessageThreadSkeleton />
  
    console.log(messages)
   return (

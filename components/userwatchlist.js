@@ -2,18 +2,26 @@
 
 import React, { useEffect, useState } from "react";
 import Watchcomp from "./watchcomp";
+import { WatchlistGridSkeleton } from "@/components/skeletons/HomeSectionSkeletons";
 
 const Userwatchlist = () => {
-  const [watchlist, setWatchlist] = useState([]);
+  const [watchlist, setWatchlist] = useState(null);
 
   useEffect(() => {
     const loadData = async () => {
-      const res = await fetch("/api/watchlist");
-      const data = await res.json();
-      setWatchlist(data.watchlist || []);
+      try {
+        const res = await fetch("/api/watchlist");
+        const data = await res.json();
+        setWatchlist(data.watchlist || []);
+      } catch (error) {
+        console.error("Failed to load watchlist:", error);
+        setWatchlist([]);
+      }
     };
     loadData();
   }, []);
+
+  if (watchlist === null) return <WatchlistGridSkeleton />
 
   return (
     <div

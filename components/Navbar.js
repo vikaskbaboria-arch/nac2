@@ -7,6 +7,7 @@ import { fetchMovies } from '@/lib/masterfetch'
 
 import { signOut } from 'next-auth/react'
 import { useSession } from 'next-auth/react'
+import { SearchSuggestionsSkeleton } from '@/components/skeletons/HomeSectionSkeletons'
 
 const Navbar = () => {
   const { data: session, status } = useSession();
@@ -17,6 +18,7 @@ const Navbar = () => {
   const [input,setInput] =useState("")
   const [suggest,setSuggest]=useState("")
   const[suggestions,setSuggestions]=useState(null)
+  const [suggestionLoading, setSuggestionLoading] = useState(false)
 
   const [mobileMenu, setMobileMenu] = useState(false); // ✅ ADDED
 
@@ -27,7 +29,12 @@ const Navbar = () => {
     setSearch(""); setInput(""); setSuggest(""); setSuggestions(null)
     setButton(false); setMobileMenu(false)
   }
-  const handleB=(m)=>{ setInput(m.target.value) }
+  const handleB=(m)=>{
+    const value = m.target.value
+    setInput(value)
+    setSuggestionLoading(Boolean(value.trim()))
+    if (!value.trim()) setSuggestions(null)
+  }
 
   useEffect(()=>{
     const timer = setTimeout(() => { setSuggest(input) }, 800)
@@ -35,8 +42,14 @@ const Navbar = () => {
   },[input])
 
   useEffect(()=>{
+    if (!suggest.trim()) return
     fetchMovies({type:"search",type_of:"multi", query: suggest})
-    .then((m)=>(setSuggestions(m)))
+      .then((m)=>(setSuggestions(m)))
+      .catch((error) => {
+        console.error("Failed to load search suggestions:", error)
+        setSuggestions(null)
+      })
+      .finally(() => setSuggestionLoading(false))
   },[suggest])
 
   // fetch ratings for suggestion items
@@ -246,7 +259,9 @@ const Navbar = () => {
               </button>
             </div>
 
-            {suggestions?.results?.slice(0,4).length > 0 && (
+            {suggestionLoading && input.trim() ? (
+              <SearchSuggestionsSkeleton />
+            ) : suggestions?.results?.slice(0,4).length > 0 && (
               <div className="absolute mt-2 w-full bg-black/90 backdrop-blur-xl rounded-xl border border-white/10">
                 {suggestions.results.slice(0,4).map((m)=>(
                   <div
