@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useSession } from 'next-auth/react'
 const Watchlist = ({ movieId }) => {
-  const [watchlist, setWatchlist] = useState("Add to Watch");
+  const [watchlist, setWatchlist] = useState(" Watch Later");
  const { data: session, status } = useSession();
  const [logpop,setLogpop]=useState(false)
   const handleSubmit = async () => {
@@ -29,7 +29,7 @@ const Watchlist = ({ movieId }) => {
   return (
 
     <div className="absolute" >
-      <div className="absolute bg-purple-500 flex hover:bg-purple-900 justify-center items-center rounded-xl text-lg text-white/80  w-72 h-8 " >
+      <div className="flex h-11 items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] text-sm font-semibold text-white transition hover:bg-white/10 w-40 " >
       <button onClick={handleSubmit} >{watchlist}</button>
     </div>
        {logpop && (
