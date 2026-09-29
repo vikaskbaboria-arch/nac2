@@ -8,6 +8,7 @@ import { fetchMovies } from '@/lib/masterfetch'
 import { signOut } from 'next-auth/react'
 import { useSession } from 'next-auth/react'
 import { SearchSuggestionsSkeleton } from '@/components/skeletons/HomeSectionSkeletons'
+import { Bookmark, Home, Search as SearchIcon } from 'lucide-react'
 
 const Navbar = () => {
   const { data: session, status } = useSession();
@@ -20,14 +21,14 @@ const Navbar = () => {
   const[suggestions,setSuggestions]=useState(null)
   const [suggestionLoading, setSuggestionLoading] = useState(false)
 
-  const [mobileMenu, setMobileMenu] = useState(false); // ✅ ADDED
+  const [navHidden, setNavHidden] = useState(false)
 
   const handleChange=(e)=>{ setSearch(e.target.value) }
   const handleClick=()=>{
     if (!search) return
     router.push(`/search/${search}`)
     setSearch(""); setInput(""); setSuggest(""); setSuggestions(null)
-    setButton(false); setMobileMenu(false)
+    setButton(false)
   }
   const handleB=(m)=>{
     const value = m.target.value
@@ -59,23 +60,40 @@ const Navbar = () => {
     if(m.media_type==="movie"){ router.push(`/movie/${m?.id}/?type=movie`) }
     else{ router.push(`/movie/${m.id}?type=tv`) }
     setSearch(""); setInput(""); setSuggest(""); setSuggestions(null)
-    setButton(false); setMobileMenu(false)
+    setButton(false)
   }
 
   const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 10)
-    window.addEventListener("scroll", handleScroll)
+    let previousScrollY = window.scrollY
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY
+      setScrolled(currentScrollY > 10)
+
+      if (currentScrollY <= 20) {
+        setNavHidden(false)
+      } else if (currentScrollY - previousScrollY > 6) {
+        setNavHidden(true)
+      } else if (previousScrollY - currentScrollY > 6) {
+        setNavHidden(false)
+      }
+
+      previousScrollY = currentScrollY
+    }
+
+    window.addEventListener("scroll", handleScroll, { passive: true })
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
   return (
+    <>
     <nav className={`
       fixed top-0 z-50 w-full h-16 px-4 sm:px-6 lg:px-12 xl:px-24
       flex items-center justify-between text-white
-      transition-all duration-300 
+      transition-all duration-300 ease-in-out
       border-b border-white/10 backdrop-blur-md
       ${scrolled ? "bg-black/60 backdrop-blur-xl shadow-lg" : "bg-black"}
+      ${navHidden ? "-translate-y-full" : "translate-y-0"}
     `}>
 
       {/* LOGO */}
@@ -154,27 +172,19 @@ const Navbar = () => {
         </button>
       </ul>
         
-      {/* MOBILE HAMBURGER */}
-      <button
-        onClick={()=>setMobileMenu(!mobileMenu)}
-        className="sm:hidden text-xl"
-      >
-        ☰
-      </button>
-
       {/* USER / LOGIN */}
-      <div className="hidden sm:flex items-center gap-3">
+      <div className="flex items-center gap-2 sm:gap-3">
         {status === 'loading' ? (
           <div className="text-sm text-gray-400">...</div>
         ) : session ? (
           <div className="relative">
             <button
               onClick={()=>setDropdown2(!dropdown2)}
-              className="px-3 py-1.5 rounded-md text-xs sm:text-sm
+              className="max-w-[10rem] px-2 py-1.5 rounded-md text-xs sm:max-w-none sm:px-3 sm:text-sm
               bg-gradient-to-br from-purple-800 to-blue-700
               hover:shadow-[0_0_20px_rgba(168,85,247,0.6)] transition flex items-center gap-1.5"
             >
-              <span>{session.user.email.split("@")[0]}</span>
+              <span className="truncate">{session.user.email.split("@")[0]}</span>
               {session.user.isAdmin && (
                 <span className="text-[10px] bg-black/40 px-1 rounded uppercase tracking-wider font-bold">Admin</span>
               )}
@@ -203,43 +213,6 @@ const Navbar = () => {
           </div>
         ) : (
           <Link href="/login" className="hover:text-purple-400 transition">Login</Link>
-        )}
-      </div>
-
-      {/* MOBILE MENU */}
-      <div className={`
-        absolute top-16 left-0 w-full sm:hidden
-        bg-black/90 backdrop-blur-xl border-t border-white/10
-        transition-all duration-300
-        ${mobileMenu ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4 pointer-events-none"}
-      `}>
-        <Link onClick={()=>setMobileMenu(false)} className="block p-4 border-b border-white/10" href="/">Home</Link>
-        <Link onClick={()=>setMobileMenu(false)} className="block p-4 border-b border-white/10" href="/collection">NAC Collection</Link>
-        {session && status === 'authenticated' ? (
-          <Link onClick={()=>setMobileMenu(false)}  href="/chats" className="block p-4 border-b border-white/10 hover:text-purple-400 transition">
-            Chats
-          </Link>):null}
-        {session?.user?.isAdmin && (
-          <Link onClick={()=>setMobileMenu(false)} href="/admin" className="block p-4 border-b border-white/10 text-purple-300 font-semibold bg-purple-950/30">
-            🛡️ Admin Dashboard
-          </Link>
-        )}
-        <button onClick={()=>{setButton(true); setMobileMenu(false)}} className="block w-full text-left p-4">
-          Search
-        </button>
-        {status === 'loading' ? (
-          <div className="block p-4 text-sm text-gray-400">...</div>
-        ) : status === 'authenticated' && session ? (
-          <>
-            <Link onClick={()=>setMobileMenu(false)} className="block p-4 border-b border-white/10" href={`/profile/${session.user.email.split("@")[0]}`}>
-              Profile
-            </Link>
-            <button onClick={() => signOut()} className="block w-full text-left p-4 text-red-400">
-              Sign out
-            </button>
-          </>
-        ) : (
-          <Link onClick={()=>setMobileMenu(false)} className="block p-4" href="/login">Login</Link>
         )}
       </div>
 
@@ -285,6 +258,34 @@ const Navbar = () => {
       )}
 
     </nav>
+    <nav
+      aria-label="Mobile navigation"
+      className="fixed inset-x-0 bottom-0 z-50 border-t border-white/10 bg-black/90 pb-[env(safe-area-inset-bottom)] text-white backdrop-blur-xl sm:hidden"
+    >
+      <div className="mx-auto grid h-16 max-w-lg grid-cols-3">
+        <Link href="/" className="flex flex-col items-center justify-center gap-1 text-white/70 transition hover:text-white">
+          <Home size={19} aria-hidden="true" />
+          <span className="text-[10px] font-medium">Home</span>
+        </Link>
+        <button
+          type="button"
+          onClick={() => {
+            setButton((open) => !open)
+            setNavHidden(false)
+          }}
+          className="flex flex-col items-center justify-center gap-1 text-white/70 transition hover:text-white"
+          aria-label="Search"
+        >
+          <SearchIcon size={19} aria-hidden="true" />
+          <span className="text-[10px] font-medium">Search</span>
+        </button>
+        <Link href="/collection" className="flex flex-col items-center justify-center gap-1 text-white/70 transition hover:text-white">
+          <Bookmark size={19} aria-hidden="true" />
+          <span className="text-[10px] font-medium">Collection</span>
+        </Link>
+      </div>
+    </nav>
+    </>
   )
 }
 

@@ -62,7 +62,7 @@ const MostInterested = ({ limit = 10 }) => {
           rounded-xl
           shadow-[0_0_40px_rgba(0,0,0,0.6)]
           bg-black
-          backdrop-blur-2xl
+          backdrop-blur-3xl
 
           grid-cols-2
           sm:grid-cols-3

@@ -20,7 +20,7 @@ const COUNTRY_PAGE_TYPES = [
 const PROVIDER_IDS = {
   netflix: 8,
   prime: 119,
-  jiohotstar: 220,
+    jiohotstar: 2336,
   crunchyroll: 283,
   sonyliv: 237,
   zee5: 232,

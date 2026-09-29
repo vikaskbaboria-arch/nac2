@@ -1,5 +1,7 @@
+"use client";
 import Link from "next/link";
 import { Instagram } from "lucide-react";
+import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 
 /* Generic stand-ins for brand marks. lucide-react only ships Instagram,
@@ -77,11 +79,15 @@ export function Footer({
   playStoreHref = "#",
   appStoreHref = "#",
   className,
-}) {
+})
+  
+{ 
+  const pathname = usePathname();
+
   return (
-    <footer className={cn("border-t border-gray-800 footerbg px-4 sm:px-8 lg:px-28 text-white/90", className)}>
-      <div className="container-page py-8">
-        <div className="flex flex-wrap items-center justify-between gap-6">
+    <footer className={cn("border-t border-gray-800   px-4 sm:px-8 lg:px-28 text-white/90  bg-[#0A0A0A]"  , className)}>
+      <div className="container-page py-8 ">
+        {pathname=="/"&& <div className={`  flex flex-wrap items-center justify-between gap-6`}>
           <div className="flex flex-wrap items-center gap-4">
             <p className="text-sm font-semibold ">
               Made with <span aria-hidden="true">❤️</span>
@@ -135,9 +141,10 @@ export function Footer({
               </a>
             ))}
           </div>
-        </div>
-
-        <hr className="my-6 border-gray-800" />
+        </div>}
+       
+          {pathname=="/"&& <hr className="my-6 border-gray-800" />}
+       
 
         <div className="flex flex-wrap items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground">

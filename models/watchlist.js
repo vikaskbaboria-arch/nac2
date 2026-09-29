@@ -12,7 +12,8 @@ const WatchSchema  = new mongoose.Schema({
           ref: "Movie",
           required: true,
           index: true,
-        }
+        },
+     
 },{timestamps: true})
 WatchSchema.index({ user: 1, movie: 1 }, { unique: true });
 

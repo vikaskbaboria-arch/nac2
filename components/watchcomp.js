@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { fetchMovies } from "@/lib/masterfetch";
 import { useRouter } from "next/navigation";
 
-const Watchcomp = ({ movieid }) => {
+const Watchcomp  = ({ movieid,type_of }) => {
   const [movie, setMovie] = useState(null);
   const router = useRouter();
 

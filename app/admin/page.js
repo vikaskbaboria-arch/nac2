@@ -354,7 +354,7 @@ export default function AdminPage() {
 
   if (!isAdmin) {
     return (
-      <div className="blackgreengrad min-h-screen flex items-center justify-center p-6 text-center text-white">
+      <div className=" min-h-screen flex items-center justify-center p-6 text-center text-white">
         <div>
           <p className="text-sm font-semibold tracking-widest text-white/50">404</p>
           <h1 className="mt-2 text-3xl font-bold">Page not found</h1>

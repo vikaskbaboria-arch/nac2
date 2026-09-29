@@ -76,21 +76,21 @@ export default function Rightsidepanel() {
   return (
     <aside
       className="
-        w-full min-w-0 overflow-hidden rounded-lg
-        bg-gradient-to-b from-black/60 to-black/30
-        backdrop-blur-2xl
-        border border-white/20
-        shadow-[0_0_40px_rgba(0,0,0,0.6)]
+        w-full min-w-0 overflow-hidden lg:rounded-lg
+         lg:bg-gradient-to-b from-black/60 to-black/30
+        lg:backdrop-blur-2xl
+        lg:border border-white/20
+        lg:shadow-[0_0_40px_rgba(0,0,0,0.6)]
         lg:h-[626px] lg:rounded-2xl
       "
     >
       {/* Header */}
-      <div className="border-b border-white/20 px-4 py-3 sm:px-6 lg:py-4">
-        <h2 className="text-base font-semibold tracking-wide text-white lg:text-lg">
-          🔥 Most Interested
+      <div className="lg:border-b border-white/20 px-6 pt-3 pb-2 sm:px-6 lg:py-4 ">
+        <h2 className="text-base font-bold tracking-wide text-white lg:text-lg">
+           Most Interested
         </h2>
 
-        <p className="text-xs text-white/40 mt-0.5">
+        <p className="text-xs text-white/40 mt-0.4">
           Popular with users right now
         </p>
       </div>
@@ -107,9 +107,13 @@ export default function Rightsidepanel() {
               key={`${m.interestedType}-${m.id}`}
               onClick={() => handleClick(m)}
               className="
-                group flex w-[min(78vw,280px)] shrink-0 gap-3 rounded-lg p-2.5
-                bg-white/[0.02]
-                hover:bg-white/[0.06]
+                group flex w-[min(86vw,330px)] shrink-0 gap-3 rounded-lg p-2.5 px-2
+               bg-black/60
+               shadow-[0_0_20px_rgba(0,0,0,0.2)]
+               border border-white/9
+               backdrop-blur-2xl
+                lg:bg-white/[0.02]
+                lg:hover:bg-white/[0.06]
                 transition-all duration-300 ease-out
                 cursor-pointer
                 lg:w-full lg:rounded-xl lg:p-3
