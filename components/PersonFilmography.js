@@ -146,7 +146,7 @@ export default function PersonFilmography({ personId }) {
     : null;
 
   return (
-    <div className="w-full min-h-screen bg-[#0A0A0A] text-[#F2F0EA]">
+    <div className="w-full min-h-screen  text-[#F2F0EA]">
       {/* ================= HEADER ================= */}
       <div className="max-w-[1200px] mx-auto px-4 sm:px-8 lg:px-24 pt-12 sm:pt-16 pb-4">
         <div className="grid md:grid-cols-[220px_1fr] gap-8">

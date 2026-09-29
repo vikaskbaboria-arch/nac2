@@ -112,6 +112,8 @@ const SeriesR = (props) => {
   /* ================= FETCH DATA ================= */
   useEffect(() => {
     let cancelled = false;
+    window.scrollTo(0, 0);
+
     async function loadData() {
       setLoading(true);
       const data = await fetchMovies({
@@ -194,28 +196,29 @@ const SeriesR = (props) => {
   };
 
   return (
-    <div className="w-full overflow-x-hidden bg-[#09090b] text-white">
+    <div className="w-full overflow-x-hidden bg-[#030000] text-white">
       {/* ================= HERO ================= */}
-      <div className="relative h-[38vh] min-h-[220px] w-full sm:h-[55vh] lg:h-[64vh]">
+      <div className="relative h-[38vh] aspect-video  min-h-[220px] w-full sm:h-[55vh] lg:h-[72vh]">
         {cover && (
           <img
             src={cover}
             alt=""
-            className="absolute inset-0 h-full w-full object-cover"
+            className="absolute inset-0 h-full w-full object-cover object-top opacity-100  "
           />
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#09090b] via-[#09090b]/30 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#000000fe] via-[#09090b]/30 to-transparent" />
 
         {/* play trailer */}
-        {trailerUrl && (
-          <button
-            onClick={() => setShowTrailer(true)}
-            aria-label="Play trailer"
-            className="absolute left-1/2 top-1/2 flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 items-center group justify-center rounded-full bg-black/40 backdrop-blur transition-all  hover:bg-black/50 sm:h-12 sm:w-12 shadow-lg "
-          >
-            <Play size={20} className="fill-white transform translate-x-0.5 group-hover:scale-110 " />
-          </button>
-        )}
+        <button
+          type="button"
+          onClick={() => trailerUrl && setShowTrailer(true)}
+          disabled={!trailerUrl}
+          aria-label={trailerUrl ? "Play trailer" : "Trailer unavailable"}
+          title={trailerUrl ? "Play trailer" : "Trailer unavailable"}
+          className="absolute left-1/2 top-1/2 flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 items-center group justify-center rounded-full bg-black/40 backdrop-blur transition-all hover:bg-black/50 disabled:cursor-not-allowed disabled:opacity-60 sm:h-12 sm:w-12 shadow-lg"
+        >
+          <Play size={20} className="fill-white transform translate-x-0.5 group-hover:scale-110" />
+        </button>
 
         {/* desktop: New Season card floats over the hero */}
         {isTv && isDesktop && (
@@ -230,7 +233,7 @@ const SeriesR = (props) => {
       </div>
 
       {/* ================= POSTER + DETAILS ================= */}
-      <div className="relative z-10 mx-auto -mt-16 max-w-7xl px-4 sm:-mt-24 sm:px-8 lg:-mt-32 lg:px-12">
+      <div className="relative z-10 mx-auto -mt-16 max-w-7xl px-4 sm:-mt-24 sm:px-8 lg:-mt-50 lg:px-12">
         <div className="grid grid-cols-[auto_minmax(0,1fr)] items-end gap-x-4 gap-y-5 sm:gap-x-6 lg:grid-cols-[auto_minmax(0,1fr)_340px] lg:gap-x-8">
           <img
             src={poster}
