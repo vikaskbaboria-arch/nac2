@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { ChevronDown, SlidersHorizontal, Circle, Play } from "lucide-react";
+import { ChevronDown, SlidersHorizontal, Circle, Play, X } from "lucide-react";
 
 /**
  * SearchFilters
@@ -123,6 +123,7 @@ const PANEL_CLASSES = `
   backdrop-blur-2xl
         border border-white/20
         shadow-[0_0_40px_rgba(0,0,0,0.6)]
+      
   lg:fixed lg:top-22 lg:w-76 lg:rounded-2xl
 `;
 
@@ -194,6 +195,7 @@ const Filters = ({
   const [country, setCountry] = useState("all");
   const [language, setLanguage] = useState("all");
   const [providers, setProviders] = useState([]);
+  const [ottOpen, setOttOpen] = useState(false);
   const [moctaleSelect, setMoctaleSelect] = useState(false);
   const [familyFriendly, setFamilyFriendly] = useState(false);
 
@@ -228,6 +230,7 @@ const Filters = ({
   };
 
   return (
+    <>
     <div className={PANEL_CLASSES + " " + className}>
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-2">
@@ -245,7 +248,34 @@ const Filters = ({
         )}
       </div>
 
+      <div className="flex min-w-0 gap-2 overflow-x-auto pb-1 lg:hidden">
+        <div className="w-36 shrink-0">
+          <PillSelect options={SORTS} value={sort} onChange={setSort} />
+        </div>
+        <div className="w-36 shrink-0">
+          <PillSelect options={types} value={type} onChange={setType} />
+        </div>
+        {showCountryFilter && (
+          <div className="w-40 shrink-0">
+            <PillSelect options={COUNTRIES} value={country} onChange={setCountry} />
+          </div>
+        )}
+        <button
+          type="button"
+          onClick={() => setOttOpen(true)}
+          aria-expanded={ottOpen}
+          aria-haspopup="dialog"
+          className="inline-flex h-10 shrink-0 items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 text-sm text-white hover:bg-white/10"
+        >
+          OTT{providers.length > 0 ? ` · ${providers.length}` : ""}
+          <ChevronDown className="size-4 text-white/50" aria-hidden="true" />
+        </button>
+      </div>
+
+      <div className="hidden flex-col gap-4 lg:flex">
+
       {/* SORT BY */}
+      <div></div>
       <div>
         <PillSelect label="Sort By" options={SORTS} value={sort} onChange={setSort} />
       </div>
@@ -291,9 +321,9 @@ const Filters = ({
       </div> */}
 
       {/* OTT */}
-      <div className="border-t border-white/10 pt-5">
+      <div className="border-t border-white/10 pt-5 ">
         <p className="text-slate-400 text-sm mb-3">OTT</p>
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid    md:grid-cols-2 gap-2">
           {PROVIDERS.map((p) => {
             const active = providers.includes(p.value);
             return (
@@ -345,7 +375,69 @@ const Filters = ({
           Family Friendly
         </ToggleBadge>
       </div>} */}
+      </div>
     </div>
+    {ottOpen && (
+      <div
+        className="fixed inset-0 z-[100] flex items-end bg-black/70 backdrop-blur-sm lg:hidden"
+        onClick={() => setOttOpen(false)}
+      >
+        <section
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="ott-filter-title"
+          className="w-full rounded-t-2xl border border-white/15 bg-[#121111] p-5 pb-[calc(1.25rem+env(safe-area-inset-bottom))] shadow-2xl"
+          onClick={(event) => event.stopPropagation()}
+        >
+          <div className="mb-4 flex items-center justify-between">
+            <h2 id="ott-filter-title" className="text-base font-bold text-white">Select OTT</h2>
+            <button
+              type="button"
+              onClick={() => setOttOpen(false)}
+              aria-label="Close OTT filters"
+              className="rounded-full p-2 text-white/60 hover:bg-white/10 hover:text-white"
+            >
+              <X className="size-5" aria-hidden="true" />
+            </button>
+          </div>
+          <div className="grid grid-cols-2 gap-2">
+            {PROVIDERS.map((provider) => {
+              const active = providers.includes(provider.value);
+              return (
+                <button
+                  key={provider.value}
+                  type="button"
+                  aria-pressed={active}
+                  onClick={() => toggleProvider(provider.value)}
+                  className={`flex min-h-11 items-center gap-2 rounded-lg border px-3 py-2 text-left transition-colors ${
+                    active
+                      ? "border-purple-500 bg-purple-600/10"
+                      : "border-white/15 bg-white/5 hover:bg-white/10"
+                  }`}
+                >
+                  <span className={`flex size-5 shrink-0 items-center justify-center rounded ${provider.color}`}>
+                    {provider.mono ? (
+                      <span className="text-[10px] font-bold text-white">{provider.mono}</span>
+                    ) : (
+                      <Play className="size-3 fill-current text-white" aria-hidden="true" />
+                    )}
+                  </span>
+                  <span className="truncate text-sm font-semibold text-white">{provider.label}</span>
+                </button>
+              );
+            })}
+          </div>
+          <button
+            type="button"
+            onClick={() => setOttOpen(false)}
+            className="mt-4 h-11 w-full rounded-full bg-white text-sm font-semibold text-black"
+          >
+            Done
+          </button>
+        </section>
+      </div>
+    )}
+    </>
   );
 };
 

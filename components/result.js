@@ -1,7 +1,15 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { Play, Eye, Bookmark, Share2, ArrowUpRight, Info, X } from "lucide-react";
+import {
+  Play,
+  Eye,
+  Bookmark,
+  Share2,
+  ArrowUpRight,
+  Info,
+  X,
+} from "lucide-react";
 import InterestedButton from "./interestedbutton";
 import Watchlist from "./watchlist";
 import ReviewsSection from "./parent";
@@ -108,7 +116,7 @@ const SeriesR = (props) => {
   const [showFullOverview, setShowFullOverview] = useState(false);
   const [trailerUrl, setTrailerUrl] = useState(null);
   const [showTrailer, setShowTrailer] = useState(false);
-
+  const [rating, setRating] = useState(null);
   /* ================= FETCH DATA ================= */
   useEffect(() => {
     let cancelled = false;
@@ -121,6 +129,20 @@ const SeriesR = (props) => {
         id: movieId,
         type_of: type,
       });
+      const releaseDates = await fetchMovies({
+        type: "byrelease_dates",
+        id: movieId,
+        type_of: type,
+      });
+      const india = releaseDates?.results?.find(
+        (country) => country.iso_3166_1 === "IN",
+      );
+    
+      const ageRating =
+        india?.release_dates?.find((release) => release.certification)
+          ?.certification || "N/A";
+
+      setRating(ageRating);
       if (cancelled) return;
       setMovie(data);
 
@@ -161,7 +183,7 @@ const SeriesR = (props) => {
     ...(regionObj?.rent || []).map((p) => ({ ...p, kind: "Rent" })),
     ...(regionObj?.buy || []).map((p) => ({ ...p, kind: "Buy" })),
   ].filter(
-    (p, i, arr) => arr.findIndex((x) => x.provider_id === p.provider_id) === i
+    (p, i, arr) => arr.findIndex((x) => x.provider_id === p.provider_id) === i,
   );
 
   if (loading) return <SeriesSkeleton />;
@@ -177,7 +199,11 @@ const SeriesR = (props) => {
   const title = isTv ? movie?.name : movie?.title;
   const year = (movie?.release_date || movie?.first_air_date || "").slice(0, 4);
   const runtime = formatRuntime(movie?.runtime || movie?.episode_run_time?.[0]);
-
+  const ageMap = {
+  "U": "0+",
+  "UA": "13+",
+  "A": "18+"
+};
   const creators = movie?.created_by || [];
   const directors = credits?.crew?.filter((p) => p.job === "Director") || [];
   const leads = isTv ? creators : directors;
@@ -217,7 +243,10 @@ const SeriesR = (props) => {
           title={trailerUrl ? "Play trailer" : "Trailer unavailable"}
           className="absolute left-1/2 top-1/2 flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 items-center group justify-center rounded-full bg-black/40 backdrop-blur transition-all hover:bg-black/50 disabled:cursor-not-allowed disabled:opacity-60 sm:h-12 sm:w-12 shadow-lg"
         >
-          <Play size={20} className="fill-white transform translate-x-0.5 group-hover:scale-110" />
+          <Play
+            size={20}
+            className="fill-white transform translate-x-0.5 group-hover:scale-110"
+          />
         </button>
 
         {/* desktop: New Season card floats over the hero */}
@@ -260,7 +289,7 @@ const SeriesR = (props) => {
                   <>
                     {leads[0].name}
                     {extraLeads > 0 && (
-                      <span className="ml-1 font-normal text-white/50">
+                      <span className=" ml-1 font-normal text-white/50">
                         +{extraLeads}
                       </span>
                     )}
@@ -290,7 +319,7 @@ const SeriesR = (props) => {
               </Meta>
 
               {/* Age rating: pass movie.certification / content rating here if you have it */}
-              <Meta label="Age Rating">{movie?.certification || "N/A"}</Meta>
+              <Meta label="Age Rating">{rating || "N/A"}</Meta>
             </div>
           </div>
 
