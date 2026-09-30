@@ -273,6 +273,9 @@ background: linear-gradient(159deg,rgba(141, 44, 158, 1) 0%, rgb(0, 0, 0) 13%, r
 background: #3115ff;
 background: linear-gradient(151deg, rgb(84, 29, 166) 0%, rgba(5, 17, 36, 1) 7%, rgb(2, 0, 0) 11%);
 }
+.bg{
+  background-color: rgb(3, 4, 58);
+}
 .blackgreengradforp{
 background: #3115ff;
 background: linear-gradient(151deg, rgb(20, 6, 42) 0%, rgb(3, 11, 22) 7%, rgb(2, 0, 0) 11%);

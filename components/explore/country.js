@@ -131,7 +131,7 @@ const Country = ({ country }) => {
   };
 
   return (
-    <div className="relative z-10 mx-auto w-full px-4 pt-4 sm:px-6 lg:px-24 lg:pt-6">
+    <div className="relative z-10 mx-auto w-full px-4  pt-4 sm:px-6 lg:px-24 lg:pt-6">
       {/* HEADER */}
     
 
@@ -155,7 +155,18 @@ const Country = ({ country }) => {
             </AnimatedShinyText>
         </h1>
       </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-1">
+          <div className="grid gap-1
+        sm:gap-4
+        
+        sm:p-3
+        
+        
+        
+     
+
+        grid-cols-2
+        sm:grid-cols-3
+        lg:grid-cols-5">
           
           {loading ? (
             <div className="col-span-full">

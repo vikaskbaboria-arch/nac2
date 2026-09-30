@@ -23,7 +23,7 @@ export default function Home() {
 
    
 {/* <Starfield/> */}
- <div className="relative z-10 mx-auto px-4 pt-4 sm:px-6 lg:px-20 lg:pt-6 xl:px-24">
+ <div className="relative z-10 mx-auto px-1 pt-4 sm:px-6 lg:px-20 lg:pt-6 xl:px-24">
   <div className="flex flex-col items-start gap-4 lg:gap-8 lg:grid lg:grid-cols-[minmax(0,4fr)_minmax(0,1.5fr)] lg:gap-8" >
 
 

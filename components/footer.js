@@ -60,7 +60,7 @@ const DEFAULT_LINKS = [
 ];
 
 const DEFAULT_SOCIALS = [
-  { label: "Instagram", href: "https://instagram.com", Icon: Instagram },
+  { label: "Instagram", href: "https://instagram.com/notoriousvikax", Icon: Instagram },
   { label: "Discord", href: "https://discord.com", Icon: DiscordIcon },
   { label: "WhatsApp", href: "https://whatsapp.com", Icon: WhatsAppIcon },
   { label: "Reddit", href: "https://reddit.com", Icon: RedditIcon },
@@ -94,37 +94,7 @@ export function Footer({
               <span className="">love</span> in India
             </p>
 
-            <div className="flex flex-wrap items-center gap-3">
-              <a
-                href={playStoreHref}
-                className="flex items-center gap-2 rounded-md border border-gray-500 bg-black px-3 py-1.5 transition-colors hover:border-gray-100"
-              >
-                <GooglePlayGlyph className="size-5 shrink-0" aria-hidden="true" />
-                <span className="leading-tight">
-                  <span className="block text-[10px] text-muted-foreground">
-                    GET IT ON
-                  </span>
-                  <span className="block text-sm font-medium text-white">
-                    Google Play
-                  </span>
-                </span>
-              </a>
-
-              <a
-                href={appStoreHref}
-                className="flex items-center gap-2 rounded-md border border-gray-500 bg-black px-3 py-1.5 border-gray-300 transition-colors hover:border-gray-50"
-              >
-                <AppleGlyph className="size-5 shrink-0 text-foreground" aria-hidden="true" />
-                <span className="leading-tight">
-                  <span className="block text-[10px] text-muted-foreground">
-                    Download on the
-                  </span>
-                  <span className="block text-sm font-medium text-white">
-                    App Store
-                  </span>
-                </span>
-              </a>
-            </div>
+            
           </div>
 
           <div className="flex items-center gap-4">
