@@ -109,8 +109,9 @@ const PROVIDERS = [
 // Matches SearchTips.jsx's panel shell, so the two read as one system
 // on either side of the results grid.
 const PANEL_CLASSES = `
-  flex w-full max-w-full flex-col gap-4
-  rounded-lg p-4
+  flex  flex-col gap-4
+  rounded-lg 
+   w-80 p-2 mx-10
     backdrop-blur-2xl
         border border-white/20 
         

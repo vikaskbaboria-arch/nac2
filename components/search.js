@@ -121,7 +121,7 @@ const filteredResults = (movies?.results || []).filter((m) => {
   //     );
   //  }
   return (
-     <div className="relative z-10 mx-auto w-full px-4 pt-4 sm:px-6 lg:px-24 lg:pt-6">
+     <div className="relative z-10 mx-auto w-full px-2 pt-4 sm:px-6 lg:px-24 lg:pt-6">
        <div className="grid items-start justify-center gap-4 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,4fr)]" >
 
 

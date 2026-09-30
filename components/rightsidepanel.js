@@ -107,9 +107,9 @@ export default function Rightsidepanel() {
               key={`${m.interestedType}-${m.id}`}
               onClick={() => handleClick(m)}
               className="
-                group flex w-[min(86vw,330px)] shrink-0 gap-3 rounded-lg p-2.5 px-2
-               bg-black/60
-               shadow-[0_0_20px_rgba(0,0,0,0.2)]
+                group flex w-[min(94vw,430px)] shrink-0 gap-3 rounded-lg p-2.5 px-2 //here
+               bg-black/50
+               shadow-[0_0_20px_rgba(0,0,1,0.2)]
                border border-white/9
                backdrop-blur-2xl
                 lg:bg-white/[0.02]
