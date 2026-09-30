@@ -220,7 +220,7 @@ const SeriesR = (props) => {
       else await navigator.clipboard.writeText(data.url);
     } catch {}
   };
-
+console.log(movie)
   return (
     <div className="w-full overflow-x-hidden bg-[#030000] text-white">
       {/* ================= HERO ================= */}
@@ -312,10 +312,11 @@ const SeriesR = (props) => {
                 )}
               </Meta>
 
-              <Meta label="Language">
-                {movie?.original_language
+              <Meta label="Language" >
+              <a href={`/explore/language/${movie.original_language}`}>   {movie?.original_language
                   ? getLanguageName(movie.original_language)
-                  : "N/A"}
+                  : "N/A"}</a>
+             
               </Meta>
 
               {/* Age rating: pass movie.certification / content rating here if you have it */}

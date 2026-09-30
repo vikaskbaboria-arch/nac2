@@ -120,7 +120,7 @@ const PROVIDERS = [
 const PANEL_CLASSES = `
   flex  flex-col gap-4
   rounded-lg 
-  w-80 p-2 ml-6
+  w-80 p-2 ml-3
   backdrop-blur-2xl
         border border-white/20
         shadow-[0_0_40px_rgba(0,0,0,0.6)]
