@@ -111,7 +111,7 @@ const PROVIDERS = [
 const PANEL_CLASSES = `
   flex  flex-col gap-4
   rounded-lg 
-   w-80 p-2 mx-10
+   w-80 p-2 ml-6
     backdrop-blur-2xl
         border border-white/20 
         
