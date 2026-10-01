@@ -3,6 +3,7 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import { AnimatedShinyText } from "@/components/ui/animated-shiny-text";
+import styles from "./MovieCard.module.css";
 
 /**
  * MovieCard (MediaCard)
@@ -69,6 +70,7 @@ export default function MovieCard({
       onClick={handleClick}
       className={`
         group
+        ${styles.movieCard}
         cursor-pointer
         rounded-xl
         p-2
@@ -98,8 +100,19 @@ export default function MovieCard({
 
       {/* TITLE */}
       <div className="mt-2 text-sm font-semibold overflow-hidden">
-        <div className={`whitespace-nowrap ${shouldMarquee ? "marquee" : ""}`}>
-          <AnimatedShinyText>{title}</AnimatedShinyText>
+        <div className={shouldMarquee ? styles.titleViewport : "whitespace-nowrap"}>
+          {shouldMarquee ? (
+            <div className={styles.titleTrack}>
+              <span className={styles.titleCopy}>
+                <AnimatedShinyText>{title}</AnimatedShinyText>
+              </span>
+              <span aria-hidden="true" className={styles.titleCopy}>
+                <AnimatedShinyText>{title}</AnimatedShinyText>
+              </span>
+            </div>
+          ) : (
+            <AnimatedShinyText>{title}</AnimatedShinyText>
+          )}
         </div>
       </div>
 
@@ -112,7 +125,9 @@ export default function MovieCard({
             subtitle
           )
         ) : (
-          <AnimatedShinyText>{mediaLabel}</AnimatedShinyText>
+          <AnimatedShinyText className={styles.mediaLabelShine} shimmerWidth={80}>
+            {mediaLabel}
+          </AnimatedShinyText>
         )}
 
      

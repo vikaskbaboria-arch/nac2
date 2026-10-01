@@ -3,7 +3,7 @@ import Language from "@/components/explore/ByLanguage";
 const LanguagePage = async ({ params }) => {
   const { lan } = await params;
 
-  return <Language country={lan} />;
+  return <Language language={lan} />;
 };
 
 export default LanguagePage;

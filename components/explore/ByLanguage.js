@@ -58,8 +58,8 @@ const Language = ({ language }) => {
         type: selectedProviderIds.length ? "provider" : "discover",
         type_of: mediaType,
         ...(selectedProviderIds.length ? { provider_id: selectedProviderIds } : {}),
-        language: "en-US",
-       
+        with_original_language: languageCode,
+        region: "",
         page: pages,
       });
 
@@ -118,6 +118,7 @@ const Language = ({ language }) => {
             onFilterChange={setFilters}
             types={LANGUAGE_PAGE_TYPES}
             showCountryFilter={false}
+            className="lg:fixed"
           />
         </div>
 

@@ -18,6 +18,7 @@ import { fetchCredit } from "@/fetch/credit";
 import { getTrailerUrl } from "@/lib/gettrailer";
 import { getCountryNames, getLanguageName } from "@/lib/localeNames";
 import SeriesSkeleton from "./SeriesSkeleton";
+import Link from "next/link";
 
 /* ---------- small helpers ---------- */
 const formatRuntime = (mins) => {
@@ -220,7 +221,7 @@ const SeriesR = (props) => {
       else await navigator.clipboard.writeText(data.url);
     } catch {}
   };
-console.log(movie)
+   console.log("movie", movie);
   return (
     <div className="w-full overflow-x-hidden bg-[#030000] text-white">
       {/* ================= HERO ================= */}
@@ -313,10 +314,11 @@ console.log(movie)
               </Meta>
 
               <Meta label="Language" >
-              <a href={`/explore/language/${movie.original_language}`}>   {movie?.original_language
-                  ? getLanguageName(movie.original_language)
-                  : "N/A"}</a>
-             
+                {movie?.original_language
+                  ? <Link href={`/explore/language/${movie.original_language}`} className="hover:underline">
+                      {getLanguageName(movie.original_language)}
+                    </Link>
+                  : "N/A"}
               </Meta>
 
               {/* Age rating: pass movie.certification / content rating here if you have it */}

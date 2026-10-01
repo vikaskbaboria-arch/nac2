@@ -85,7 +85,7 @@ export function Footer({
   const pathname = usePathname();
 
   return (
-    <footer className={cn("border-t border-gray-800   px-4 sm:px-8 lg:px-28 text-white/90  bg-[#0A0A0A]"  , className)}>
+    <footer className={cn("border-t border-gray-800   px-4 sm:px-8 lg:px-28 text-white/90   bg-[#0A0A0A]"  , className)}>
       <div className="container-page py-8 ">
         {pathname=="/"&& <div className={`  flex flex-wrap items-center justify-between gap-6`}>
           <div className="flex flex-wrap items-center gap-4">
