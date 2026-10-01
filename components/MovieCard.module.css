@@ -1,0 +1,55 @@
+@keyframes mediaLabelShine {
+  from {
+    background-position: calc(-100% - var(--shiny-width)) 0;
+  }
+  to {
+    background-position: calc(100% + var(--shiny-width)) 0;
+  }
+}
+
+.mediaLabelShine {
+  background-image: linear-gradient(
+    90deg,
+    transparent 0%,
+      rgb(104, 98, 98) 50%,
+    transparent 100%
+  ) !important;
+  animation: mediaLabelShine 3s cubic-bezier(0.4, 0, 0.2, 1) infinite !important;
+}
+
+.titleViewport {
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
+}
+
+.titleTrack {
+  display: flex;
+  width: max-content;
+}
+
+.titleCopy {
+  flex: 0 0 auto;
+  padding-right: 2rem;
+  white-space: nowrap;
+}
+
+.movieCard:hover .titleTrack {
+  animation: titleMarquee 8s linear infinite;
+}
+
+@keyframes titleMarquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mediaLabelShine {
+    animation: none !important;
+  }
+
+  .movieCard:hover .titleTrack {
+    animation: none;
+  }
+}

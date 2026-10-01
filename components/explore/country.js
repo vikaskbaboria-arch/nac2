@@ -2,7 +2,8 @@
 import React, { useEffect, useState } from "react";
 import { getCountryNames, getLanguageName } from "@/lib/localeNames";
 import MovieCard from "../MovieCard";
-import Filters, { COUNTRIES } from "../helpers/Filters";
+import { COUNTRIES } from "@/lib/countries";
+import Filters from "../helpers/Filters";
 import { fetchMovies } from "@/lib/masterfetch";
 import { AnimatedShinyText } from "@/components/ui/animated-shiny-text";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -140,6 +141,7 @@ const Country = ({ country }) => {
           <Filters
             onFilterChange={handleFilterChange}
             types={COUNTRY_PAGE_TYPES}
+            className="lg:fixed"
             showCountryFilter={false}
           />
         </div>

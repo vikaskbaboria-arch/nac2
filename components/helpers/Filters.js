@@ -1,6 +1,8 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { ChevronDown, SlidersHorizontal, Circle, Play, X } from "lucide-react";
+import { GENRES } from "@/lib/genres";
+import { COUNTRIES } from "@/lib/countries";
 
 /**
  * SearchFilters
@@ -55,32 +57,6 @@ const DEFAULT_TYPES = [
   { value: "person", label: "People" },
 ];
 
-// ISO 3166-1 alpha-2 codes, matching TMDB's origin_country field.
-// Exported so other pages (e.g. a /country/[code] page) can reuse the
-// same list — for looking up a country's display label from its code,
-// for instance — without duplicating it.
-export const COUNTRIES = [
-  { value: "all", label: "All countries" },
-  { value: "US", label: "United States" },
-  { value: "IN", label: "India" },
-  { value: "GB", label: "United Kingdom" },
-  { value: "CA", label: "Canada" },
-  { value: "AU", label: "Australia" },
-  { value: "FR", label: "France" },
-  { value: "DE", label: "Germany" },
-  { value: "IT", label: "Italy" },
-  { value: "ES", label: "Spain" },
-  { value: "JP", label: "Japan" },
-  { value: "KR", label: "South Korea" },
-  { value: "CN", label: "China" },
-  { value: "HK", label: "Hong Kong" },
-  { value: "BR", label: "Brazil" },
-  { value: "MX", label: "Mexico" },
-  { value: "RU", label: "Russia" },
-  { value: "SE", label: "Sweden" },
-  { value: "NG", label: "Nigeria" },
-];
-
 // ISO 639-1 codes, matching TMDB's original_language field.
 const LANGUAGES = [
   { value: "all", label: "All languages" },
@@ -117,16 +93,16 @@ const PROVIDERS = [
 
 // Matches SearchTips.jsx's panel shell, so the two read as one system
 // on either side of the results grid.
-const PANEL_CLASSES = `
+const PANEL_CLASSES = `{
   flex  flex-col gap-4
   rounded-lg 
-  w-80 p-2 ml-3
+  w-[95vw] p-1 md:px-4
   backdrop-blur-2xl
-        border border-white/20
+        lg:border lg:border-white/20
         shadow-[0_0_40px_rgba(0,0,0,0.6)]
       
-  lg:fixed lg:top-22 lg:w-76 lg:rounded-2xl
-`;
+   lg:top-22 lg:w-76 lg:rounded-2xl
+}`;
 
 // Full-rounded pill dropdown, matching the "Sort By" control shape.
 const SELECT_CLASSES = `
@@ -190,26 +166,34 @@ const Filters = ({
   className = "",
   types = DEFAULT_TYPES,
   showCountryFilter = true,
+  showGenreFilter = false,
+  initialGenre = "all",
 }) => {
   const [sort, setSort] = useState("newest");
   const [type, setType] = useState("all");
   const [country, setCountry] = useState("all");
   const [language, setLanguage] = useState("all");
+  const [genre, setGenre] = useState(initialGenre);
   const [providers, setProviders] = useState([]);
   const [ottOpen, setOttOpen] = useState(false);
   const [moctaleSelect, setMoctaleSelect] = useState(false);
   const [familyFriendly, setFamilyFriendly] = useState(false);
 
   useEffect(() => {
-    onFilterChange?.({ sort, type, country, language, providers, moctaleSelect, familyFriendly });
+    onFilterChange?.({ sort, type, country, language, genre, providers, moctaleSelect, familyFriendly });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sort, type, country, language, providers, moctaleSelect, familyFriendly]);
+  }, [sort, type, country, language, genre, providers, moctaleSelect, familyFriendly]);
+
+  useEffect(() => {
+    setGenre(initialGenre);
+  }, [initialGenre]);
 
   const hasActiveFilters =
     sort !== "newest" ||
     type !== "all" ||
     country !== "all" ||
     language !== "all" ||
+    genre !== "all" ||
     providers.length > 0 ||
     moctaleSelect ||
     familyFriendly;
@@ -219,6 +203,7 @@ const Filters = ({
     setType("all");
     setCountry("all");
     setLanguage("all");
+    setGenre("all");
     setProviders([]);
     setMoctaleSelect(false);
     setFamilyFriendly(false);
@@ -229,10 +214,13 @@ const Filters = ({
       prev.includes(value) ? prev.filter((p) => p !== value) : [...prev, value]
     );
   };
-
+  var fixer;
+if(!genre){
+  fixer="lg:fixed"
+}
   return (
     <>
-    <div className={PANEL_CLASSES + " " + className}>
+    <div className={PANEL_CLASSES + fixer+" " + className}>
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-2">
           <SlidersHorizontal className="size-4 text-white" aria-hidden="true" />
@@ -259,6 +247,15 @@ const Filters = ({
         {showCountryFilter && (
           <div className="w-40 shrink-0">
             <PillSelect options={COUNTRIES} value={country} onChange={setCountry} />
+          </div>
+        )}
+        {showGenreFilter && (
+          <div className="w-40 shrink-0">
+            <PillSelect
+              options={[{ value: "all", label: "All genres" }, ...GENRES.map(({ slug, name }) => ({ value: slug, label: name }))]}
+              value={genre}
+              onChange={setGenre}
+            />
           </div>
         )}
         <button
@@ -313,6 +310,17 @@ const Filters = ({
       {showCountryFilter && (
         <div className="border-t border-white/10 pt-5">
           <PillSelect label="Country" options={COUNTRIES} value={country} onChange={setCountry} />
+        </div>
+      )}
+
+      {showGenreFilter && (
+        <div className="border-t border-white/10 pt-5">
+          <PillSelect
+            label="Genre"
+            options={[{ value: "all", label: "All genres" }, ...GENRES.map(({ slug, name }) => ({ value: slug, label: name }))]}
+            value={genre}
+            onChange={setGenre}
+          />
         </div>
       )}
 

@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { fetchMovies } from '@/lib/masterfetch'
@@ -8,13 +8,15 @@ import { fetchMovies } from '@/lib/masterfetch'
 import { signOut } from 'next-auth/react'
 import { useSession } from 'next-auth/react'
 import { SearchSuggestionsSkeleton } from '@/components/skeletons/HomeSectionSkeletons'
-import { Bookmark, Home, Search as SearchIcon } from 'lucide-react'
+import { Bookmark, Compass, Globe2, Home, Search as SearchIcon, Shapes } from 'lucide-react'
 
 const Navbar = () => {
   const { data: session, status } = useSession();
   const[button,setButton]=useState(false)
   const[dropdown2,setDropdown2]=useState(false)
+  const [exploreOpen, setExploreOpen] = useState(false)
   const[search,setSearch]=useState("")
+  const searchPanelRef = useRef(null)
   const router=useRouter()
   const [input,setInput] =useState("")
   const [suggest,setSuggest]=useState("")
@@ -53,6 +55,24 @@ const Navbar = () => {
       .finally(() => setSuggestionLoading(false))
   },[suggest])
 
+  useEffect(() => {
+    if (!button) return
+
+    const handleOutsidePointer = (event) => {
+      if (!searchPanelRef.current?.contains(event.target)) setButton(false)
+    }
+    const handleEscape = (event) => {
+      if (event.key === "Escape") setButton(false)
+    }
+
+    document.addEventListener("pointerdown", handleOutsidePointer)
+    document.addEventListener("keydown", handleEscape)
+    return () => {
+      document.removeEventListener("pointerdown", handleOutsidePointer)
+      document.removeEventListener("keydown", handleEscape)
+    }
+  }, [button])
+
   // fetch ratings for suggestion items
 
 
@@ -66,9 +86,16 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
     let previousScrollY = window.scrollY
+    const desktopQuery = window.matchMedia("(min-width: 768px)")
     const handleScroll = () => {
       const currentScrollY = window.scrollY
       setScrolled(currentScrollY > 10)
+
+      if (desktopQuery.matches) {
+        setNavHidden(false)
+        previousScrollY = currentScrollY
+        return
+      }
 
       if (currentScrollY <= 20) {
         setNavHidden(false)
@@ -80,9 +107,17 @@ const Navbar = () => {
 
       previousScrollY = currentScrollY
     }
+    const handleResize = () => {
+      previousScrollY = window.scrollY
+      if (desktopQuery.matches) setNavHidden(false)
+    }
 
     window.addEventListener("scroll", handleScroll, { passive: true })
-    return () => window.removeEventListener("scroll", handleScroll)
+    window.addEventListener("resize", handleResize)
+    return () => {
+      window.removeEventListener("scroll", handleScroll)
+      window.removeEventListener("resize", handleResize)
+    }
   }, [])
 
   return (
@@ -93,7 +128,7 @@ const Navbar = () => {
       transition-all duration-300 ease-in-out
       border-b border-white/10 backdrop-blur-md
       ${scrolled ? "bg-black/60 backdrop-blur-xl shadow-lg" : "bg-black"}
-      ${navHidden ? "-translate-y-full" : "translate-y-0"}
+      ${navHidden ? "-translate-y-full md:translate-y-0" : "translate-y-0"}
     `}>
 
       {/* LOGO */}
@@ -147,6 +182,38 @@ const Navbar = () => {
       <ul className="hidden z-50 backdrop-blur-xl bg-black/5 hover:bg-white/5 border border-white/10 backdrop-blur-md transition sm:flex items-center gap-4 px-3 py-1 text-sm font-medium bg-gray-950 rounded-2xl">
         <li className="hover:text-gray-400 transition"><Link href="/">Home</Link></li>
         <li className="hover:text-gray-400 transition"><Link href="/collection">Collection</Link></li>
+        <li className="relative">
+          <button
+            type="button"
+            onClick={() => setExploreOpen((open) => !open)}
+            aria-expanded={exploreOpen}
+            aria-haspopup="menu"
+            className="flex items-center gap-1 px-2 py-1 hover:text-gray-400 transition"
+          >
+            Explore
+            <span aria-hidden="true" className="text-[10px]">{exploreOpen ? "▲" : "▼"}</span>
+          </button>
+          {exploreOpen && (
+            <div role="menu" className="absolute left-0 top-full mt-3 w-52 overflow-hidden rounded-lg border border-white/15 bg-black/95 p-1 shadow-xl backdrop-blur-xl">
+              <Link
+                role="menuitem"
+                href="/explore/country"
+                onClick={() => setExploreOpen(false)}
+                className="flex items-center gap-3 rounded-md px-3 py-2.5 text-sm text-white/85 transition hover:bg-white/10 hover:text-white"
+              >
+                <Globe2 size={17} aria-hidden="true" /> Countries
+              </Link>
+              <Link
+                role="menuitem"
+                href="/explore/genre"
+                onClick={() => setExploreOpen(false)}
+                className="flex items-center gap-3 rounded-md px-3 py-2.5 text-sm text-white/85 transition hover:bg-white/10 hover:text-white"
+              >
+                <Shapes size={17} aria-hidden="true" /> Genres
+              </Link>
+            </div>
+          )}
+        </li>
        
        {status === 'authenticated' && session ? (
         <li className="hover:text-gray-400 transition"><Link href={`/profile/${session.user.email.split("@")[0]}`}>
@@ -219,18 +286,24 @@ const Navbar = () => {
       {/* SEARCH OVERLAY (SHARED) */}
       {button && (
         <div className="absolute left-0 top-16 w-full flex justify-center z-40">
-          <div className="relative mt-4 w-[95vw] sm:w-[70vw] lg:w-[50vw]">
-            <div className="flex items-center gap-2 bg-black/80 backdrop-blur-xl rounded-xl border border-white/10 p-2">
+          <div ref={searchPanelRef} className="relative mt-4 w-[95vw] sm:w-[70vw] lg:w-[50vw]">
+            <form
+              onSubmit={(event) => {
+                event.preventDefault()
+                handleClick()
+              }}
+              className="flex items-center gap-2 bg-black/80 backdrop-blur-xl rounded-xl border border-white/10 p-2"
+            >
               <input
                 value={search}
                 onChange={(e)=>{handleChange(e); handleB(e)}}
                 placeholder="Search movies or series..."
                 className="flex-1 bg-transparent outline-none text-white px-2"
               />
-              <button onClick={handleClick}>
+              <button type="submit" aria-label="Submit search">
                 <img src="/r.svg" alt="" width={22} />
               </button>
-            </div>
+            </form>
 
             {suggestionLoading && input.trim() ? (
               <SearchSuggestionsSkeleton />
@@ -262,11 +335,24 @@ const Navbar = () => {
       aria-label="Mobile navigation"
       className="fixed inset-x-0 bottom-0 z-50 border-t border-white/10 bg-black/90 pb-[env(safe-area-inset-bottom)] text-white backdrop-blur-xl sm:hidden"
     >
-      <div className="mx-auto grid h-16 max-w-lg grid-cols-3">
+      <div className="mx-auto grid h-16 max-w-lg grid-cols-4">
         <Link href="/" className="flex flex-col items-center justify-center gap-1 text-white/70 transition hover:text-white">
           <Home size={19} aria-hidden="true" />
           <span className="text-[10px] font-medium">Home</span>
         </Link>
+        <button
+          type="button"
+          onClick={() => {
+            setExploreOpen((open) => !open)
+            setNavHidden(false)
+          }}
+          className="flex flex-col items-center justify-center gap-1 text-white/70 transition hover:text-white"
+          aria-label="Explore"
+          aria-expanded={exploreOpen}
+        >
+          <Compass size={19} aria-hidden="true" />
+          <span className="text-[10px] font-medium">Explore</span>
+        </button>
         <button
           type="button"
           onClick={() => {
@@ -284,6 +370,24 @@ const Navbar = () => {
           <span className="text-[10px] font-medium">Collection</span>
         </Link>
       </div>
+      {exploreOpen && (
+        <div className="absolute inset-x-4 bottom-full mb-2 rounded-xl border border-white/15 bg-black/95 p-2 shadow-xl backdrop-blur-xl sm:hidden">
+          <Link
+            href="/explore/country"
+            onClick={() => setExploreOpen(false)}
+            className="flex items-center gap-3 rounded-lg px-3 py-3 text-sm text-white/85 transition hover:bg-white/10 hover:text-white"
+          >
+            <Globe2 size={18} aria-hidden="true" /> Countries
+          </Link>
+          <Link
+            href="/explore/genre"
+            onClick={() => setExploreOpen(false)}
+            className="flex items-center gap-3 rounded-lg px-3 py-3 text-sm text-white/85 transition hover:bg-white/10 hover:text-white"
+          >
+            <Shapes size={18} aria-hidden="true" /> Genres
+          </Link>
+        </div>
+      )}
     </nav>
     </>
   )
