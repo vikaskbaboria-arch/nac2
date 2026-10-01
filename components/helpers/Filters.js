@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { ChevronDown, SlidersHorizontal, Circle, Play, X } from "lucide-react";
 import { GENRES } from "@/lib/genres";
 import { COUNTRIES } from "@/lib/countries";
+import { LANGUAGES } from "@/lib/languages";
 
 /**
  * SearchFilters
@@ -57,24 +58,33 @@ const DEFAULT_TYPES = [
   { value: "person", label: "People" },
 ];
 
-// ISO 639-1 codes, matching TMDB's original_language field.
-const LANGUAGES = [
+const LANGUAGE_OPTIONS = [
   { value: "all", label: "All languages" },
-  { value: "en", label: "English" },
-  { value: "hi", label: "Hindi" },
-  { value: "es", label: "Spanish" },
-  { value: "fr", label: "French" },
-  { value: "de", label: "German" },
-  { value: "it", label: "Italian" },
-  { value: "ja", label: "Japanese" },
-  { value: "ko", label: "Korean" },
-  { value: "zh", label: "Chinese" },
-  { value: "pt", label: "Portuguese" },
-  { value: "ru", label: "Russian" },
-  { value: "ta", label: "Tamil" },
-  { value: "te", label: "Telugu" },
-  { value: "pa", label: "Punjabi" },
-  { value: "ar", label: "Arabic" },
+  ...LANGUAGES,
+];
+
+const AGE_RATINGS = [
+  { value: "all", label: "Any rating" },
+  { value: "U", label: "U" },
+  { value: "UA", label: "U/A" },
+  { value: "A", label: "A" },
+  { value: "S", label: "S" },
+];
+
+const TIME_PERIODS = [
+  { value: "all", label: "Any period" },
+  { value: "2020s", label: "2020s" },
+  { value: "2010s", label: "2010s" },
+  { value: "2000s", label: "2000s" },
+  { value: "1990s", label: "1990s" },
+  { value: "pre-1990", label: "Before 1990" },
+];
+
+const RUNTIMES = [
+  { value: "all", label: "Any runtime" },
+  { value: "under-90", label: "Under 90 min" },
+  { value: "90-120", label: "90–120 min" },
+  { value: "over-120", label: "Over 120 min" },
 ];
 
 // No brand logos here on purpose — same call the repo already makes in
@@ -167,26 +177,36 @@ const Filters = ({
   types = DEFAULT_TYPES,
   showCountryFilter = true,
   showGenreFilter = false,
+  showLanguageFilter = false,
+  showDiscoveryFilters = false,
   initialGenre = "all",
+  initialLanguage = "all",
 }) => {
   const [sort, setSort] = useState("newest");
   const [type, setType] = useState("all");
   const [country, setCountry] = useState("all");
-  const [language, setLanguage] = useState("all");
+  const [language, setLanguage] = useState(initialLanguage);
   const [genre, setGenre] = useState(initialGenre);
+  const [ageRating, setAgeRating] = useState("all");
+  const [period, setPeriod] = useState("all");
+  const [runtime, setRuntime] = useState("all");
   const [providers, setProviders] = useState([]);
   const [ottOpen, setOttOpen] = useState(false);
   const [moctaleSelect, setMoctaleSelect] = useState(false);
   const [familyFriendly, setFamilyFriendly] = useState(false);
 
   useEffect(() => {
-    onFilterChange?.({ sort, type, country, language, genre, providers, moctaleSelect, familyFriendly });
+    onFilterChange?.({ sort, type, country, language, genre, providers, ageRating, period, runtime, moctaleSelect, familyFriendly });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sort, type, country, language, genre, providers, moctaleSelect, familyFriendly]);
+  }, [sort, type, country, language, genre, providers, ageRating, period, runtime, moctaleSelect, familyFriendly]);
 
   useEffect(() => {
     setGenre(initialGenre);
   }, [initialGenre]);
+
+  useEffect(() => {
+    setLanguage(initialLanguage);
+  }, [initialLanguage]);
 
   const hasActiveFilters =
     sort !== "newest" ||
@@ -194,6 +214,9 @@ const Filters = ({
     country !== "all" ||
     language !== "all" ||
     genre !== "all" ||
+    ageRating !== "all" ||
+    period !== "all" ||
+    runtime !== "all" ||
     providers.length > 0 ||
     moctaleSelect ||
     familyFriendly;
@@ -204,6 +227,9 @@ const Filters = ({
     setCountry("all");
     setLanguage("all");
     setGenre("all");
+    setAgeRating("all");
+    setPeriod("all");
+    setRuntime("all");
     setProviders([]);
     setMoctaleSelect(false);
     setFamilyFriendly(false);
@@ -249,6 +275,11 @@ if(!genre){
             <PillSelect options={COUNTRIES} value={country} onChange={setCountry} />
           </div>
         )}
+        {showLanguageFilter && (
+          <div className="w-40 shrink-0">
+            <PillSelect options={LANGUAGE_OPTIONS} value={language} onChange={setLanguage} />
+          </div>
+        )}
         {showGenreFilter && (
           <div className="w-40 shrink-0">
             <PillSelect
@@ -257,6 +288,19 @@ if(!genre){
               onChange={setGenre}
             />
           </div>
+        )}
+        {showDiscoveryFilters && (
+          <>
+            <div className="w-36 shrink-0">
+              <PillSelect options={AGE_RATINGS} value={ageRating} onChange={setAgeRating} />
+            </div>
+            <div className="w-36 shrink-0">
+              <PillSelect options={TIME_PERIODS} value={period} onChange={setPeriod} />
+            </div>
+            <div className="w-36 shrink-0">
+              <PillSelect options={RUNTIMES} value={runtime} onChange={setRuntime} />
+            </div>
+          </>
         )}
         <button
           type="button"
@@ -324,10 +368,25 @@ if(!genre){
         </div>
       )}
 
-      {/* LANGUAGE */}
-      {/* <div className="border-t border-white/10 pt-5">
-        <PillSelect label="Language" options={LANGUAGES} value={language} onChange={setLanguage} />
-      </div> */}
+      {showLanguageFilter && (
+        <div className="border-t border-white/10 pt-5">
+          <PillSelect label="Language" options={LANGUAGE_OPTIONS} value={language} onChange={setLanguage} />
+        </div>
+      )}
+
+      {showDiscoveryFilters && (
+        <>
+          <div className="border-t border-white/10 pt-5">
+            <PillSelect label="Age rating (India)" options={AGE_RATINGS} value={ageRating} onChange={setAgeRating} />
+          </div>
+          <div className="border-t border-white/10 pt-5">
+            <PillSelect label="Time period" options={TIME_PERIODS} value={period} onChange={setPeriod} />
+          </div>
+          <div className="border-t border-white/10 pt-5">
+            <PillSelect label="Runtime" options={RUNTIMES} value={runtime} onChange={setRuntime} />
+          </div>
+        </>
+      )}
 
       {/* OTT */}
       <div className="border-t border-white/10 pt-5 ">
