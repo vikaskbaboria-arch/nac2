@@ -225,7 +225,7 @@ const SeriesR = (props) => {
   return (
     <div className="w-full overflow-x-hidden bg-[#030000] text-white">
       {/* ================= HERO ================= */}
-      <div className="relative h-[38vh] aspect-video  min-h-[220px] w-full sm:h-[55vh] lg:h-[72vh]">
+      <div className="relative h-[34vh] aspect-video  min-h-[220px] w-full sm:h-[55vh] lg:h-[72vh]">
         {cover && (
           <img
             src={cover}
@@ -344,7 +344,7 @@ const SeriesR = (props) => {
         )}
 
         {/* ================= OVERVIEW + WATCH ================= */}
-        <div className="mt-10 grid gap-8 lg:grid-cols-[minmax(0,1fr)_340px] lg:gap-12">
+        <div className="mt-4 sm:mt-10 grid gap-8 lg:grid-cols-[minmax(0,1fr)_340px] lg:gap-12">
           <div className="min-w-0">
             <h2 className="mb-3 text-lg font-semibold sm:text-xl">Overview</h2>
             <p

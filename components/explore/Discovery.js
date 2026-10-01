@@ -30,6 +30,7 @@ export default function Discovery() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const genreSlug = searchParams.get("genre") || "all";
+  const languageCode = searchParams.get("language") || "all";
   const pageFromUrl = Number(searchParams.get("page")) || 1;
   const [page, setPage] = useState(pageFromUrl);
   const [movies, setMovies] = useState([]);
@@ -38,9 +39,12 @@ export default function Discovery() {
     sort: "newest",
     type: "all",
     country: "all",
-    language: "all",
+    language: languageCode,
     genre: genreSlug,
     providers: [],
+    ageRating: "all",
+    period: "all",
+    runtime: "all",
   });
 
   const requestKey = JSON.stringify({
@@ -50,6 +54,9 @@ export default function Discovery() {
     country: filters.country,
     language: filters.language,
     providers: filters.providers,
+    ageRating: filters.ageRating,
+    period: filters.period,
+    runtime: filters.runtime,
   });
   const loading = loadedRequest !== requestKey;
 
@@ -62,6 +69,20 @@ export default function Discovery() {
       .filter(Boolean);
     const shouldLoadMovies = filters.type === "all" || filters.type === "movie";
     const shouldLoadTv = filters.type === "all" || filters.type === "tv";
+    const periodRanges = {
+      "2020s": ["2020-01-01", "2029-12-31"],
+      "2010s": ["2010-01-01", "2019-12-31"],
+      "2000s": ["2000-01-01", "2009-12-31"],
+      "1990s": ["1990-01-01", "1999-12-31"],
+      "pre-1990": ["", "1989-12-31"],
+    };
+    const [fromDate, toDate] = periodRanges[filters.period] || [];
+    const runtimeRanges = {
+      "under-90": { runtime_max: 89 },
+      "90-120": { runtime_min: 90, runtime_max: 120 },
+      "over-120": { runtime_min: 121 },
+    };
+    const runtimeRange = runtimeRanges[filters.runtime] || {};
     const load = (type_of) => fetchMovies({
       type: selectedProviderIds.length ? "provider" : "discover",
       type_of,
@@ -69,6 +90,11 @@ export default function Discovery() {
       genre: genre?.id || "",
       with_origin_country: filters.country === "all" ? "" : filters.country,
       with_original_language: filters.language === "all" ? "" : filters.language,
+      certification: filters.ageRating === "all" ? "" : filters.ageRating,
+      certification_country: "IN",
+      fromDate: fromDate || "",
+      toDate: toDate || "",
+      ...runtimeRange,
       ...(selectedProviderIds.length ? { provider_id: selectedProviderIds } : {}),
     });
 
@@ -93,7 +119,7 @@ export default function Discovery() {
     return () => {
       cancelled = true;
     };
-  }, [filters.country, filters.language, filters.providers, filters.type, genreSlug, page, requestKey]);
+  }, [filters.ageRating, filters.country, filters.language, filters.period, filters.providers, filters.runtime, filters.type, genreSlug, page, requestKey]);
 
   const handleFilterChange = (nextFilters) => {
     setFilters(nextFilters);
@@ -103,6 +129,11 @@ export default function Discovery() {
       params.set("genre", nextFilters.genre);
     } else {
       params.delete("genre");
+    }
+    if (nextFilters.language && nextFilters.language !== "all") {
+      params.set("language", nextFilters.language);
+    } else {
+      params.delete("language");
     }
     params.delete("page");
     const query = params.toString();
@@ -126,7 +157,10 @@ export default function Discovery() {
           onFilterChange={handleFilterChange}
           types={TYPES}
           showGenreFilter
+          showLanguageFilter
+          showDiscoveryFilters
           initialGenre={genreSlug}
+          initialLanguage={languageCode}
           
         />
 
