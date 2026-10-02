@@ -4,14 +4,13 @@ import { useEffect, useState, useRef } from "react";
 import {
   Play,
   Eye,
-  Bookmark,
   Share2,
   ArrowUpRight,
   Info,
   X,
 } from "lucide-react";
-import InterestedButton from "./interestedbutton";
 import Watchlist from "./watchlist";
+import InterestedButton from "./interestedbutton";
 import ReviewsSection from "./parent";
 import { fetchMovies } from "@/lib/masterfetch";
 import { fetchCredit } from "@/fetch/credit";
@@ -19,6 +18,7 @@ import { getTrailerUrl } from "@/lib/gettrailer";
 import { getCountryNames, getLanguageName } from "@/lib/localeNames";
 import SeriesSkeleton from "./SeriesSkeleton";
 import Link from "next/link";
+import CollectionButton from "./CollectionButton";
 
 /* ---------- small helpers ---------- */
 const formatRuntime = (mins) => {
@@ -82,7 +82,7 @@ const NewSeasonCard = ({ movieId, nextAir, onShare, className = "" }) => (
   </div>
 );
 
-const ActionButtons = ({ movieId }) => (
+const ActionButtons = ({ movie }) => (
   <div className="flex flex-col gap-2.5">
     <button
       type="button"
@@ -91,20 +91,16 @@ const ActionButtons = ({ movieId }) => (
       <Eye size={18} /> Mark as Watched
     </button>
     <div className="grid grid-cols-2 gap-2.5 ">
-      <button
-        type="button"
-        className="flex h-11 items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] text-sm font-semibold text-white transition hover:bg-white/10"
-      >
-        <Bookmark size={17} /> Collections
-      </button>
+      <div className="h-11">
+        <CollectionButton movie={movie} />
+      </div>
       {/* your existing Watchlist component ("Watch Later") */}
       <div className="">
-        <Watchlist movieId={movieId} />
+        <Watchlist movieId={movie.id} />
       </div>
     </div>
   </div>
 );
-
 const SeriesR = (props) => {
   const { movie: movieId, type, streamer } = props;
   const isTv = type === "tv";
@@ -328,7 +324,19 @@ const SeriesR = (props) => {
 
           {/* actions: full width on mobile, right column on desktop */}
           <div className="col-span-2 lg:col-span-1 lg:self-end">
-            <ActionButtons movieId={movie?.id} />
+            <ActionButtons
+              movie={{
+                id: movie?.id,
+                mediaType: isTv ? "tv" : "movie",
+                title,
+                poster_path: movie?.poster_path,
+                backdrop_path: movie?.backdrop_path,
+                vote_average: movie?.vote_average,
+                release_date: movie?.release_date || movie?.first_air_date || "",
+                genres: genres.map((genre) => genre.name),
+                overview: movie?.overview,
+              }}
+            />
           </div>
         </div>
 

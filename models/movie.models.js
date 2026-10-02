@@ -4,6 +4,11 @@ const MovieSchema =new Schema ({
     movieid:{
      type:Number
     },
+    media_type: {
+        type: String,
+        enum: ["movie", "tv"],
+        default: "movie"
+    },
 
     createdAt:{
         type:Date,

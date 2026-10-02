@@ -139,11 +139,11 @@ if (loading) {
             )}
           </div>
           <div className="flex justify-center pt-2 md:justify-start lg:hidden">
-            <Watchlist movieId={movie?.id} />
+            <Watchlist movieId={movie?.id} mediaType="tv" />
           </div>
         </div>
            <div className="absolute  right-52 hidden lg:flex bottom-10 mr-18  z-20">
-          <Watchlist movieId={movie?.id} />
+          <Watchlist movieId={movie?.id} mediaType="tv" />
         </div>
       </div>
 
