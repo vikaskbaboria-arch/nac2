@@ -1,10 +1,12 @@
 "use client";
 
 import React, { useState } from "react";
+import { useParams } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
 import Userwatchlist from "@/components/userwatchlist";
 import {ShowRevonProflie} from "@/components/showrevonprofile";
 import MyInterested from "@/components/myinterested";
+import ProfileCollections from "@/components/ProfileCollections";
 // TODO: replace with real counts once the API/data is wired up.
 const DUMMY_STATS = {
   reviews: 12,
@@ -13,12 +15,15 @@ const DUMMY_STATS = {
 const NAV_ITEMS = [
   { key: "watchlist", label: "Watchlist" },
   { key: "reviews", label: "Reviews" },
+  { key: "collections", label: "Collections" },
   { key: "settings", label: "Settings" },
   {key:"interested", label:"Interested"}
 ];
 
 const ProfileClient = ({ username, stats = DUMMY_STATS }) => {
   const { data: session } = useSession();
+  const routeParams = useParams();
+  const profileUsername = username || routeParams?.username;
   const [active, setActive] = useState("watchlist");
 
   return (
@@ -35,7 +40,7 @@ const ProfileClient = ({ username, stats = DUMMY_STATS }) => {
 
           <div className="flex-1">
             <h1 className="text-2xl sm:text-3xl font-bold">
-              {username || session?.user?.name || "Guest"}
+              {profileUsername || session?.user?.name || "Guest"}
             </h1>
             {session?.user?.email && (
               <p className="text-white/40 text-sm mt-1">
@@ -111,6 +116,7 @@ const ProfileClient = ({ username, stats = DUMMY_STATS }) => {
           {active === "reviews" && (
            <ShowRevonProflie/>
           )}
+          {active === "collections" && <ProfileCollections username={profileUsername} />}
            {active === "interested" && (
            <MyInterested/>
           )}

@@ -394,6 +394,13 @@ const Navbar = () => {
           >
             <Shapes size={18} aria-hidden="true" /> Genres
           </Link>
+            <Link
+            href="/explore/language"
+            onClick={() => setExploreOpen(false)}
+            className="flex items-center gap-3 rounded-lg px-3 py-3 text-sm text-white/85 transition hover:bg-white/10 hover:text-white"
+          >
+            <Languages size={18} aria-hidden="true" /> Language
+          </Link>
         </div>
       )}
     </nav>
