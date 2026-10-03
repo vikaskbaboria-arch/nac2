@@ -19,17 +19,17 @@ const fetchProviders = async ({ media_type = "movie", id }) => {
         console.error(`TMDB providers direct fetch error ${res.status} for ${tmdbUrl}`);
         return null;
       }
-      return await res.json();
+      return await res?.json();
     } else {
       // Client-side: call our internal proxy
       const path = `/api/tmdb/${media_type}/${id}/watch/providers`;
       const res = await fetch(path, { next: { revalidate: 60 * 60 } });
-      if (!res.ok) {
-        const text = await res.text().catch(() => "");
+      if (!res?.ok) {
+        const text = await res?.text().catch(() => "");
         console.error(`TMDB providers proxy error ${res.status} for ${path}: ${text}`);
         return null;
       }
-      return await res.json();
+      return await res?.json();
     }
   } catch (err) {
     console.error("TMDB providers fetch failed:", err?.message || err);

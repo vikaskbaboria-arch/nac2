@@ -111,17 +111,17 @@ const PROVIDERS = [
 const PANEL_CLASSES = `
   flex  flex-col gap-4
   rounded-lg p-1
-   w-[95vw] md:px-4
+   w-[95vw] lg:px-4 lg:pb-6
     backdrop-blur-2xl
-        lg:border border-white/20 
-        
-        shadow-[0_0_40px_rgba(0,0,0,0.6)]
+        lg:border border-white/10
+        md:py-2
+        shadow-[0_0_20px_rgba(0,0,0,0.6)]
   lg:fixed lg:top-22 lg:w-76 lg:rounded-2xl
 `;
 
 // Full-rounded pill dropdown, matching the "Sort By" control shape.
 const SELECT_CLASSES = `
-  w-full rounded-full
+  w-full rounded-2xl
   border border-white/15 bg-white/5
   pl-4 pr-10 py-2.5 text-sm text-white
   hover:bg-white/10 transition-colors

@@ -9,7 +9,16 @@ const MovieSchema =new Schema ({
         enum: ["movie", "tv"],
         default: "movie"
     },
-
+    movieId:{
+        type: String,
+        default: null
+    },
+    moviePoster:{
+       type:String
+    },
+    movieTitle:{
+      type:String
+    },
     createdAt:{
         type:Date,
         default:Date.now
