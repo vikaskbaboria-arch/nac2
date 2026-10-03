@@ -8,7 +8,7 @@ import { fetchMovies } from '@/lib/masterfetch'
 import { signOut } from 'next-auth/react'
 import { useSession } from 'next-auth/react'
 import { SearchSuggestionsSkeleton } from '@/components/skeletons/HomeSectionSkeletons'
-import { Bookmark, Compass, Globe2, Home, Languages, Search as SearchIcon, Shapes } from 'lucide-react'
+import { Bookmark, Compass, Globe2, Home, Languages, Search as SearchIcon, Shapes, Sparkles } from 'lucide-react'
 
 const Navbar = () => {
   const { data: session, status } = useSession();
@@ -182,6 +182,7 @@ const Navbar = () => {
       <ul className="hidden z-50 backdrop-blur-xl bg-black/5 hover:bg-white/5 border border-white/10 backdrop-blur-md transition sm:flex items-center gap-4 px-3 py-1 text-sm font-medium bg-gray-950 rounded-2xl">
         <li className="hover:text-gray-400 transition"><Link href="/">Home</Link></li>
         <li className="hover:text-gray-400 transition"><Link href="/collection">Collection</Link></li>
+        <li className="hover:text-gray-400 transition"><Link href="/space">Space</Link></li>
         <li className="relative">
           <button
             type="button"
@@ -195,6 +196,14 @@ const Navbar = () => {
           </button>
           {exploreOpen && (
             <div role="menu" className="absolute left-0 top-full mt-3 w-52 overflow-hidden rounded-lg border border-white/15 bg-black/95 p-1 shadow-xl backdrop-blur-xl">
+              <Link
+                role="menuitem"
+                href="/space"
+                onClick={() => setExploreOpen(false)}
+                className="flex items-center gap-3 rounded-md px-3 py-2.5 text-sm text-purple-300 font-semibold transition hover:bg-white/10 hover:text-white"
+              >
+                <Sparkles size={17} aria-hidden="true" className="text-purple-400" /> Space Hub
+              </Link>
               <Link
                 role="menuitem"
                 href="/explore/country"
@@ -279,6 +288,7 @@ const Navbar = () => {
                   </li>
                 )}
                 <li className="p-2 hover:bg-white/5"><Link href="/collection">NAC Collection</Link></li>
+                <li className="p-2 hover:bg-white/5"><Link href="/space">NAC Space</Link></li>
                 <li className="p-2 hover:bg-white/5"><Link href="#">Earnings</Link></li>
                 <li className="p-2 hover:bg-red-500/10">
                   <button onClick={() => signOut()}>Sign out</button>
@@ -380,6 +390,13 @@ const Navbar = () => {
       </div>
       {exploreOpen && (
         <div className="absolute inset-x-4 bottom-full mb-2 rounded-xl border border-white/15 bg-black/95 p-2 shadow-xl backdrop-blur-xl sm:hidden">
+          <Link
+            href="/space"
+            onClick={() => setExploreOpen(false)}
+            className="flex items-center gap-3 rounded-lg px-3 py-3 text-sm text-purple-300 font-semibold transition hover:bg-white/10 hover:text-white"
+          >
+            <Sparkles size={18} aria-hidden="true" className="text-purple-400" /> NAC Space
+          </Link>
           <Link
             href="/explore/country"
             onClick={() => setExploreOpen(false)}

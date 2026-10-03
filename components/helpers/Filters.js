@@ -108,15 +108,16 @@ const PANEL_CLASSES = `{
   rounded-lg 
   w-[95vw] p-1 md:px-4
   backdrop-blur-2xl
-        lg:border lg:border-white/20
-        shadow-[0_0_40px_rgba(0,0,0,0.6)]
+  lg:py-2 lg:pb-6
+        lg:border lg:border-white/10
+        shadow-[0_0_20px_rgba(0,0,0,0.6)]
       
    lg:top-22 lg:w-76 lg:rounded-2xl
 }`;
 
 // Full-rounded pill dropdown, matching the "Sort By" control shape.
 const SELECT_CLASSES = `
-  w-full rounded-full
+  w-full rounded-2xl
   border border-white/15 bg-white/5
   pl-4 pr-10 py-2.5 text-sm text-white
   hover:bg-white/10 transition-colors
@@ -135,7 +136,7 @@ function PillSelect({ label, options, value, onChange }) {
           className={SELECT_CLASSES}
         >
           {options.map((o) => (
-            <option key={o.value} value={o.value} className="bg-[#121111]">
+            <option key={o.value} value={o.value} className="bg-[#121212]">
               {o.label}
             </option>
           ))}
