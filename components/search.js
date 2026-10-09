@@ -59,6 +59,11 @@ const filteredResults = (movies?.results || []).filter((m) => {
   return true
 })
   const handleClick = (m) => {
+    if (m.media_type === "person") {
+      router.push(`/person/${m.id}`);
+      return;
+    }
+
     if (m.media_type === "movie") {
       router.push(`/movie/${m.id}?type=movie`);
     } else {
@@ -161,11 +166,11 @@ const filteredResults = (movies?.results || []).filter((m) => {
                 {/* POSTER */}
                 <div className="relative aspect-[2/3] overflow-hidden rounded-lg">
                   <img
-                    src={
-                      m.poster_path
-                        ? `https://image.tmdb.org/t/p/w500${m.poster_path}`
-                        : `https://image.tmdb.org/t/p/w500${m.profile_path}`
-                    }
+                    src={m.poster_path
+                      ? `https://image.tmdb.org/t/p/w500${m.poster_path}`
+                      : m.profile_path
+                        ? `https://image.tmdb.org/t/p/w500${m.profile_path}`
+                        : "/placeholder.png"}
                     className="
                       absolute inset-0
                       w-full h-full object-cover
@@ -197,7 +202,11 @@ const filteredResults = (movies?.results || []).filter((m) => {
                 {/* MEDIA TYPE */}
                 <div className="text-white/60 text-xs tracking-wide">
                   <AnimatedShinyText>
-                    {m.media_type === "movie" ? "Movie" : "Series"}
+                    {m.media_type === "person"
+                      ? "Person"
+                      : m.media_type === "movie"
+                        ? "Movie"
+                        : "Series"}
                   </AnimatedShinyText>
                 </div>
               </div>

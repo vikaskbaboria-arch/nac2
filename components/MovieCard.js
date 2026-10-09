@@ -34,6 +34,7 @@ export default function MovieCard({
   const title = movie.title || movie.name || "Untitled";
   const mediaType = movie.media_type || movie.mediaType || movie.interestedType || typeFallback;
   const isMovie = mediaType === "movie";
+  const isPerson = mediaType === "person";
   const posterPath = movie.poster_path;
   const profilePath = movie.profile_path;
 
@@ -44,6 +45,11 @@ export default function MovieCard({
     : "/placeholder.png";
 
   const defaultClick = () => {
+    if (isPerson) {
+      router.push(`/person/${id}`);
+      return;
+    }
+
     router.push(`/movie/${id}?type=${isMovie ? "movie" : "tv"}`);
   };
 
@@ -62,7 +68,7 @@ export default function MovieCard({
           </div>
         ) : null;
 
-  const mediaLabel = isMovie ? "Movie" : "Series";
+  const mediaLabel = isPerson ? "Person" : isMovie ? "Movie" : "Series";
   const shouldMarquee = title?.length > 22;
 
   return (
