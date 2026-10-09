@@ -75,7 +75,7 @@ export default function MovieCard({
         rounded-xl
         p-2
         transition-colors
-        hover:bg-white/10
+        hover:bg-white/5
         ${className}
       `}
     >

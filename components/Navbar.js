@@ -24,6 +24,7 @@ const Navbar = () => {
   const [suggestionLoading, setSuggestionLoading] = useState(false)
 
   const [navHidden, setNavHidden] = useState(false)
+  const [footerVisible, setFooterVisible] = useState(false)
 
   const handleChange=(e)=>{ setSearch(e.target.value) }
   const handleClick=()=>{
@@ -54,6 +55,18 @@ const Navbar = () => {
       })
       .finally(() => setSuggestionLoading(false))
   },[suggest])
+
+  useEffect(() => {
+    const footer = document.getElementById("site-footer")
+    if (!footer || !("IntersectionObserver" in window)) return
+
+    const observer = new IntersectionObserver(([entry]) => {
+      setFooterVisible(entry.isIntersecting)
+    })
+
+    observer.observe(footer)
+    return () => observer.disconnect()
+  }, [])
 
   useEffect(() => {
     if (!button) return
@@ -351,7 +364,9 @@ const Navbar = () => {
     </nav>
     <nav
       aria-label="Mobile navigation"
-      className="fixed inset-x-0 bottom-0 z-50 border-t border-white/10 bg-black/90 pb-[env(safe-area-inset-bottom)] text-white backdrop-blur-xl sm:hidden"
+      className={`fixed inset-x-0 bottom-0 z-50 border-t border-white/10 bg-black/90 pb-[env(safe-area-inset-bottom)] text-white backdrop-blur-xl transition-transform duration-200 sm:hidden ${
+        footerVisible ? "pointer-events-none translate-y-full" : "translate-y-0"
+      }`}
     >
       <div className="mx-auto grid h-16 max-w-lg grid-cols-4">
         <Link href="/" className="flex flex-col items-center justify-center gap-1 text-white/70 transition hover:text-white">

@@ -284,7 +284,16 @@ const SeriesR = (props) => {
               <Meta label={leadLabel}>
                 {leads.length ? (
                   <>
-                    {leads[0].name}
+                    {leads[0].id ? (
+                      <Link
+                        href={`/person/${leads[0].id}`}
+                        className="transition hover:text-purple-300 hover:underline focus-visible:rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-purple-300"
+                      >
+                        {leads[0].name}
+                      </Link>
+                    ) : (
+                      leads[0].name
+                    )}
                     {extraLeads > 0 && (
                       <span className=" ml-1 font-normal text-white/50">
                         +{extraLeads}
