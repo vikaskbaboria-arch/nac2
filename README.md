@@ -4,6 +4,8 @@
 
 The project is designed with a **premium dark UI** inspired by modern streaming platforms while providing a more discovery and review-focused experience.
 
+My love for cinema, movies, and TV series inspired me to build this platform in a thoughtful and premium way, so that discovering great stories feels as exciting as watching them.
+
 ---
 
 ## ✨ Features
