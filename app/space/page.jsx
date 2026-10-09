@@ -141,19 +141,19 @@ export default function SpacePage() {
     <div className="min-h-screen bg-black text-white pt-20 sm:pt-24 pb-20 selection:bg-purple-600 selection:text-white">
       {/* Toast Feedback */}
       {toastMessage && (
-        <div className="fixed top-20 right-6 z-50 flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-emerald-950/90 border border-emerald-500/40 text-emerald-300 text-xs font-semibold shadow-2xl backdrop-blur-xl animate-scaleIn">
+        <div className="fixed top-20 left-3 right-3 sm:left-auto sm:right-6 z-50 flex w-fit max-w-[calc(100vw-1.5rem)] items-center gap-2 px-4 py-2.5 rounded-2xl bg-emerald-950/90 border border-emerald-500/40 text-emerald-300 text-xs font-semibold shadow-2xl backdrop-blur-xl animate-scaleIn">
           <Sparkles size={15} />
           <span>{toastMessage}</span>
         </div>
       )}
 
-      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
-        <div className="grid items-start justify-center gap-4 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,4fr)]">
+      <div className="mx-auto w-full max-w-7xl px-3 sm:px-5 lg:px-8">
+        <div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-[13rem_minmax(0,1fr)] lg:gap-6 xl:gap-8">
           
           {/* ============================================================== */}
           {/* LEFT SIDEBAR (STICKY NAVIGATION - Matches screenshot)           */}
           {/* ============================================================== */}
-          <div>    <aside className="w-48 xl:w-56 fixed shrink-0 hidden md:block  top-24 self-start p-4 ">
+          <aside className="hidden w-full shrink-0 self-start p-2 lg:sticky lg:top-24 lg:block">
             <nav className="space-y-1.5" aria-label="Space Sidebar Navigation">
               {navItems.map((item) => {
                 const Icon = item.icon;
@@ -203,35 +203,52 @@ export default function SpacePage() {
                 <span>Create Dispatch</span>
               </button>
             </div>
-          </aside></div>
+          </aside>
       
 
           {/* ============================================================== */}
           {/* CENTER COLUMN (MAIN STREAM FEED - Matches screenshot)          */}
           {/* ============================================================== */}
-          <main className="flex-1 max-w-2xl mx-auto w-full">
+          <main className="mx-auto w-full min-w-0 lg:max-w-2xl lg:justify-self-center">
             
             {/* MOBILE NAVIGATION TABS (Visible only on small screens) */}
-            <div className="md:hidden flex items-center gap-1.5 overflow-x-auto pb-3 mb-4 no-scrollbar">
-              {navItems.slice(0, 4).map((item) => {
-                const Icon = item.icon;
-                const isActive = activeNav === item.id;
-                return (
-                  <button
-                    key={item.id}
-                    onClick={() => setActiveNav(item.id)}
-                    className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition cursor-pointer ${
-                      isActive ? "bg-[#222225] text-white" : "text-zinc-400 hover:text-white bg-zinc-900/60"
-                    }`}
-                  >
-                    <Icon size={14} />
-                    <span>{item.label}</span>
-                  </button>
-                );
-              })}
+            <div className="mb-4 flex min-w-0 items-center gap-2 lg:hidden">
+              <nav
+                className="no-scrollbar flex min-w-0 flex-1 items-center gap-1.5 overflow-x-auto"
+                aria-label="Space navigation"
+              >
+                {navItems.map((item) => {
+                  const Icon = item.icon;
+                  const isActive = activeNav === item.id;
+                  if (item.href) {
+                    return (
+                      <Link
+                        key={item.id}
+                        href={item.href}
+                        className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-zinc-900/60 px-3 py-2 text-xs font-semibold text-zinc-400 transition hover:text-white"
+                      >
+                        <Icon size={14} />
+                        <span>{item.label}</span>
+                      </Link>
+                    );
+                  }
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => setActiveNav(item.id)}
+                      className={`inline-flex shrink-0 items-center gap-2 rounded-xl px-3 py-2 text-xs font-semibold whitespace-nowrap transition cursor-pointer ${
+                        isActive ? "bg-[#222225] text-white" : "text-zinc-400 hover:text-white bg-zinc-900/60"
+                      }`}
+                    >
+                      <Icon size={14} />
+                      <span>{item.label}</span>
+                    </button>
+                  );
+                })}
+              </nav>
               <button
                 onClick={() => setIsModalOpen(true)}
-                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold bg-purple-600 text-white whitespace-nowrap ml-auto"
+                className="inline-flex shrink-0 items-center gap-1.5 rounded-xl bg-purple-600 px-3 py-2 text-xs font-bold text-white whitespace-nowrap"
               >
                 <Plus size={14} />
                 <span>Post</span>
@@ -239,7 +256,7 @@ export default function SpacePage() {
             </div>
 
             {/* TOP BAR: Topics (5) & Search Button (Matches screenshot) */}
-            <div className="flex items-center justify-between gap-3 mb-6 relative">
+            <div className="relative mb-5 flex min-w-0 items-center justify-between gap-3 sm:mb-6">
               {/* TOPICS BUTTON */}
               <div className="relative">
                 <button
@@ -260,7 +277,7 @@ export default function SpacePage() {
 
                 {/* Topics Dropdown Pill Menu */}
                 {topicsOpen && (
-                  <div className="absolute left-0 top-full mt-2 w-64 p-2 rounded-2xl bg-[#141418] border border-white/10 shadow-2xl z-30 flex flex-wrap gap-1.5 backdrop-blur-xl animate-scaleIn">
+                  <div className="absolute left-0 top-full z-30 mt-2 flex w-64 max-w-[calc(100vw-1.5rem)] flex-wrap gap-1.5 rounded-2xl border border-white/10 bg-[#141418] p-2 shadow-2xl backdrop-blur-xl animate-scaleIn">
                     {TOPICS.map((topic) => (
                       <button
                         key={topic}
@@ -290,8 +307,8 @@ export default function SpacePage() {
                       type="text"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      placeholder="Search dispatches..."
-                      className="bg-[#141418] border border-white/15 focus:border-zinc-400 rounded-full pl-3.5 pr-8 py-1.5 text-xs text-white placeholder-zinc-500 outline-none w-48 sm:w-60 transition"
+                      placeholder="Search..."
+                      className="w-[min(40vw,12rem)] rounded-full border border-white/15 bg-[#141418] py-1.5 pl-3.5 pr-8 text-xs text-white outline-none transition placeholder-zinc-500 focus:border-zinc-400 sm:w-60"
                     />
                     <button
                       type="button"
@@ -330,12 +347,12 @@ export default function SpacePage() {
 
             {/* FEED LIST */}
             {loading ? (
-              <div className="space-y-10">
+              <div className="space-y-6 sm:space-y-10">
                 <SpaceSkeletonCard />
                 <SpaceSkeletonCard />
               </div>
             ) : filteredSpaces.length === 0 ? (
-              <div className="text-center py-20 px-4 rounded-3xl bg-[#0e0e12] border border-white/5 my-4">
+              <div className="my-4 rounded-3xl border border-white/5 bg-[#0e0e12] px-4 py-12 text-center sm:py-20">
                 <div className="w-14 h-14 rounded-2xl bg-zinc-900 border border-white/10 text-zinc-400 flex items-center justify-center mx-auto mb-3">
                   <Film size={24} />
                 </div>

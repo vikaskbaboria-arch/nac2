@@ -22,14 +22,16 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className="bg-[#060000] min-h-screen pb-[calc(4rem+env(safe-area-inset-bottom))] sm:pb-0">
+      <body className="bg-[#060000] min-h-screen">
                {/* <Starfield /> */}
+     <div className="pb-[calc(4rem+env(safe-area-inset-bottom))] sm:pb-0">
      <Sessionwrapper>
       <div className="mb-16">        <Navbar/></div>
 
   
         {children }
         </Sessionwrapper>
+     </div>
         <div className="mt-6"><Footer/></div>
            
       </body>
