@@ -90,7 +90,8 @@ const Navbar = () => {
 
 
   const handleLnk=(m)=>{
-    if(m.media_type==="movie"){ router.push(`/movie/${m?.id}/?type=movie`) }
+    if (m.media_type === "person") { router.push(`/person/${m.id}`) }
+    else if(m.media_type==="movie"){ router.push(`/movie/${m?.id}/?type=movie`) }
     else{ router.push(`/movie/${m.id}?type=tv`) }
     setSearch(""); setInput(""); setSuggest(""); setSuggestions(null)
     setButton(false)
