@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState, useEffect, useMemo, useRef } from "react";
+import React, { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   Home,
   Newspaper,
@@ -50,13 +51,17 @@ export default function SpacePage() {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState(null);
+  const [publicCollections, setPublicCollections] = useState([]);
+  const [collectionsLoading, setCollectionsLoading] = useState(false);
+  const [collectionsError, setCollectionsError] = useState("");
+  const [collectionsHasMore, setCollectionsHasMore] = useState(false);
 
   // Modal & Toast
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState(null);
 
   // Fetch spaces based on active category
-  const loadSpaces = async (isManual = false) => {
+  const loadSpaces = useCallback(async (isManual = false) => {
     if (isManual) setRefreshing(true);
     else setLoading(true);
     setError(null);
@@ -82,11 +87,39 @@ export default function SpacePage() {
       setLoading(false);
       setRefreshing(false);
     }
-  };
+  }, [activeNav]);
+
+  const loadPublicCollections = useCallback(async (offset = 0, append = false) => {
+    setCollectionsLoading(true);
+    setCollectionsError("");
+    try {
+      const res = await fetch(
+        `/api/user-collections/public?offset=${offset}`,
+        { cache: "no-store" }
+      );
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "Unable to load public collections");
+      }
+      setPublicCollections((current) =>
+        append ? [...current, ...(data.collections || [])] : data.collections || []
+      );
+      setCollectionsHasMore(Boolean(data.hasMore));
+    } catch (err) {
+      console.error("Error loading public collections:", err);
+      setCollectionsError("Unable to load public collections right now.");
+    } finally {
+      setCollectionsLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
-    loadSpaces();
-  }, [activeNav]);
+    if (activeNav === "collections") {
+      loadPublicCollections();
+    } else {
+      loadSpaces();
+    }
+  }, [activeNav, loadPublicCollections, loadSpaces]);
 
   const handleCreated = (newSpace) => {
     setSpaces((prev) => [newSpace, ...prev]);
@@ -127,6 +160,18 @@ export default function SpacePage() {
     });
   }, [spaces, searchQuery, activeTopic]);
 
+  const filteredPublicCollections = useMemo(() => {
+    const query = searchQuery.toLowerCase().trim();
+    if (!query) return publicCollections;
+    return publicCollections.filter(
+      (collection) =>
+        collection.name?.toLowerCase().includes(query) ||
+        collection.owner?.username?.toLowerCase().includes(query) ||
+        collection.owner?.name?.toLowerCase().includes(query) ||
+        collection.items?.some((item) => item.title?.toLowerCase().includes(query))
+    );
+  }, [publicCollections, searchQuery]);
+
   // Navigation Items
   const navItems = [
     { id: "feed", label: "Feed", icon: Home },
@@ -134,7 +179,7 @@ export default function SpacePage() {
     { id: "discussions", label: "Discussions", icon: MessageSquare },
     { id: "trailers", label: "Trailers", icon: PlaySquare },
     { id: "reviews", label: "Reviews", icon: Edit3, href: "/movie" },
-    { id: "collections", label: "Collections", icon: Bookmark, href: "/collection" },
+    { id: "collections", label: "Collections", icon: Bookmark },
   ];
 
   return (
@@ -258,7 +303,7 @@ export default function SpacePage() {
             {/* TOP BAR: Topics (5) & Search Button (Matches screenshot) */}
             <div className="relative mb-5 flex min-w-0 items-center justify-between gap-3 sm:mb-6">
               {/* TOPICS BUTTON */}
-              <div className="relative">
+              {activeNav !== "collections" && <div className="relative">
                 <button
                   type="button"
                   onClick={() => setTopicsOpen((prev) => !prev)}
@@ -296,7 +341,7 @@ export default function SpacePage() {
                     ))}
                   </div>
                 )}
-              </div>
+              </div>}
 
               {/* SEARCH ICON BUTTON & EXPANDABLE INPUT (Matches screenshot) */}
               <div className="flex items-center gap-2">
@@ -307,7 +352,7 @@ export default function SpacePage() {
                       type="text"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      placeholder="Search..."
+                      placeholder={activeNav === "collections" ? "Search collections..." : "Search..."}
                       className="w-[min(40vw,12rem)] rounded-full border border-white/15 bg-[#141418] py-1.5 pl-3.5 pr-8 text-xs text-white outline-none transition placeholder-zinc-500 focus:border-zinc-400 sm:w-60"
                     />
                     <button
@@ -332,21 +377,144 @@ export default function SpacePage() {
                 {/* Refresh Feed */}
                 <button
                   type="button"
-                  onClick={() => loadSpaces(true)}
-                  disabled={refreshing}
+                  onClick={() =>
+                    activeNav === "collections"
+                      ? loadPublicCollections()
+                      : loadSpaces(true)
+                  }
+                  disabled={activeNav === "collections" ? collectionsLoading : refreshing}
                   className="w-8 h-8 rounded-full bg-[#121215] border border-white/10 flex items-center justify-center text-zinc-400 hover:text-white hover:border-white/20 transition cursor-pointer"
                   title="Refresh feed"
                 >
                   <RefreshCw
                     size={13}
-                    className={refreshing ? "animate-spin text-purple-400" : ""}
+                    className={
+                      refreshing || collectionsLoading
+                        ? "animate-spin text-purple-400"
+                        : ""
+                    }
                   />
                 </button>
               </div>
             </div>
 
-            {/* FEED LIST */}
-            {loading ? (
+            {activeNav === "collections" ? (
+              collectionsLoading && publicCollections.length === 0 ? (
+                <div className="space-y-4">
+                  <SpaceSkeletonCard />
+                  <SpaceSkeletonCard />
+                </div>
+              ) : collectionsError && publicCollections.length === 0 ? (
+                <p role="alert" className="rounded-3xl border border-red-500/20 bg-red-950/20 p-6 text-center text-sm text-red-200">
+                  {collectionsError}
+                </p>
+              ) : filteredPublicCollections.length === 0 ? (
+                <div className="my-4 rounded-3xl border border-white/5 bg-[#0e0e12] px-4 py-12 text-center sm:py-20">
+                  <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-zinc-900 text-zinc-400">
+                    <Bookmark size={24} />
+                  </div>
+                  <h3 className="mb-1 text-base font-bold text-white">
+                    {searchQuery ? "No matching collections" : "No public collections yet"}
+                  </h3>
+                  <p className="mx-auto max-w-sm text-xs text-zinc-400">
+                    {searchQuery
+                      ? `No public collections found for "${searchQuery}".`
+                      : "Public collections shared by the community will appear here."}
+                  </p>
+                  {collectionsHasMore && (
+                    <button
+                      type="button"
+                      onClick={() =>
+                        loadPublicCollections(publicCollections.length, true)
+                      }
+                      disabled={collectionsLoading}
+                      className="mt-4 rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-white/80 transition hover:bg-white/10 disabled:cursor-wait disabled:opacity-60"
+                    >
+                      {collectionsLoading ? "Loading…" : "Load more collections"}
+                    </button>
+                  )}
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {collectionsError && (
+                    <p role="alert" className="rounded-xl border border-red-500/20 bg-red-950/20 p-3 text-sm text-red-200">
+                      {collectionsError}
+                    </p>
+                  )}
+                  {filteredPublicCollections.map((collection) => (
+                    <article
+                      key={collection._id}
+                      className="rounded-2xl border border-white/10 bg-[#0e0e12] p-4 sm:p-5"
+                    >
+                      <div className="flex flex-wrap items-start justify-between gap-3">
+                        <div className="min-w-0">
+                          <h2 className="truncate text-lg font-semibold text-white">
+                            {collection.name}
+                          </h2>
+                          <p className="mt-1 text-xs text-zinc-400">
+                            {collection.owner?.username ? (
+                              <Link
+                                href={`/profile/${encodeURIComponent(collection.owner.username)}`}
+                                className="text-purple-300 hover:text-purple-200 hover:underline"
+                              >
+                                {collection.owner.name || collection.owner.username}
+                              </Link>
+                            ) : (
+                              "NAC member"
+                            )}
+                            {" · "}{collection.itemCount}{" "}
+                            {collection.itemCount === 1 ? "title" : "titles"}
+                          </p>
+                        </div>
+                      </div>
+                      {collection.items.length > 0 ? (
+                        <div className="mt-4 flex gap-3 overflow-x-auto pb-1">
+                          {collection.items.map((item) => (
+                            <Link
+                              key={item._id}
+                              href={`/movie/${item.movieId}?type=${item.mediaType}`}
+                              className="w-24 shrink-0 sm:w-28"
+                            >
+                              <Image
+                                src={
+                                  item.poster_path
+                                    ? `https://image.tmdb.org/t/p/w185${item.poster_path}`
+                                    : "/placeholder.png"
+                                }
+                                alt={item.title}
+                                width={185}
+                                height={278}
+                                unoptimized
+                                className="aspect-[2/3] w-full rounded-lg object-cover"
+                              />
+                              <p className="mt-1 truncate text-xs text-white/75">
+                                {item.title}
+                              </p>
+                            </Link>
+                          ))}
+                        </div>
+                      ) : (
+                        <p className="mt-4 text-sm text-white/40">
+                          No titles in this collection yet.
+                        </p>
+                      )}
+                    </article>
+                  ))}
+                  {collectionsHasMore && (
+                    <button
+                      type="button"
+                      onClick={() =>
+                        loadPublicCollections(publicCollections.length, true)
+                      }
+                      disabled={collectionsLoading}
+                      className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-white/80 transition hover:bg-white/10 disabled:cursor-wait disabled:opacity-60"
+                    >
+                      {collectionsLoading ? "Loading…" : "Load more collections"}
+                    </button>
+                  )}
+                </div>
+              )
+            ) : loading ? (
               <div className="space-y-6 sm:space-y-10">
                 <SpaceSkeletonCard />
                 <SpaceSkeletonCard />
