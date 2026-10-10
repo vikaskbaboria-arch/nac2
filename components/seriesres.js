@@ -4,7 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import Rating from "./rating";
 import Watchlist from "./watchlist";
 import ReviewsSection from "./parent";
-import { fetchMovies } from "@/lib/masterfetch";
+import { fetchAgeRating, fetchMovies } from "@/lib/masterfetch";
 import { fetchCredit } from "@/fetch/credit";
 import { getTrailerUrl } from "@/lib/gettrailer";
 import SeriesSkeleton from "./SeriesSkeleton";
@@ -12,6 +12,7 @@ const SeriesR = (movies) => {
   const castRef = useRef(null);
 
   const [movie, setMovie] = useState(null);
+  const [ageRating, setAgeRating] = useState("N/A");
   const [credits, setCredits] = useState(null);
   const [showFullOverview, setShowFullOverview] = useState(false);
   const [trailerUrl, setTrailerUrl] = useState(null);
@@ -29,7 +30,9 @@ const [loading, setLoading] = useState(true);
         type_of: "tv",
       });
 
+      const rating = await fetchAgeRating(movies.movie, "tv");
       setMovie(tvData);
+      setAgeRating(rating);
 
       const creditsData = await fetchCredit(tvData.id, "tv");
       setCredits(creditsData);
@@ -137,6 +140,10 @@ if (loading) {
             ) : (
               <span className="text-white/40">N/A</span>
             )}
+          </div>
+          <div className="flex justify-center gap-2 pt-1 md:justify-start">
+            <span className="text-white/50 font-bold">Age Rating:</span>
+            <span>{ageRating}</span>
           </div>
           <div className="flex justify-center pt-2 md:justify-start lg:hidden">
             <Watchlist movieId={movie?.id} mediaType="tv" />
