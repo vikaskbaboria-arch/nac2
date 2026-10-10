@@ -7,16 +7,21 @@ const fetchProviders = async ({ media_type = "movie", id }) => {
   try {
     if (isServer) {
       // Call TMDB directly from server-side using server API key to avoid fetching our own API route.
-      const key = process.env.TMDB_API_KEY || process.env.SERVER_API || process.env.NEXT_PUBLIC_API_KEY;
+      const key = process.env.TMDB_API_KEY || process.env.SERVER_API;
       if (!key) {
         console.error("TMDB providers fetch failed: no TMDB API key in env");
         return null;
       }
 
-      const tmdbUrl = `https://api.themoviedb.org/3/${media_type}/${id}/watch/providers?api_key=${key}`;
+      const tmdbUrl = new URL(
+        `https://api.themoviedb.org/3/${media_type}/${id}/watch/providers`
+      );
+      tmdbUrl.searchParams.set("api_key", key);
       const res = await fetch(tmdbUrl);
       if (!res.ok) {
-        console.error(`TMDB providers direct fetch error ${res.status} for ${tmdbUrl}`);
+        console.error(
+          `TMDB providers direct fetch error ${res.status} for ${media_type}/${id}`
+        );
         return null;
       }
       return await res?.json();
