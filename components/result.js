@@ -12,7 +12,7 @@ import {
 import Watchlist from "./watchlist";
 import InterestedButton from "./interestedbutton";
 import ReviewsSection from "./parent";
-import { fetchMovies } from "@/lib/masterfetch";
+import { fetchAgeRating, fetchMovies } from "@/lib/masterfetch";
 import { fetchCredit } from "@/fetch/credit";
 import { getTrailerUrl } from "@/lib/gettrailer";
 import { getCountryNames, getLanguageName } from "@/lib/localeNames";
@@ -126,21 +126,9 @@ const SeriesR = (props) => {
         id: movieId,
         type_of: type,
       });
-      const releaseDates = await fetchMovies({
-        type: "byrelease_dates",
-        id: movieId,
-        type_of: type,
-      });
-      const india = releaseDates?.results?.find(
-        (country) => country.iso_3166_1 === "IN",
-      );
-    
-      const ageRating =
-        india?.release_dates?.find((release) => release.certification)
-          ?.certification || "N/A";
-
-      setRating(ageRating);
+      const ageRating = await fetchAgeRating(movieId, type);
       if (cancelled) return;
+      setRating(ageRating);
       setMovie(data);
 
       const [creditsData, trailer] = await Promise.all([
