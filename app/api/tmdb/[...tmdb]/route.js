@@ -31,8 +31,7 @@ export async function GET(request) {
 
     const apiKey =
       process.env.TMDB_API_KEY ||
-      process.env.SERVER_API ||
-      process.env.NEXT_PUBLIC_API_KEY;
+      process.env.SERVER_API;
     if (!apiKey) {
       return errorResponse(
         "TMDB_API_KEY_MISSING",
