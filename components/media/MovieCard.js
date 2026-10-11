@@ -4,7 +4,6 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import { AnimatedShinyText } from "@/components/ui/animated-shiny-text";
 import styles from "@/components/media/MovieCard.module.css";
-import ReportButton from "@/components/common/ReportButton";
 
 /**
  * MovieCard (MediaCard)
@@ -103,19 +102,6 @@ export default function MovieCard({
 
         {/* Optional Badge (Tag / Curator Note) */}
         {resolvedBadge}
-        {!isPerson && (
-          <div className="absolute right-2 top-2 z-10 rounded-full bg-black/75 backdrop-blur">
-            <ReportButton
-              targetType="movie"
-              targetTitle={title}
-              targetContent={movie.overview || ""}
-              mediaId={id}
-              mediaType={isMovie ? "movie" : "tv"}
-              compact
-              className="grid size-8 place-items-center rounded-full text-white/70 transition hover:bg-white/15 hover:text-white"
-            />
-          </div>
-        )}
       </div>
 
       {/* TITLE */}

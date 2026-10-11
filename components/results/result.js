@@ -268,22 +268,6 @@ const SeriesR = (props) => {
             <h1 className="mt-1 break-words text-2xl font-bold leading-tight sm:text-4xl lg:text-5xl">
               {title}
             </h1>
-            <div className="mt-2 flex flex-wrap gap-2">
-              <ReportButton
-                targetType="movie"
-                targetTitle={title || "Movie or series"}
-                targetContent={movie?.overview || ""}
-                mediaId={movie?.id}
-                mediaType={isTv ? "tv" : "movie"}
-              />
-              <ReportButton
-                targetType="movie_info"
-                targetTitle={title || "Movie or series information"}
-                targetContent={movie?.overview || ""}
-                mediaId={movie?.id}
-                mediaType={isTv ? "tv" : "movie"}
-              />
-            </div>
 
             <div className="mt-3 grid grid-cols-2 gap-x-6 gap-y-3 sm:mt-5 sm:grid-cols-[repeat(4,auto)] sm:justify-start sm:gap-x-10">
               <Meta label={leadLabel}>
