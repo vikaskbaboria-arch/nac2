@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { getCountryNames, getLanguageName } from "@/lib/localeNames";
-import MovieCard from "../MovieCard";
+import MovieCard from "@/components/media/MovieCard";
 import { COUNTRIES } from "@/lib/countries";
 import Filters from "../helpers/Filters";
 import { fetchMovies } from "@/lib/masterfetch";

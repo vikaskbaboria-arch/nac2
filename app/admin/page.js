@@ -20,6 +20,7 @@ import {
   AlertCircle,
   Tag,
   Eye,
+  Flag,
 } from "lucide-react"
 import { AnimatedShinyText } from "@/components/ui/animated-shiny-text"
 import { AdminRowsSkeleton, SkeletonBlock } from "@/components/skeletons/HomeSectionSkeletons"
@@ -478,6 +479,13 @@ export default function AdminPage() {
           </div>
 
           <div className="flex items-center gap-2">
+            <Link
+              href="/admin/analytic/reports"
+              className="px-3 py-1.5 rounded-xl text-xs font-medium text-rose-200 hover:text-rose-100 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 flex items-center gap-1.5 transition"
+            >
+              <Flag size={14} />
+              <span>Reports</span>
+            </Link>
             <Link
               href="/"
               target="_blank"

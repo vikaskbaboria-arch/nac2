@@ -1,7 +1,7 @@
 "use client"
 import { useState, useRef, useEffect } from "react"
 import { useSession } from "next-auth/react"
-import { VERDICTS } from "./Verdict"
+import { VERDICTS } from "@/components/reviews/Verdict"
 
 const MAX_LEN = 1000
 

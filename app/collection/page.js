@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation"
 import { useSession } from "next-auth/react"
 import Link from "next/link"
 import { AnimatedShinyText } from "@/components/ui/animated-shiny-text"
-import { Footer } from "@/components/footer"
+import { Footer } from "@/components/layout/footer"
 
 export default function CollectionPage() {
   const [items, setItems] = useState([])

@@ -1,6 +1,6 @@
 "use client"
 import React, { useEffect, useState } from "react"
-import MovieCard from "@/components/MovieCard"
+import MovieCard from "@/components/media/MovieCard"
 import { fetchMovies } from "@/lib/masterfetch"
 import { useRouter } from "next/navigation"
 import { ProviderRowSkeleton } from "@/components/skeletons/HomeSectionSkeletons"

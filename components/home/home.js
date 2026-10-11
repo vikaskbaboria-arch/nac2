@@ -1,7 +1,7 @@
 "use client"
 import React, { useEffect, useState, useRef } from 'react'
 import { fetchMovies } from '@/lib/masterfetch'
-import RetroTv from '@/components/RetroTv'
+import RetroTv from '@/components/home/RetroTv'
 
 import { useRouter } from 'next/navigation'
 import { HeroCarouselSkeleton } from '@/components/skeletons/HomeSectionSkeletons'

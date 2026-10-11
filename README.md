@@ -146,39 +146,45 @@ Depending on the feature:
 
 # 📁 Project Structure
 
-A simplified structure of NAC 2:
+Components are grouped by feature so related UI is easier to find. Movie and
+series detail result components live together in `components/results/`.
 
 ```text
 nac2/
 │
 ├── app/
-│   ├── api/
-│   │   └── tmdb/
-│   │
+│   ├── api/                 # API route handlers
+│   ├── admin/analytic/reports/ # Admin report moderation queue
 │   ├── explore/
-│   │   ├── country/
-│   │   └── ...
-│   │
-│   ├── movie/
-│   │   └── [moviename]/
-│   │
+│   ├── movie/               # Movie detail routes
+│   ├── series/              # Series detail routes
 │   ├── search/
-│   │
 │   ├── page.js
 │   └── layout.js
 │
 ├── components/
-│   ├── ui/
-│   └── ...
+│   ├── collections/         # Collection UI and actions
+│   ├── common/              # Shared/general components
+│   ├── explore/              # Country, language, and discovery views
+│   ├── helpers/              # Component-specific helpers
+│   ├── home/                 # Homepage sections and provider rows
+│   ├── layout/               # Navigation, footer, and app wrappers
+│   ├── media/                # Movie/series cards and media details
+│   ├── messaging/            # Chat and message UI
+│   ├── profile/              # Profile and profile lists
+│   ├── results/              # Movie and series detail result views
+│   ├── reports/              # Reports submitted by the signed-in user
+│   ├── reviews/              # Review cards, forms, and sections
+│   ├── search/               # Search view and filters
+│   ├── skeletons/            # Loading placeholders
+│   ├── space/                # Community space components
+│   └── ui/                   # Reusable visual primitives
 │
+├── fetch/                    # Data fetching functions
 ├── lib/
-│   ├── masterfetch.js
-│   ├── localeNames.js
-│   └── ...
-│
+├── models/                   # Mongoose models
+├── db/                       # Database connection
 ├── public/
-│
-├── styles/
 │
 ├── package.json
 └── README.md

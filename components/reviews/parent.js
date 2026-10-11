@@ -1,7 +1,7 @@
 "use client"
 import { useState } from "react"
-import Reviewdata from "./Reviewdata"
-import ReviewForm from "./ReviewForm"
+import Reviewdata from "@/components/reviews/Reviewdata"
+import ReviewForm from "@/components/reviews/ReviewForm"
 
 export default function ReviewsSection({ movieId }) {
   const [refreshKey, setRefreshKey] = useState(0)

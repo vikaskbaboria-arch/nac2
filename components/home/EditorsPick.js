@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react"
 import { fetchMovies } from "@/lib/masterfetch"
 import { AnimatedShinyText } from "@/components/ui/animated-shiny-text"
-import MovieCard from "./MovieCard"
+import MovieCard from "@/components/media/MovieCard"
 import { useRouter } from "next/navigation"
 import { useSession } from "next-auth/react"
 import Link from "next/link"

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import Watchcomp from "./watchcomp";
+import Watchcomp from "@/components/profile/watchcomp";
 import { WatchlistGridSkeleton } from "@/components/skeletons/HomeSectionSkeletons";
 
 const Userwatchlist = () => {

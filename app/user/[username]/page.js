@@ -4,7 +4,7 @@ import React from 'react'
 import User from '@/models/user'
 import connectDB from '@/db'
 
-import MessageButton from '@/components/MessageButton'
+import MessageButton from '@/components/messaging/MessageButton'
 
 const Usern = async ({params}) => {
      await connectDB();

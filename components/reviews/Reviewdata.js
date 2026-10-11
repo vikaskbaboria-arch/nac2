@@ -12,7 +12,8 @@ import {
   MoreHorizontal,
 } from "lucide-react"
 import { ReviewListSkeleton } from "@/components/skeletons/HomeSectionSkeletons"
-import { verdictOf } from "./Verdict.js"
+import { verdictOf } from "@/components/reviews/Verdict.js"
+import ReportButton from "@/components/common/ReportButton"
 
 /* ================= helpers ================= */
 const SORTS = [
@@ -133,7 +134,7 @@ function Avatar({ user }) {
   )
 }
 
-function ReviewItem({ rv, isOwner, showSpoilers, onOpenProfile, onAskDelete }) {
+function ReviewItem({ rv, isOwner, showSpoilers, movieId, onOpenProfile, onAskDelete }) {
   const [open, setOpen] = useState(false)
   const [menu, setMenu] = useState(false)
   const [revealed, setRevealed] = useState(false)
@@ -236,6 +237,16 @@ function ReviewItem({ rv, isOwner, showSpoilers, onOpenProfile, onAskDelete }) {
             {compact(rv.commentsCount ?? rv.comments?.length ?? 0)}
           </span>
         </button>
+
+        <ReportButton
+          targetType="review"
+          targetId={rv._id}
+          targetTitle={rv.movieTitle || "Movie review"}
+          targetContent={text}
+          mediaId={movieId}
+          mediaType="movie"
+          compact
+        />
 
         <div ref={menuRef} className="relative ml-auto">
           <button
@@ -383,6 +394,7 @@ export default function Reviewdata({ movieId, refreshKey }) {
                 rv={rv}
                 isOwner={!!currentUserId && rv.user?._id === currentUserId}
                 showSpoilers={showSpoilers}
+                movieId={movieId}
                 onOpenProfile={() => router.push(`/user/${rv.user?.username}`)}
                 onAskDelete={() => setPendingDelete(rv._id)}
               />
