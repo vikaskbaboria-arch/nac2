@@ -196,6 +196,7 @@ export default function SpaceFeedItem({ space, onCommentClick }) {
           targetId={_id}
           targetTitle={title || `${movieTitle} ${spaceType}`}
           targetContent={content || title || ""}
+          ownerId={postedBy?._id ?? postedBy}
           mediaId={movieDbId}
           mediaType={mediaType}
           compact

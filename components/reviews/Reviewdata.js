@@ -243,6 +243,7 @@ function ReviewItem({ rv, isOwner, showSpoilers, movieId, onOpenProfile, onAskDe
           targetId={rv._id}
           targetTitle={rv.movieTitle || "Movie review"}
           targetContent={text}
+          ownerId={rv.user?._id}
           mediaId={movieId}
           mediaType="movie"
           compact

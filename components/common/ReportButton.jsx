@@ -21,6 +21,7 @@ export default function ReportButton({
   targetId,
   targetTitle,
   targetContent = "",
+  ownerId,
   mediaId,
   mediaType,
   providerId,
@@ -35,6 +36,10 @@ export default function ReportButton({
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
   const [failed, setFailed] = useState(false);
+  const isOwner =
+    ownerId != null &&
+    session?.user?.id != null &&
+    String(ownerId) === String(session.user.id);
 
   const close = () => {
     setOpen(false);
@@ -80,9 +85,11 @@ export default function ReportButton({
     }
   }
 
+  if (isOwner) return null;
+
   return (
     <>
-      <button
+      <button 
         type="button"
         onClick={(event) => {
           event.stopPropagation();
