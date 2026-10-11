@@ -34,7 +34,7 @@ export default function RootLayout({ children }) {
         </Sessionwrapper>
      </div>
         <div className="mt-6"><Footer/></div>
-           
+           <Analytics/>
       </body>
     </html>
   );
