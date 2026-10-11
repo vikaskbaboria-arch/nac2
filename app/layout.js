@@ -35,6 +35,7 @@ export default function RootLayout({ children }) {
      </div>
         <div className="mt-6"><Footer/></div>
            
+        <Analytics />
       </body>
     </html>
   );
