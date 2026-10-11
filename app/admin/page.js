@@ -344,7 +344,7 @@ export default function AdminPage() {
   // LOADING STATE
   if (status === "loading" || checkingAuth) {
     return (
-      <div className="blackgreengrad min-h-screen flex items-center justify-center text-white">
+      <div className="bg-black min-h-screen flex items-center justify-center text-white">
         <div className="flex flex-col items-center gap-4">
           <div className="w-12 h-12 rounded-full border-2 border-purple-500 border-t-transparent animate-spin" />
           <p className="text-sm font-medium text-slate-400">Verifying Admin Clearance...</p>

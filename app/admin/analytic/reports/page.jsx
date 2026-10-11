@@ -99,7 +99,7 @@ export default function AdminReportsPage() {
   const pendingCount = reports.filter((report) => report.status === "pending").length;
 
   return (
-    <main className="blackgreengrad min-h-screen px-4 pb-16 pt-24 text-white sm:px-8 lg:px-12">
+    <main className="bg-black min-h-screen px-4 pb-16 pt-24 text-white sm:px-8 lg:px-12">
       <div className="mx-auto max-w-5xl">
         <header className="mb-8 flex flex-wrap items-center justify-between gap-4">
           <div>
