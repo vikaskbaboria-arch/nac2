@@ -1,7 +1,7 @@
 
 import React from 'react'
-import Chats from '@/components/chats'
-import Starfield from '@/components/starfield'
+import Chats from '@/components/messaging/chats'
+import Starfield from '@/components/layout/starfield'
 
 
 

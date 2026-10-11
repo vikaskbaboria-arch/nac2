@@ -1,5 +1,5 @@
 import React from 'react'
-import MessagePage from '@/components/messagepage'
+import MessagePage from '@/components/messaging/messagepage'
 const page = async({params}) => {
     const {conversationId}= await params;
   return (

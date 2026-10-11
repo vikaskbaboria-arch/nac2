@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { Play, MessageCircle, Share2, ExternalLink, Heart, Film } from "lucide-react";
+import ReportButton from "@/components/common/ReportButton";
 
 function formatTimeAgo(dateString) {
   if (!dateString) return "Recently";
@@ -189,6 +190,16 @@ export default function SpaceFeedItem({ space, onCommentClick }) {
             </div>
           )}
         </div>
+
+        <ReportButton
+          targetType="space"
+          targetId={_id}
+          targetTitle={title || `${movieTitle} ${spaceType}`}
+          targetContent={content || title || ""}
+          mediaId={movieDbId}
+          mediaType={mediaType}
+          compact
+        />
 
         {/* Circular Comment / Discussion Button (matches reference) */}
         <button

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Eye } from "lucide-react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
-import CollectionButton from "./CollectionButton";
+import CollectionButton from "@/components/collections/CollectionButton";
 
 const MovieStatusActions = ({ movie }) => {
   const { data: session, status } = useSession();

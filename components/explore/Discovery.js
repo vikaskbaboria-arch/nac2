@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { AnimatedShinyText } from "@/components/ui/animated-shiny-text";
-import MovieCard from "@/components/MovieCard";
+import MovieCard from "@/components/media/MovieCard";
 import Filters from "@/components/helpers/Filters";
 import { MediaListSkeleton } from "@/components/skeletons/HomeSectionSkeletons";
 import { fetchMovies } from "@/lib/masterfetch";

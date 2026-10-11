@@ -1,4 +1,4 @@
-import PersonFilmography from "@/components/PersonFilmography";
+import PersonFilmography from "@/components/media/PersonFilmography";
 
 const PersonPage = async ({ params }) => {
   const { personId } = await params;

@@ -1,13 +1,14 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import Rating from "./rating";
-import Watchlist from "./watchlist";
-import ReviewsSection from "./parent";
+import Rating from "@/components/media/rating";
+import Watchlist from "@/components/results/watchlist";
+import ReviewsSection from "@/components/reviews/parent";
 import { fetchAgeRating, fetchMovies } from "@/lib/masterfetch";
 import { fetchCredit } from "@/fetch/credit";
 import { getTrailerUrl } from "@/lib/gettrailer";
-import SeriesSkeleton from "./SeriesSkeleton";
+import SeriesSkeleton from "@/components/results/SeriesSkeleton";
+import ReportButton from "@/components/common/ReportButton";
 const SeriesR = (movies) => {
   const castRef = useRef(null);
 
@@ -128,6 +129,22 @@ if (loading) {
           <h1 className="break-words text-2xl font-extrabold sm:text-3xl lg:text-4xl">
             {movie?.name}
           </h1>
+          <div className="flex flex-wrap justify-center gap-2 md:justify-start">
+            <ReportButton
+              targetType="movie"
+              targetTitle={movie?.name || "Series"}
+              targetContent={movie?.overview || ""}
+              mediaId={movie?.id}
+              mediaType="tv"
+            />
+            <ReportButton
+              targetType="movie_info"
+              targetTitle={movie?.name || "Series information"}
+              targetContent={movie?.overview || ""}
+              mediaId={movie?.id}
+              mediaType="tv"
+            />
+          </div>
 
           <div className="flex flex-wrap justify-center gap-2 md:justify-start">
             <span className="text-white/50 font-bold">Created by:</span>
@@ -198,7 +215,16 @@ w-full
                     alt={p.provider_name}
                     className="w-10 h-10 rounded-md"
                   />
-                  <span>{p.provider_name}</span>
+                  <span className="min-w-0 flex-1 truncate">{p.provider_name}</span>
+                  <ReportButton
+                    targetType="provider"
+                    targetTitle={`${movie?.name || "Series"} — ${p.provider_name}`}
+                    mediaId={movie?.id}
+                    mediaType="tv"
+                    providerId={p.provider_id}
+                    providerName={p.provider_name}
+                    compact
+                  />
                 </div>
               ))}
             </div>

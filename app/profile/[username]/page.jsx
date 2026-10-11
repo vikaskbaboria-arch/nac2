@@ -3,10 +3,10 @@
 import React, { useState } from "react";
 import { useParams } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
-import Userwatchlist from "@/components/userwatchlist";
-import {ShowRevonProflie} from "@/components/showrevonprofile";
-import MyInterested from "@/components/myinterested";
-import ProfileCollections from "@/components/ProfileCollections";
+import Userwatchlist from "@/components/profile/userwatchlist";
+import {ShowRevonProflie} from "@/components/reviews/showrevonprofile";
+import MyInterested from "@/components/profile/myinterested";
+import ProfileCollections from "@/components/profile/ProfileCollections";
 // TODO: replace with real counts once the API/data is wired up.
 const DUMMY_STATS = {
   reviews: 12,

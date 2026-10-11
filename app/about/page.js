@@ -1,5 +1,5 @@
 import React from 'react'
-import About from '@/components/About'
+import About from '@/components/common/About'
 
 const about = () => {
   return (

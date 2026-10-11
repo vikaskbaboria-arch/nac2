@@ -1,11 +1,11 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import SearchFilters from "./SearchFilters";
+import SearchFilters from "@/components/search/SearchFilters";
 import { fetchMovies } from "@/lib/masterfetch";
 import { AnimatedShinyText } from "@/components/ui/animated-shiny-text";
-import MovieCard from "./MovieCard";
+import MovieCard from "@/components/media/MovieCard";
 import { useRouter, useSearchParams } from "next/navigation";
-import SearchTips from "@/components/searchTips";
+import SearchTips from "@/components/search/searchTips";
 import { SearchGridSkeleton } from "@/components/skeletons/HomeSectionSkeletons";
 
 

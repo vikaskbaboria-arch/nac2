@@ -1,7 +1,7 @@
 "use client"
 import React, { useEffect, useState } from "react"
 import { fetchMovies } from "@/lib/masterfetch"
-import MovieCard from "./MovieCard"
+import MovieCard from "@/components/media/MovieCard"
 import { AnimatedShinyText } from "@/components/ui/animated-shiny-text"
 import { useRouter } from "next/navigation"
 import { TrendingSkeleton } from "@/components/skeletons/HomeSectionSkeletons"

@@ -1,5 +1,5 @@
 "use client"
-import DontMissRow from "@/components/dontmissrow"
+import DontMissRow from "@/components/home/dontmissrow"
 
 const DontMissOnPrimeVideo = () => (
   <DontMissRow

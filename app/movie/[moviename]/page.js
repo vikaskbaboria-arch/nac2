@@ -1,4 +1,4 @@
-import SeriesR from "@/components/result";
+import SeriesR from "@/components/results/result";
 import { fetchProviders } from "@/fetch/providers";
 
 const SearchPage = async ({ params, searchParams}) => {

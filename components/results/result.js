@@ -9,16 +9,17 @@ import {
   Info,
   X,
 } from "lucide-react";
-import Watchlist from "./watchlist";
-import InterestedButton from "./interestedbutton";
-import ReviewsSection from "./parent";
+import Watchlist from "@/components/results/watchlist";
+import InterestedButton from "@/components/results/interestedbutton";
+import ReviewsSection from "@/components/reviews/parent";
 import { fetchAgeRating, fetchMovies } from "@/lib/masterfetch";
 import { fetchCredit } from "@/fetch/credit";
 import { getTrailerUrl } from "@/lib/gettrailer";
 import { getCountryNames, getLanguageName } from "@/lib/localeNames";
-import SeriesSkeleton from "./SeriesSkeleton";
+import SeriesSkeleton from "@/components/results/SeriesSkeleton";
 import Link from "next/link";
-import CollectionButton from "./CollectionButton";
+import CollectionButton from "@/components/collections/CollectionButton";
+import ReportButton from "@/components/common/ReportButton";
 
 /* ---------- small helpers ---------- */
 const formatRuntime = (mins) => {
@@ -267,6 +268,22 @@ const SeriesR = (props) => {
             <h1 className="mt-1 break-words text-2xl font-bold leading-tight sm:text-4xl lg:text-5xl">
               {title}
             </h1>
+            <div className="mt-2 flex flex-wrap gap-2">
+              <ReportButton
+                targetType="movie"
+                targetTitle={title || "Movie or series"}
+                targetContent={movie?.overview || ""}
+                mediaId={movie?.id}
+                mediaType={isTv ? "tv" : "movie"}
+              />
+              <ReportButton
+                targetType="movie_info"
+                targetTitle={title || "Movie or series information"}
+                targetContent={movie?.overview || ""}
+                mediaId={movie?.id}
+                mediaType={isTv ? "tv" : "movie"}
+              />
+            </div>
 
             <div className="mt-3 grid grid-cols-2 gap-x-6 gap-y-3 sm:mt-5 sm:grid-cols-[repeat(4,auto)] sm:justify-start sm:gap-x-10">
               <Meta label={leadLabel}>
@@ -430,12 +447,15 @@ const SeriesR = (props) => {
               {providersList.length > 0 ? (
                 <ul className="divide-y divide-white/5">
                   {providersList.map((p) => (
-                    <li key={`${p.provider_id}-${p.kind}`}>
+                    <li
+                      key={`${p.provider_id}-${p.kind}`}
+                      className="flex items-center gap-1 pr-2"
+                    >
                       <a
                         href={regionObj?.link || "#"}
                         target="_blank"
                         rel="noreferrer"
-                        className="flex items-center gap-3 px-4 py-3 transition hover:bg-white/5"
+                        className="flex min-w-0 flex-1 items-center gap-3 px-4 py-3 transition hover:bg-white/5"
                       >
                         <img
                           src={`https://image.tmdb.org/t/p/w92${p.logo_path}`}
@@ -450,6 +470,16 @@ const SeriesR = (props) => {
                         </div>
                         <ArrowUpRight size={16} className="text-white/60" />
                       </a>
+                      <ReportButton
+                        targetType="provider"
+                        targetTitle={`${title} — ${p.provider_name}`}
+                        targetContent={`Availability type: ${p.kind}`}
+                        mediaId={movie?.id}
+                        mediaType={isTv ? "tv" : "movie"}
+                        providerId={p.provider_id}
+                        providerName={p.provider_name}
+                        compact
+                      />
                     </li>
                   ))}
                 </ul>

@@ -1,8 +1,8 @@
 // "use client"
-import Search from "@/components/result"
+import Search from "@/components/results/result"
 import { generename } from "@/fetch/genre"
 // import { useEffect } from "react"
-import Genre from "@/components/genre"
+import Genre from "@/components/media/genre"
 const SearchPage = async ({ params }) => {
 const p=await params
 const genreno =p.genrename
