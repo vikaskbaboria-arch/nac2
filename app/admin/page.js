@@ -370,7 +370,7 @@ export default function AdminPage() {
 
   // ADMIN IS AUTHENTICATED: RENDER ADMIN DASHBOARD
   return (
-    <div className="blackgreengrad min-h-screen text-white pt-20 pb-16 px-4 sm:px-8 lg:px-12">
+    <div className="bg-black min-h-screen text-white pt-20 pb-16 px-4 sm:px-8 lg:px-12">
       {/* TOAST NOTIFICATION */}
       {notification && (
         <div
