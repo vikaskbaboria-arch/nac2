@@ -129,22 +129,6 @@ if (loading) {
           <h1 className="break-words text-2xl font-extrabold sm:text-3xl lg:text-4xl">
             {movie?.name}
           </h1>
-          <div className="flex flex-wrap justify-center gap-2 md:justify-start">
-            <ReportButton
-              targetType="movie"
-              targetTitle={movie?.name || "Series"}
-              targetContent={movie?.overview || ""}
-              mediaId={movie?.id}
-              mediaType="tv"
-            />
-            <ReportButton
-              targetType="movie_info"
-              targetTitle={movie?.name || "Series information"}
-              targetContent={movie?.overview || ""}
-              mediaId={movie?.id}
-              mediaType="tv"
-            />
-          </div>
 
           <div className="flex flex-wrap justify-center gap-2 md:justify-start">
             <span className="text-white/50 font-bold">Created by:</span>
