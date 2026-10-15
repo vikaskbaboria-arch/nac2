@@ -7,12 +7,13 @@ import { InterestedPanelSkeleton } from "@/components/skeletons/HomeSectionSkele
 
 const IMAGE_BASE = "https://image.tmdb.org/t/p/w185";
 
-export default function Rightsidepanel() {
-  const [movies, setMovies] = useState([]);
-  const [loading, setLoading] = useState(true);
+export default function Rightsidepanel({ initialMovies = null }) {
+  const [movies, setMovies] = useState(initialMovies || []);
+  const [loading, setLoading] = useState(initialMovies ? false : true);
   const router = useRouter();
 
   useEffect(() => {
+    if (initialMovies && initialMovies.length > 0) return;
     let mounted = true;
 
     async function loadMovies() {

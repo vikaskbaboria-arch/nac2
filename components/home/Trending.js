@@ -6,11 +6,13 @@ import { AnimatedShinyText } from "@/components/ui/animated-shiny-text"
 import { useRouter } from "next/navigation"
 import { TrendingSkeleton } from "@/components/skeletons/HomeSectionSkeletons"
 
-const Trending = () => {
-  const [movies, setMovies] = useState(null)
+const Trending = ({ initialMovies = null }) => {
+  const [movies, setMovies] = useState(initialMovies)
   const router = useRouter()
 
   useEffect(() => {
+    if (initialMovies && initialMovies.length > 0) return
+
     fetchMovies({
       type: "trending",
       time: "day",
@@ -21,7 +23,7 @@ const Trending = () => {
         console.error("Failed to load trending movies:", error)
         setMovies([])
       })
-  }, [])
+  }, [initialMovies])
 
   const handleClick = (m) => {
     if (m.media_type === "movie") {

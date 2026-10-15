@@ -11,12 +11,13 @@ import { ProviderRowSkeleton } from "@/components/skeletons/HomeSectionSkeletons
  * assumes { type: "provider", provider_id, watch_region, type_of }.
  * Adjust fetchParams (or the fetch call itself) to match your real API.
  */
-const DontMissRow = ({ title, accentColor, fetchParams }) => {
-  const [movies, setMovies] = useState(null)
-  const [providerLogo, setProviderLogo] = useState(null)
+const DontMissRow = ({ title, accentColor, fetchParams, initialMovies = null, initialProviderLogo = null }) => {
+  const [movies, setMovies] = useState(initialMovies)
+  const [providerLogo, setProviderLogo] = useState(initialProviderLogo)
   const router = useRouter()
 
   useEffect(() => {
+    if (initialMovies && initialMovies.length > 0) return
     fetchMovies(fetchParams)
       .then((m) => setMovies(m?.results ?? []))
       .catch((error) => {
@@ -24,9 +25,10 @@ const DontMissRow = ({ title, accentColor, fetchParams }) => {
         setMovies([])
       })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fetchParams.type, fetchParams.provider_id, fetchParams.watch_region, fetchParams.type_of])
+  }, [initialMovies, fetchParams.type, fetchParams.provider_id, fetchParams.watch_region, fetchParams.type_of])
 
   useEffect(() => {
+    if (initialProviderLogo) return
     let cancelled = false
     const mediaType = fetchParams.type_of || "movie"
     const watchRegion = fetchParams.watch_region || "IN"
@@ -45,7 +47,7 @@ const DontMissRow = ({ title, accentColor, fetchParams }) => {
     return () => {
       cancelled = true
     }
-  }, [fetchParams.provider_id, fetchParams.type_of, fetchParams.watch_region, title])
+  }, [initialProviderLogo, fetchParams.provider_id, fetchParams.type_of, fetchParams.watch_region, title])
 
   const handleClick = (m) => {
     if (m.media_type === "movie" || fetchParams.type_of === "movie") {
