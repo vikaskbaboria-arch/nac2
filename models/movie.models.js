@@ -16,6 +16,13 @@ const MovieSchema =new Schema ({
     moviePoster:{
        type:String
     },
+    backdrop:{
+        type:String
+    },
+    overview:{
+        type:String
+    }
+    ,
     movieTitle:{
       type:String
     },

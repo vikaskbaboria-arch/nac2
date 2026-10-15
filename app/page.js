@@ -1,4 +1,6 @@
 
+export const revalidate = 1800; // Revalidate every 30 minutes (ISR)
+
 import DontMissOnNetflix from "@/components/home/dontmissonnetflix";
 import DontMissOnPrimeVideo from "@/components/home/dontmissonprime";
 
@@ -15,7 +17,10 @@ import Starfield from "@/components/layout/starfield";
 import Rightsidepanel from "@/components/home/rightsidepanel";
 import TrendingonNac from "@/components/home/TrendingonNac";
 import DontMissOnHotstar from "@/components/home/dontmissonhotstar";
-export default function Home() {
+import { getHomeData } from "@/lib/getHomeData";
+
+export default async function Home() {
+  const data = await getHomeData();
 
   return (
     <>
@@ -28,18 +33,21 @@ export default function Home() {
 
 
       <div className="order-2 flex min-w-0 flex-col gap-8 lg:order-1">
-      <Trending />
-      <EditorsPick />
+      <Trending initialMovies={data.trending} />
+      <EditorsPick
+        initialMovies={data.editorsPick.movies}
+        initialIsCustom={data.editorsPick.isCustom}
+      />
       
     
-      <DontMissOnNetflix />
-      <DontMissOnPrimeVideo />
-      <DontMissOnHotstar/>
+      <DontMissOnNetflix initialMovies={data.netflix} />
+      <DontMissOnPrimeVideo initialMovies={data.prime} />
+      <DontMissOnHotstar initialMovies={data.hotstar} />
       
     </div>
 
     <div className="order-1 w-full min-w-0 lg:order-2 lg:mt-14">
-      <Rightsidepanel />
+      <Rightsidepanel initialMovies={data.mostInterested} />
     </div>
 
     

@@ -1,21 +1,39 @@
 import mongoose from "mongoose";
 
-let isConnected = false; // Track connection status
+let cached = global.mongoose;
+
+if (!cached) {
+  cached = global.mongoose = { conn: null, promise: null };
+}
 
 const connectDB = async () => {
-    if (isConnected) {
-        console.log("MongoDB is already connected");
-        return;
+  if (cached.conn) {
+    return cached.conn;
+  }
+
+  if (!cached.promise) {
+    if (!process.env.MONGODB_URI) {
+      console.warn("MONGODB_URI is not defined");
+      return null;
     }
 
-    try {
-        const connect = await mongoose.connect(`${process.env.MONGODB_URI}`);
-        isConnected = true;
-        console.log(`MongoDB connected: ${connect.connection.host}`);
-    } catch (error) {
-        console.error(error.message);
-        process.exit(1);
-    }
+    cached.promise = mongoose
+      .connect(process.env.MONGODB_URI, {
+        bufferCommands: false,
+      })
+      .then((mongooseInstance) => {
+        return mongooseInstance;
+      });
+  }
+
+  try {
+    cached.conn = await cached.promise;
+    return cached.conn;
+  } catch (error) {
+    cached.promise = null;
+    console.error("MongoDB connection error:", error.message);
+    throw error;
+  }
 };
 
 export default connectDB;

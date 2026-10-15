@@ -14,13 +14,16 @@ import { EditorsPickSkeleton } from "@/components/skeletons/HomeSectionSkeletons
  */
 const EditorsPick = ({
   fetchParams = { type: "top_rated", type_of: "movie" },
+  initialMovies = null,
+  initialIsCustom = false,
 }) => {
-  const [movies, setMovies] = useState(null)
-  const [isCustom, setIsCustom] = useState(false)
+  const [movies, setMovies] = useState(initialMovies)
+  const [isCustom, setIsCustom] = useState(initialIsCustom)
   const router = useRouter()
   const { data: session } = useSession()
 
   useEffect(() => {
+    if (initialMovies && initialMovies.length > 0) return
     let isMounted = true
 
     async function loadPicks() {
@@ -70,7 +73,7 @@ const EditorsPick = ({
     return () => {
       isMounted = false
     }
-  }, [fetchParams.type, fetchParams.type_of, fetchParams.time])
+  }, [initialMovies, fetchParams.type, fetchParams.type_of, fetchParams.time])
 
   const handleClick = (m) => {
     const id = m.movieId || m.id
