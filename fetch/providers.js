@@ -13,6 +13,7 @@ const fetchProviders = async ({ media_type = "movie", id }) => {
         : window.location.origin;
     const res = await fetch(new URL(path, baseUrl), {
       next: { revalidate: 60 * 60 },
+      
     });
 
     if (!res.ok) {

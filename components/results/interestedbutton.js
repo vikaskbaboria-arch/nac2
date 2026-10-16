@@ -80,17 +80,17 @@ export default function InterestedButton({ movieID, type, className }) {
   }
 
   return (
-    <div className="absolute flex flex-col items-end gap-1">
+    <div className="flex w-full min-w-0 flex-col items-end gap-1">
       <button
         type="button"
         onClick={handleClick}
         disabled={loading || checking || added}
         aria-pressed={added}
         className={cn(
-          "inline-flex shrink-0 items-center gap-1.5 rounded-md border px-3 py-1.5 text-xs font-medium transition-colors disabled:cursor-default",
+          "inline-flex w-full max-w-full min-w-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-md border px-3 py-1.5 text-xs font-medium transition-colors disabled:cursor-default",
           added
-            ? "border-[#10b981]/40 bg-[#10b981]/10 text-[#34d399]"
-            : "border-white/15 bg-white/5 text-white/80 hover:bg-white/10",
+            ? "border-[#10b981]/50 bg-[#10b981]/10 text-[#34d399] shadow-[0_0_8px_rgba(16,185,129,0.2)]"
+            : "border-violet-300/30 bg-white/5 text-white/80 shadow-[0_0_8px_rgba(167,139,250,0.16)] hover:border-violet-300/50 hover:bg-white/10 hover:shadow-[0_0_10px_rgba(167,139,250,0.24)]",
           className
         )}
       >

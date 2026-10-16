@@ -108,13 +108,15 @@ export default function Rightsidepanel({ initialMovies = null }) {
               key={`${m.interestedType}-${m.id}`}
               onClick={() => handleClick(m)}
               className="
-                group flex w-[min(94vw,430px)] shrink-0 gap-3 rounded-lg p-2.5 px-2 //here
-               bg-black/50
-               shadow-[0_0_20px_rgba(0,0,1,0.2)]
-               border border-white/9
+                group flex w-full max-w-[430px] shrink-0 gap-3 rounded-lg p-2.5 px-2
+               bg-[#070606]
+               shadow-[0_0_12px_rgba(167,139,250,0.12)]
+               border border-violet-300/20
                backdrop-blur-2xl
                 lg:bg-white/[0.02]
                 lg:hover:bg-white/[0.06]
+                hover:border-violet-300/40
+                hover:shadow-[0_0_16px_rgba(167,139,250,0.2)]
                 transition-all duration-300 ease-out
                 cursor-pointer
                 lg:w-full lg:rounded-xl lg:p-3
