@@ -18,14 +18,43 @@ const DontMissRow = ({ title, accentColor, fetchParams, initialMovies = null, in
 
   useEffect(() => {
     if (initialMovies && initialMovies.length > 0) return
-    fetchMovies(fetchParams)
-      .then((m) => setMovies(m?.results ?? []))
+
+    const providerId = fetchParams?.provider_id
+    const region = fetchParams?.watch_region || "IN"
+
+    Promise.allSettled([
+      fetchMovies({
+        ...fetchParams,
+        type: "provider",
+        provider_id: providerId,
+        watch_region: region,
+        type_of: "movie",
+      }),
+      fetchMovies({
+        ...fetchParams,
+        type: "provider",
+        provider_id: providerId,
+        watch_region: region,
+        type_of: "tv",
+      }),
+    ])
+      .then(([mRes, tvRes]) => {
+        const mList = (mRes.status === "fulfilled" ? mRes.value?.results || [] : [])
+          .map((m) => ({ ...m, media_type: "movie" }))
+        const tvList = (tvRes.status === "fulfilled" ? tvRes.value?.results || [] : [])
+          .map((s) => ({ ...s, media_type: "tv" }))
+
+        const topMovies = mList.slice(0, 3)
+        const topTv = tvList.slice(0, 2)
+        const combined = [...topMovies, ...topTv]
+        setMovies(combined)
+      })
       .catch((error) => {
         console.error(`Failed to load ${title}:`, error)
         setMovies([])
       })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initialMovies, fetchParams.type, fetchParams.provider_id, fetchParams.watch_region, fetchParams.type_of])
+  }, [initialMovies, fetchParams?.provider_id, fetchParams?.watch_region, title])
 
   useEffect(() => {
     if (initialProviderLogo) return

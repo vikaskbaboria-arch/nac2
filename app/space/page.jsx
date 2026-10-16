@@ -26,12 +26,7 @@ import { SpaceSkeletonCard } from "@/components/space/SpaceSkeleton";
 
 const TOPICS = [
   "All Topics",
-  "Farzi / OTT",
-  "Hollywood",
-  "Marvel / DC",
-  "Sci-Fi",
-  "Crime Thriller",
-  "Bollywood",
+
   "Anime",
 ];
 
@@ -183,7 +178,7 @@ export default function SpacePage() {
   ];
 
   return (
-    <div className="min-h-screen bg-black text-white pt-20 sm:pt-24 pb-20 selection:bg-purple-600 selection:text-white">
+    <div className="min-h-screen bg-black text-white pt-20 sm:pt-10 pb-20 selection:bg-purple-600 selection:text-white">
       {/* Toast Feedback */}
       {toastMessage && (
         <div className="fixed top-20 left-3 right-3 sm:left-auto sm:right-6 z-50 flex w-fit max-w-[calc(100vw-1.5rem)] items-center gap-2 px-4 py-2.5 rounded-2xl bg-emerald-950/90 border border-emerald-500/40 text-emerald-300 text-xs font-semibold shadow-2xl backdrop-blur-xl animate-scaleIn">
@@ -192,61 +187,63 @@ export default function SpacePage() {
         </div>
       )}
 
-      <div className="mx-auto w-full max-w-7xl px-3 sm:px-5 lg:px-8">
+      <div className="mx-auto min-h-[70vh] w-full max-w-7xl px-4 sm:px-6 lg:px-10">
         <div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-[13rem_minmax(0,1fr)] lg:gap-6 xl:gap-8">
           
           {/* ============================================================== */}
-          {/* LEFT SIDEBAR (STICKY NAVIGATION - Matches screenshot)           */}
+          {/* LEFT SIDEBAR (FIXED NAVIGATION - Matches screenshot)            */}
           {/* ============================================================== */}
-          <aside className="hidden w-full shrink-0 self-start p-2 lg:sticky lg:top-24 lg:block">
-            <nav className="space-y-1.5" aria-label="Space Sidebar Navigation">
-              {navItems.map((item) => {
-                const Icon = item.icon;
-                const isActive = activeNav === item.id;
+          <aside className="hidden w-full shrink-0 self-start p-2 lg:block">
+            <div className="lg:fixed lg:left-10 lg:top-24 lg:z-20 lg:w-48 xl:left-[calc((100vw-80rem)/2+2.5rem)]">
+              <nav className="space-y-1.5" aria-label="Space Sidebar Navigation">
+                {navItems.map((item) => {
+                  const Icon = item.icon;
+                  const isActive = activeNav === item.id;
 
-                if (item.href) {
+                  if (item.href) {
+                    return (
+                      <Link
+                        key={item.id}
+                        href={item.href}
+                        className="flex items-center gap-3.5 px-4 py-3 rounded-2xl text-sm font-medium text-zinc-400 hover:text-white hover:bg-white/5 transition-colors"
+                      >
+                        <Icon size={19} className="shrink-0" />
+                        <span>{item.label}</span>
+                      </Link>
+                    );
+                  }
+
                   return (
-                    <Link
+                    <button
                       key={item.id}
-                      href={item.href}
-                      className="flex items-center gap-3.5 px-4 py-3 rounded-2xl text-sm font-medium text-zinc-400 hover:text-white hover:bg-white/5 transition-colors"
+                      type="button"
+                      onClick={() => {
+                        setActiveNav(item.id);
+                      }}
+                      className={`w-full flex items-center gap-3.5 px-4 py-3 rounded-2xl text-sm font-medium transition-all text-left cursor-pointer ${
+                        isActive
+                          ? "bg-[#222225] text-white shadow-sm font-semibold"
+                          : "text-zinc-400 hover:text-white hover:bg-white/5"
+                      }`}
                     >
                       <Icon size={19} className="shrink-0" />
                       <span>{item.label}</span>
-                    </Link>
+                    </button>
                   );
-                }
+                })}
+              </nav>
 
-                return (
-                  <button
-                    key={item.id}
-                    type="button"
-                    onClick={() => {
-                      setActiveNav(item.id);
-                    }}
-                    className={`w-full flex items-center gap-3.5 px-4 py-3 rounded-2xl text-sm font-medium transition-all text-left cursor-pointer ${
-                      isActive
-                        ? "bg-[#222225] text-white shadow-sm font-semibold"
-                        : "text-zinc-400 hover:text-white hover:bg-white/5"
-                    }`}
-                  >
-                    <Icon size={19} className="shrink-0" />
-                    <span>{item.label}</span>
-                  </button>
-                );
-              })}
-            </nav>
-
-            {/* CREATE POST ACTION BUTTON */}
-            <div className="mt-8 px-1">
-              <button
-                type="button"
-                onClick={() => setIsModalOpen(true)}
-                className="w-full py-3 px-4 rounded-2xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-lg shadow-purple-950/50 hover:scale-[1.02] active:scale-98 transition cursor-pointer"
-              >
-                <Plus size={16} />
-                <span>Create Dispatch</span>
-              </button>
+              {/* CREATE POST ACTION BUTTON */}
+              <div className="mt-8 px-1">
+                <button
+                  type="button"
+                  onClick={() => setIsModalOpen(true)}
+                  className="w-full py-3 px-4 rounded-2xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-lg shadow-purple-950/50 hover:scale-[1.02] active:scale-98 transition cursor-pointer"
+                >
+                  <Plus size={16} />
+                  <span>Create Dispatch</span>
+                </button>
+              </div>
             </div>
           </aside>
       
@@ -255,6 +252,14 @@ export default function SpacePage() {
           {/* CENTER COLUMN (MAIN STREAM FEED - Matches screenshot)          */}
           {/* ============================================================== */}
           <main className="mx-auto w-full min-w-0 lg:max-w-2xl lg:justify-self-center">
+            <header className="mb-8">
+              <p className="text-xs font-semibold uppercase tracking-widest text-slate-400">
+                Explore
+              </p>
+              <h1 className="mt-2 text-3xl font-extrabold text-white sm:text-4xl">
+                Space Hub
+              </h1>
+            </header>
             
             {/* MOBILE NAVIGATION TABS (Visible only on small screens) */}
             <div className="mb-4 flex min-w-0 items-center gap-2 lg:hidden">
@@ -304,7 +309,7 @@ export default function SpacePage() {
             <div className="relative mb-5 flex min-w-0 items-center justify-between gap-3 sm:mb-6">
               {/* TOPICS BUTTON */}
               {activeNav !== "collections" && <div className="relative">
-                <button
+                {/* <button
                   type="button"
                   onClick={() => setTopicsOpen((prev) => !prev)}
                   className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border text-xs font-medium transition cursor-pointer ${
@@ -318,7 +323,7 @@ export default function SpacePage() {
                   <span className="w-4 h-4 rounded-full bg-white/10 text-[10px] flex items-center justify-center font-bold text-zinc-300">
                     5
                   </span>
-                </button>
+                </button> */}
 
                 {/* Topics Dropdown Pill Menu */}
                 {topicsOpen && (

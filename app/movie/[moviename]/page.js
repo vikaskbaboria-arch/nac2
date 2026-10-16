@@ -11,6 +11,7 @@ const SearchPage = async ({ params, searchParams}) => {
  const providers = await fetchProviders({
     media_type: type,
     id: moviename,})
+     console.log(providers)
 
   return (
     <>

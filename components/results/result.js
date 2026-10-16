@@ -61,7 +61,7 @@ const useIsDesktop = () => {
   return isDesktop;
 };
 
-const NewSeasonCard = ({ movieId, nextAir, onShare, className = "" }) => (
+const NewSeasonCard = ({ nextAir, onShare, className = "" }) => (
   <div
     className={`flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/[0.06] px-4 py-3 backdrop-blur-md ${className}`}
   >
@@ -79,7 +79,6 @@ const NewSeasonCard = ({ movieId, nextAir, onShare, className = "" }) => (
         <Share2 size={12} /> Share
       </button>
     </div>
-    <InterestedButton movieID={movieId} type="series" />
   </div>
 );
 
@@ -100,8 +99,81 @@ const ActionButtons = ({ movie }) => (
         <Watchlist movieId={movie.id} />
       </div>
     </div>
+    <InterestedButton
+      movieID={movie.id}
+      type={movie.mediaType === "tv" ? "series" : "movie"}
+      className="w-full justify-center"
+    />
   </div>
 );
+
+const WatchOnlineCard = ({
+  providersList,
+  regionLink,
+  title,
+  movieId,
+  mediaType,
+  className = "",
+}) => (
+  <aside
+    className={`h-fit rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.07] to-white/[0.02] ${className}`}
+  >
+    <div className="flex items-center justify-between px-4 pb-3 pt-4">
+      <h3 className="text-sm font-semibold">Watch Online</h3>
+      <button className="text-xs text-white/40 transition hover:text-white/70">
+        Report?
+      </button>
+    </div>
+
+    <div className="border-t border-white/10">
+      {providersList.length > 0 ? (
+        <ul className="divide-y divide-white/5">
+          {providersList.map((provider) => (
+            <li
+              key={`${provider.provider_id}-${provider.kind}`}
+              className="flex items-center gap-1 pr-2"
+            >
+              <a
+                href={regionLink || "#"}
+                target="_blank"
+                rel="noreferrer"
+                className="flex min-w-0 flex-1 items-center gap-3 px-4 py-3 transition hover:bg-white/5"
+              >
+                <img
+                  src={`https://image.tmdb.org/t/p/w92${provider.logo_path}`}
+                  alt=""
+                  className="h-10 w-10 rounded-lg"
+                />
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-semibold">
+                    {provider.provider_name}
+                  </p>
+                  <p className="text-xs text-white/50">{provider.kind}</p>
+                </div>
+                <ArrowUpRight size={16} className="text-white/60" />
+              </a>
+              <ReportButton
+                targetType="provider"
+                targetTitle={`${title} — ${provider.provider_name}`}
+                targetContent={`Availability type: ${provider.kind}`}
+                mediaId={movieId}
+                mediaType={mediaType}
+                providerId={provider.provider_id}
+                providerName={provider.provider_name}
+                compact
+              />
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p className="px-4 py-4 text-sm text-white/50">
+          Not available in your region
+        </p>
+      )}
+    </div>
+  </aside>
+);
+
 const SeriesR = (props) => {
   const { movie: movieId, type, streamer } = props;
   const isTv = type === "tv";
@@ -155,8 +227,10 @@ const SeriesR = (props) => {
     };
   }, [showTrailer]);
 
+  console.log(streamer)
   /* ================= PROVIDERS ================= */
   const providerResults = streamer?.results || {};
+  console.log(providerResults)
   const regionObj =
     providerResults?.IN ||
     providerResults?.US ||
@@ -178,9 +252,17 @@ const SeriesR = (props) => {
   const poster = movie?.poster_path
     ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
     : "/placeholder.png";
-  const cover = movie?.backdrop_path
-    ? `https://image.tmdb.org/t/p/w1280${movie.backdrop_path}`
+  const backdropPath = movie?.backdrop_path;
+  const cover = backdropPath
+    ? `https://image.tmdb.org/t/p/w1280${backdropPath}`
     : "";
+  const coverSrcSet = backdropPath
+    ? [
+        `https://image.tmdb.org/t/p/w300${backdropPath} 300w`,
+        `https://image.tmdb.org/t/p/w780${backdropPath} 780w`,
+        `https://image.tmdb.org/t/p/w1280${backdropPath} 1280w`,
+      ].join(", ")
+    : undefined;
 
   const title = isTv ? movie?.name : movie?.title;
   const year = (movie?.release_date || movie?.first_air_date || "").slice(0, 4);
@@ -214,6 +296,8 @@ const SeriesR = (props) => {
         {cover && (
           <img
             src={cover}
+            srcSet={coverSrcSet}
+            sizes="100vw"
             alt=""
             className="absolute inset-0 h-full w-full object-cover object-top opacity-100  "
           />
@@ -239,7 +323,6 @@ const SeriesR = (props) => {
         {isTv && isDesktop && (
           <div className="absolute right-6 top-6 z-10 w-[320px] xl:right-16">
             <NewSeasonCard
-              movieId={movie?.id}
               nextAir={nextAir}
               onShare={handleShare}
             />
@@ -315,6 +398,7 @@ const SeriesR = (props) => {
                   : "N/A"}
               </Meta>
 
+
               {/* Age rating: pass movie.certification / content rating here if you have it */}
               <Meta label="Age Rating">{rating || "N/A"}</Meta>
             </div>
@@ -342,7 +426,6 @@ const SeriesR = (props) => {
         {isTv && !isDesktop && (
           <div className="mt-4">
             <NewSeasonCard
-              movieId={movie?.id}
               nextAir={nextAir}
               onShare={handleShare}
             />
@@ -382,6 +465,15 @@ const SeriesR = (props) => {
               </div>
             )}
 
+            <WatchOnlineCard
+              providersList={providersList}
+              regionLink={regionObj?.link}
+              title={title}
+              movieId={movie?.id}
+              mediaType={isTv ? "tv" : "movie"}
+              className="mt-8 lg:hidden"
+            />
+
             {/* ---- Cast ---- */}
             <div className="mt-10">
               <h2 className="mb-4 text-lg font-semibold sm:text-xl">Cast</h2>
@@ -419,61 +511,14 @@ const SeriesR = (props) => {
           </div>
 
           {/* ---- Watch Online card ---- */}
-          <aside className="h-fit rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.07] to-white/[0.02] lg:sticky lg:top-6">
-            <div className="flex items-center justify-between px-4 pb-3 pt-4">
-              <h3 className="text-sm font-semibold">Watch Online</h3>
-              <button className="text-xs text-white/40 transition hover:text-white/70">
-                Report?
-              </button>
-            </div>
-
-            <div className="border-t border-white/10">
-              {providersList.length > 0 ? (
-                <ul className="divide-y divide-white/5">
-                  {providersList.map((p) => (
-                    <li
-                      key={`${p.provider_id}-${p.kind}`}
-                      className="flex items-center gap-1 pr-2"
-                    >
-                      <a
-                        href={regionObj?.link || "#"}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="flex min-w-0 flex-1 items-center gap-3 px-4 py-3 transition hover:bg-white/5"
-                      >
-                        <img
-                          src={`https://image.tmdb.org/t/p/w92${p.logo_path}`}
-                          alt=""
-                          className="h-10 w-10 rounded-lg"
-                        />
-                        <div className="min-w-0 flex-1">
-                          <p className="truncate text-sm font-semibold">
-                            {p.provider_name}
-                          </p>
-                          <p className="text-xs text-white/50">{p.kind}</p>
-                        </div>
-                        <ArrowUpRight size={16} className="text-white/60" />
-                      </a>
-                      <ReportButton
-                        targetType="provider"
-                        targetTitle={`${title} — ${p.provider_name}`}
-                        targetContent={`Availability type: ${p.kind}`}
-                        mediaId={movie?.id}
-                        mediaType={isTv ? "tv" : "movie"}
-                        providerId={p.provider_id}
-                        providerName={p.provider_name}
-                        compact
-                      />
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="px-4 py-4 text-sm text-white/50">
-                  Not available in your region
-                </p>
-              )}
-            </div>
-          </aside>
+          <WatchOnlineCard
+            providersList={providersList}
+            regionLink={regionObj?.link}
+            title={title}
+            movieId={movie?.id}
+            mediaType={isTv ? "tv" : "movie"}
+            className="hidden lg:sticky lg:top-6 lg:block"
+          />
         </div>
       </div>
 
