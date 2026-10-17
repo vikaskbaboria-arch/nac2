@@ -348,7 +348,7 @@ const SeriesR = (props) => {
               <Info size={13} className="text-white/40" />
             </p>
 
-            <h1 className="mt-1 break-words text-2xl font-bold leading-tight sm:text-4xl lg:text-5xl">
+            <h1 className="mt-1a break-words text-2xl font-bold leading-tight sm:text-4xl lg:text-5xl">
               {title}
             </h1>
 
