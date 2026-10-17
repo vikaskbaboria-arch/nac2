@@ -5,6 +5,7 @@ import EditorsPick from "@/models/editorsPick";
 export async function GET() {
   try {
     await connectDB();
+    
     const picks = await EditorsPick.find({}).sort({ order: 1, createdAt: -1 }).lean();
     return NextResponse.json({ picks });
   } catch (error) {

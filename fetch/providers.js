@@ -1,7 +1,7 @@
 const fetchProviders = async ({ media_type = "movie", id }) => {
   if (!id) {
     return null;
-  }
+  } 
 
   try {
     const path = `/api/tmdb/${encodeURIComponent(media_type)}/${encodeURIComponent(id)}/watch/providers`;
@@ -12,10 +12,10 @@ const fetchProviders = async ({ media_type = "movie", id }) => {
           "http://localhost:3000"
         : window.location.origin;
     const res = await fetch(new URL(path, baseUrl), {
-      next: { revalidate: 60 * 60 },
+      
       
     });
-
+      console.log(res)
     if (!res.ok) {
       console.error(
         `TMDB providers proxy error ${res.status} for ${media_type}/${id}`
