@@ -456,7 +456,7 @@ export default function AdminPage() {
       )}
 
       {/* TOP HEADER BAR */}
-      <div className="max-w-7xl mx-auto mb-8">
+      <div className="max-w-7xl mx-auto mb-6 lg:mb-8">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 rounded-2xl bg-black/60 backdrop-blur-xl border border-white/10 shadow-lg">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-purple-950/80 border border-purple-500/30 flex items-center justify-center text-purple-400">
@@ -478,7 +478,7 @@ export default function AdminPage() {
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <Link
               href="/admin/analytic/reports"
               className="px-3 py-1.5 rounded-xl text-xs font-medium text-rose-200 hover:text-rose-100 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 flex items-center gap-1.5 transition"
@@ -492,7 +492,7 @@ export default function AdminPage() {
               className="px-3 py-1.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 flex items-center gap-1.5 transition"
             >
               <Eye size={14} />
-              <span>Preview Home</span>
+              <span className="hidden sm:inline">Preview Home</span>
               <ExternalLink size={12} className="opacity-60" />
             </Link>
             <Link
@@ -501,7 +501,7 @@ export default function AdminPage() {
               className="px-3 py-1.5 rounded-xl text-xs font-medium text-amber-300 hover:text-amber-200 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/20 flex items-center gap-1.5 transition"
             >
               <Sparkles size={14} />
-              <span>View Collection</span>
+              <span className="hidden sm:inline">View Collection</span>
               <ExternalLink size={12} className="opacity-60" />
             </Link>
             <button
@@ -544,9 +544,9 @@ export default function AdminPage() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
-        {/* LEFT COLUMN: MANAGEMENT TABS (7 cols) */}
-        <div className="lg:col-span-7 flex flex-col gap-6">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
+        {/* LEFT COLUMN: MANAGEMENT TABS (7 cols) — order-2 on mobile so Search shows first */}
+        <div className="order-2 lg:order-1 lg:col-span-7 flex flex-col gap-6">
           {/* TAB BUTTONS */}
           <div className="flex p-1.5 rounded-2xl bg-black/60 border border-white/10 backdrop-blur-xl">
             <button
@@ -648,7 +648,7 @@ export default function AdminPage() {
                     <Film className="mx-auto text-slate-600 mb-2" size={28} />
                     <p className="text-sm text-slate-400 font-medium">No custom Editor&apos;s Picks added yet</p>
                     <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
-                      Search TMDB in the right panel and click &ldquo;+ Add to Editor&apos;s Pick&rdquo; to curate your top 5 films.
+                      Search TMDB above and click &ldquo;+ Add to Editor&apos;s Pick&rdquo; to curate your top 5 films.
                     </p>
                   </div>
                 ) : (
@@ -757,7 +757,7 @@ export default function AdminPage() {
                     <Sparkles className="mx-auto text-slate-600 mb-2" size={28} />
                     <p className="text-sm text-slate-400 font-medium">No movies in NAC Collection yet</p>
                     <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
-                      Search TMDB in the right panel and click &ldquo;+ Add to NAC Collection&rdquo; to add handpicked gems to the archive.
+                      Search TMDB above and click &ldquo;+ Add to NAC Collection&rdquo; to add handpicked gems to the archive.
                     </p>
                   </div>
                 ) : (
@@ -829,9 +829,9 @@ export default function AdminPage() {
           )}
         </div>
 
-        {/* RIGHT COLUMN: TMDB SEARCH & ADD PANEL (5 cols) */}
-        <div className="lg:col-span-5 flex flex-col gap-4">
-          <div className="p-5 rounded-2xl bg-black/60 backdrop-blur-xl border border-white/10 sticky top-24">
+        {/* RIGHT COLUMN: TMDB SEARCH & ADD PANEL (5 cols) — order-1 on mobile */}
+        <div className="order-1 lg:order-2 lg:col-span-5 flex flex-col gap-4">
+          <div className="p-5 rounded-2xl bg-black/60 backdrop-blur-xl border border-white/10 lg:sticky lg:top-24">
             <h3 className="text-base font-bold text-white mb-1 flex items-center gap-2">
               <Search className="text-purple-400" size={18} />
               <span>Search TMDB Library</span>
@@ -883,7 +883,7 @@ export default function AdminPage() {
             </div>
 
             {/* SEARCH RESULTS LIST */}
-            <div className="max-h-[500px] overflow-y-auto space-y-3 pr-1 scrollbar-hidden">
+            <div className="max-h-[300px] lg:max-h-[500px] overflow-y-auto space-y-3 pr-1 scrollbar-hidden">
               {searching ? (
                 <AdminRowsSkeleton count={3} label="TMDB search results" />
               ) : searchQuery && searchResults.length === 0 ? (
