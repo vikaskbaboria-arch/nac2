@@ -87,10 +87,11 @@ const NacCollection = () => {
       {loading ? (
         <div className="flex gap-4 p-3 overflow-x-auto">
           {[1, 2, 3, 4, 5].map((n) => (
-            <div
-              key={n}
-              className="shrink-0 w-[140px] sm:w-[160px] aspect-[2/3] rounded-xl bg-white/5 animate-pulse"
-            />
+            <div key={n} className="shrink-0 w-[38vw] xs:w-[30vw] sm:w-[22vw] lg:w-[160px] p-2 rounded-xl">
+              <div className="aspect-[2/3] w-full rounded-xl skeleton-shimmer border border-white/[0.08] shadow-lg shadow-black/40" />
+              <div className="mt-2.5 h-4 w-4/5 rounded-md skeleton-shimmer border border-white/[0.05]" />
+              <div className="mt-2 h-3 w-2/5 rounded-md skeleton-shimmer border border-white/[0.04]" />
+            </div>
           ))}
         </div>
       ) : items.length === 0 ? (

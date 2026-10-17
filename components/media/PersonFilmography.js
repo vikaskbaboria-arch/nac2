@@ -8,17 +8,17 @@ import { fetchPerson } from "@/fetch/person";
 function PersonSkeleton() {
   return (
     <main className="min-h-screen w-full bg-[#030000] text-white">
-      <div className="h-[28vh] min-h-[180px] bg-white/[0.04] sm:h-[36vh] lg:h-[46vh]" />
+      <div className="h-[28vh] min-h-[180px] skeleton-shimmer border-b border-white/10 sm:h-[36vh] lg:h-[46vh]" />
       <div className="mx-auto -mt-14 w-full max-w-7xl px-4 sm:-mt-20 sm:px-8 lg:-mt-28 lg:px-12">
         <div className="grid grid-cols-[6rem_minmax(0,1fr)] items-end gap-4 sm:grid-cols-[10rem_minmax(0,1fr)] sm:gap-6 lg:grid-cols-[13rem_minmax(0,1fr)] lg:gap-8">
-          <div className="aspect-[2/3] animate-pulse rounded-xl bg-white/10" />
+          <div className="aspect-[2/3] skeleton-shimmer rounded-2xl border border-white/15 shadow-2xl" />
           <div className="space-y-3 pb-1">
-            <div className="h-3 w-24 animate-pulse rounded bg-white/10" />
-            <div className="h-8 w-2/3 animate-pulse rounded bg-white/10 sm:h-12" />
-            <div className="h-4 w-full animate-pulse rounded bg-white/10" />
+            <div className="h-3.5 w-24 skeleton-shimmer rounded-md border border-white/10" />
+            <div className="h-8 w-2/3 skeleton-shimmer rounded-xl border border-white/10 sm:h-12" />
+            <div className="h-4 w-full skeleton-shimmer rounded-md border border-white/10" />
           </div>
         </div>
-        <div className="mt-8 h-28 animate-pulse rounded-2xl bg-white/[0.04]" />
+        <div className="mt-8 h-28 skeleton-shimmer rounded-2xl border border-white/10" />
       </div>
     </main>
   );

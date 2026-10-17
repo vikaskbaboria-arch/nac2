@@ -18,8 +18,8 @@ const Watchcomp  = ({ movieid,type_of }) => {
   if (!movie) {
     return (
       <div className="group cursor-pointer rounded-xl p-2">
-        <div className="relative aspect-[2/3] overflow-hidden rounded-lg bg-white/5 animate-pulse" />
-        <div className="mt-2 h-4 w-3/4 rounded bg-white/5 animate-pulse" />
+        <div className="relative aspect-[2/3] overflow-hidden rounded-xl skeleton-shimmer border border-white/[0.08] shadow-lg shadow-black/40" />
+        <div className="mt-2.5 h-4 w-4/5 rounded-md skeleton-shimmer border border-white/[0.05]" />
       </div>
     );
   }

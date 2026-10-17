@@ -134,10 +134,11 @@ export default function CollectionPage() {
         {loading ? (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
             {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n) => (
-              <div
-                key={n}
-                className="aspect-[2/3] rounded-xl bg-white/5 animate-pulse"
-              />
+              <div key={n} className="rounded-xl p-2">
+                <div className="aspect-[2/3] w-full rounded-xl skeleton-shimmer border border-white/[0.08] shadow-lg shadow-black/40" />
+                <div className="mt-2.5 h-4 w-4/5 rounded-md skeleton-shimmer border border-white/[0.05]" />
+                <div className="mt-2 h-3 w-2/5 rounded-md skeleton-shimmer border border-white/[0.04]" />
+              </div>
             ))}
           </div>
         ) : filteredItems.length === 0 ? (
