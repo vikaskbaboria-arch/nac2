@@ -311,7 +311,6 @@ const Navbar = () => {
                 )}
                 <li className="p-2 hover:bg-white/5"><Link href="/collection">NAC Collection</Link></li>
                 <li className="p-2 hover:bg-white/5"><Link href="/space">NAC Space</Link></li>
-                <li className="p-2 hover:bg-white/5"><Link href="#">Earnings</Link></li>
                 <li className="p-2 hover:bg-red-500/10">
                   <button onClick={() => signOut()}>Sign out</button>
                 </li>
