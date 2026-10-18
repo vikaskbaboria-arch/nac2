@@ -1,14 +1,15 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Bookmark } from "lucide-react";
 import Watchcomp from "@/components/profile/watchcomp";
 import { WatchlistGridSkeleton } from "@/components/skeletons/HomeSectionSkeletons";
 
-const Userwatchlist = () => {
+const Userwatchlist = ({ onCountChange }) => {
   const [watchlist, setWatchlist] = useState(null);
   const [error, setError] = useState("");
+  const [removingId, setRemovingId] = useState("");
 
   useEffect(() => {
     const loadData = async () => {
@@ -16,7 +17,9 @@ const Userwatchlist = () => {
         const res = await fetch("/api/watchlist");
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || "Unable to load your watchlist");
-        setWatchlist(data.watchlist || []);
+        const items = data.watchlist || [];
+        setWatchlist(items);
+        onCountChange?.(items.length);
       } catch (error) {
         console.error("Failed to load watchlist:", error);
         setError(error.message || "Unable to load your watchlist");
@@ -24,7 +27,29 @@ const Userwatchlist = () => {
       }
     };
     loadData();
-  }, []);
+  }, [onCountChange]);
+
+  const removeItem = async (item) => {
+    if (removingId) return;
+    setError("");
+    setRemovingId(item._id);
+    try {
+      const response = await fetch("/api/watchlist", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ movieid: Number(item.movie.movieid) }),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || "Unable to remove this title");
+      const nextItems = watchlist.filter((entry) => entry._id !== item._id);
+      setWatchlist(nextItems);
+      onCountChange?.(nextItems.length);
+    } catch (removeError) {
+      setError(removeError.message || "Unable to remove this title");
+    } finally {
+      setRemovingId("");
+    }
+  };
 
   if (watchlist === null) return <WatchlistGridSkeleton />
 
@@ -45,7 +70,7 @@ const Userwatchlist = () => {
       ) : (
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 md:grid-cols-4 lg:grid-cols-5">
           {watchlist.map((item) => item.movie?.movieid ? (
-            <Watchcomp key={item._id} movieid={item.movie.movieid} type_of={item.movie.media_type} />
+            <Watchcomp key={item._id} movieid={item.movie.movieid} type_of={item.movie.media_type} onRemove={() => removeItem(item)} removing={Boolean(removingId)} />
           ) : null)}
         </div>
       )}

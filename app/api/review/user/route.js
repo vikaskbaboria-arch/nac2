@@ -3,6 +3,7 @@ import Review from "@/models/review";
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
+import Movie from "@/models/movie.models";
 import User from "@/models/user";
 
 
@@ -26,7 +27,7 @@ export const GET = async (req) => {
 
     const reviews = await Review.find({ user: profileUser._id })
       .populate("user", "username profilepic")
-      .populate("movie", "movieid media_type movieTitle moviePoster")
+      .populate({ path: "movie", model: Movie, select: "movieid media_type movieTitle moviePoster" })
       .sort({ createdAt: -1 })
       .lean();
 

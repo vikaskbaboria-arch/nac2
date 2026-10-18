@@ -10,6 +10,7 @@ function ReviewEntry({ review, isOwner, onDelete }) {
   const [movieLoading, setMovieLoading] = useState(true);
   const [showSpoiler, setShowSpoiler] = useState(!review.spoiler);
   const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState("");
   const movieId = review.movie?.movieid;
   const mediaType = review.movie?.media_type === "tv" ? "tv" : "movie";
 
@@ -38,6 +39,7 @@ function ReviewEntry({ review, isOwner, onDelete }) {
   const deleteReview = async () => {
     if (!movieId || !window.confirm("Delete this review? This can’t be undone.")) return;
     setDeleting(true);
+    setDeleteError("");
     try {
       const response = await fetch("/api/review", {
         method: "DELETE",
@@ -48,7 +50,7 @@ function ReviewEntry({ review, isOwner, onDelete }) {
       if (!response.ok) throw new Error(data.error || "Unable to delete this review");
       onDelete(review._id);
     } catch (error) {
-      window.alert(error.message || "Unable to delete this review");
+      setDeleteError(error.message || "Unable to delete this review");
     } finally {
       setDeleting(false);
     }
@@ -94,6 +96,7 @@ function ReviewEntry({ review, isOwner, onDelete }) {
               )}
             </div>
           ) : <p className="mt-3 text-sm italic text-white/35">Rating only</p>}
+          {deleteError && <p role="alert" className="mt-2 text-xs text-red-200">{deleteError}</p>}
           {movieLoading && !review.movie?.movieTitle && <span className="sr-only">Loading title</span>}
         </div>
       </div>
@@ -101,7 +104,7 @@ function ReviewEntry({ review, isOwner, onDelete }) {
   );
 }
 
-export function ShowRevonProflie({ username, isOwner = false }) {
+export function ShowRevonProflie({ username, isOwner = false, onReviewDeleted }) {
   const [reviews, setReviews] = useState(null);
   const [error, setError] = useState("");
 
@@ -132,7 +135,7 @@ export function ShowRevonProflie({ username, isOwner = false }) {
   return (
     <section>
       <div className="mb-4 flex items-end justify-between gap-3">
-        <div><h2 className="text-xl font-semibold">Reviews</h2><p className="mt-1 text-sm text-white/45">Thoughts and ratings from the watchlist.</p></div>
+        <div><h2 className="text-xl font-semibold">Reviews</h2><p className="mt-1 text-sm text-white/45">Notes and ratings across movies and series.</p></div>
         <span className="text-sm text-white/40">{reviews.length} {reviews.length === 1 ? "review" : "reviews"}</span>
       </div>
       {error && <p role="alert" className="mb-4 rounded-xl border border-red-400/20 bg-red-400/5 p-3 text-sm text-red-200">{error}</p>}
@@ -145,7 +148,7 @@ export function ShowRevonProflie({ username, isOwner = false }) {
         </div>
       ) : (
         <div className="space-y-3">
-          {reviews.map((review) => <ReviewEntry key={review._id} review={review} isOwner={isOwner} onDelete={(id) => setReviews((current) => current.filter((entry) => entry._id !== id))} />)}
+          {reviews.map((review) => <ReviewEntry key={review._id} review={review} isOwner={isOwner} onDelete={(id) => { setReviews((current) => current.filter((entry) => entry._id !== id)); onReviewDeleted?.(); }} />)}
         </div>
       )}
     </section>

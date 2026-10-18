@@ -6,7 +6,6 @@ import { signOut } from "next-auth/react";
 import Link from "next/link";
 import {
   CalendarDays,
-  Check,
   Clapperboard,
   Globe2,
   MapPin,
@@ -31,6 +30,15 @@ const initials = (name = "") =>
     .slice(0, 2)
     .map((part) => part[0]?.toUpperCase())
     .join("") || "N";
+
+const safeExternalUrl = (value) => {
+  try {
+    const parsed = new URL(value);
+    return ["http:", "https:"].includes(parsed.protocol) ? parsed.href : "";
+  } catch {
+    return "";
+  }
+};
 
 function ProfileEditor({ profile, username, onClose, onSaved }) {
   const [form, setForm] = useState(() => ({
@@ -238,6 +246,10 @@ const ProfileClient = () => {
   const [active, setActive] = useState("overview");
   const [editing, setEditing] = useState(false);
   const [copied, setCopied] = useState(false);
+  const decrementReviewCount = useCallback(() => setStats((current) => ({ ...current, reviews: Math.max(0, (current.reviews || 0) - 1) })), []);
+  const updateCollectionCount = useCallback((count) => setStats((current) => ({ ...current, collections: count })), []);
+  const updateWatchlistCount = useCallback((count) => setStats((current) => ({ ...current, watchlist: count })), []);
+  const updateInterestedCount = useCallback((count) => setStats((current) => ({ ...current, interested: count })), []);
 
   const loadProfile = useCallback(async (signal) => {
     if (!username) return;
@@ -250,6 +262,7 @@ const ProfileClient = () => {
       setProfile(data.profile);
       setStats(data.stats || {});
       setIsOwner(Boolean(data.isOwner));
+      setActive("overview");
     } catch (loadError) {
       if (loadError.name !== "AbortError") setError(loadError.message || "Unable to load profile");
     } finally {
@@ -287,12 +300,12 @@ const ProfileClient = () => {
     return <main className="min-h-[75vh] bg-[#050407] px-4 py-10 text-white sm:px-8"><div className="mx-auto max-w-5xl animate-pulse"><div className="h-52 rounded-3xl bg-white/[0.05]" /><div className="mt-6 h-24 rounded-2xl bg-white/[0.04]" /><div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4">{[0, 1, 2, 3].map((item) => <div key={item} className="h-20 rounded-2xl bg-white/[0.04]" />)}</div></div></main>;
   }
 
-  if (!profile || error) {
+  if (!profile) {
     return <main className="flex min-h-[65vh] items-center justify-center bg-[#050407] px-4 text-center text-white"><div className="max-w-md"><div className="mx-auto grid size-14 place-items-center rounded-2xl border border-white/10 bg-white/5 text-purple-200"><Clapperboard /></div><h1 className="mt-5 text-2xl font-semibold">{error || "Profile unavailable"}</h1><p className="mt-2 text-sm text-white/50">Check the username or try again in a moment.</p><Link href="/" className="mt-5 inline-flex rounded-xl border border-white/10 px-4 py-2 text-sm text-white/75 hover:bg-white/5">Back to NAC</Link></div></main>;
   }
 
-  const avatar = profile.profilepic || "";
-  const cover = profile.coverpic || "";
+  const avatar = safeExternalUrl(profile.profilepic);
+  const cover = safeExternalUrl(profile.coverpic);
 
   return (
     <main className="min-h-screen bg-[#050407] px-3 pb-16 pt-6 text-white sm:px-8 sm:pt-10">
@@ -311,8 +324,9 @@ const ProfileClient = () => {
 
           <div className="relative px-5 pb-6 sm:px-8 sm:pb-8">
             <div className="-mt-12 flex flex-col gap-4 sm:-mt-16 sm:flex-row sm:items-end sm:gap-5">
-              <div className="grid size-24 shrink-0 place-items-center overflow-hidden rounded-[1.6rem] border-4 border-[#0b090e] bg-gradient-to-br from-purple-500/70 to-blue-500/50 text-2xl font-bold text-white shadow-lg sm:size-32 sm:text-3xl">
-                {avatar ? <img src={avatar} alt={`${profile.name} avatar`} className="size-full object-cover" onError={(event) => { event.currentTarget.style.display = "none"; }} /> : initials(profile.name)}
+              <div className="relative grid size-24 shrink-0 place-items-center overflow-hidden rounded-[1.6rem] border-4 border-[#0b090e] bg-gradient-to-br from-purple-500/70 to-blue-500/50 text-2xl font-bold text-white shadow-lg sm:size-32 sm:text-3xl">
+                <span>{initials(profile.name)}</span>
+                {avatar && <img src={avatar} alt={`${profile.name} avatar`} className="absolute inset-0 size-full object-cover" onError={(event) => { event.currentTarget.remove(); }} />}
               </div>
               <div className="min-w-0 flex-1 pb-1">
                 <p className="text-xs font-semibold uppercase tracking-[0.2em] text-purple-200/75">NAC member</p>
@@ -340,12 +354,14 @@ const ProfileClient = () => {
           ))}
         </nav>
 
+        {error && <p role="status" className="mt-3 text-sm text-amber-100/80">{error}</p>}
+
         <div className="mt-6">
           {active === "overview" && <Overview profile={profile} isOwner={isOwner} onEdit={() => setEditing(true)} />}
-          {active === "reviews" && <ShowRevonProflie username={profile.username} isOwner={isOwner} />}
-          {active === "collections" && <ProfileCollections username={profile.username} />}
-          {active === "watchlist" && isOwner && <Userwatchlist />}
-          {active === "interested" && isOwner && <MyInterested />}
+          {active === "reviews" && <ShowRevonProflie username={profile.username} isOwner={isOwner} onReviewDeleted={decrementReviewCount} />}
+          {active === "collections" && <ProfileCollections username={profile.username} onCountChange={updateCollectionCount} />}
+          {active === "watchlist" && isOwner && <Userwatchlist onCountChange={updateWatchlistCount} />}
+          {active === "interested" && isOwner && <MyInterested onCountChange={updateInterestedCount} />}
         </div>
       </div>
 

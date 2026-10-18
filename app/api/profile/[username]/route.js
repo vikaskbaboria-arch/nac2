@@ -81,6 +81,9 @@ export async function PATCH(_request, { params }) {
     }
 
     const body = await _request.json();
+    if (!body || typeof body !== "object" || Array.isArray(body)) {
+      return NextResponse.json({ error: "Profile details are required" }, { status: 400 });
+    }
     const fields = {
       name: { max: 50 },
       bio: { max: 280 },

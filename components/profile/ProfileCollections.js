@@ -5,7 +5,7 @@ import Link from "next/link";
 import { LockKeyhole, Pencil, Plus, Trash2, X } from "lucide-react";
 import { useSession } from "next-auth/react";
 
-const ProfileCollections = ({ username }) => {
+const ProfileCollections = ({ username, onCountChange }) => {
   const { data: session } = useSession();
   const isOwner = !username || username === session?.user?.name;
   const [collections, setCollections] = useState([]);
@@ -26,13 +26,15 @@ const ProfileCollections = ({ username }) => {
       const response = await fetch(endpoint);
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || "Unable to load collections");
-      setCollections(data.collections || []);
+      const nextCollections = data.collections || [];
+      setCollections(nextCollections);
+      onCountChange?.(nextCollections.length);
     } catch (loadError) {
       setError(loadError.message);
     } finally {
       setLoading(false);
     }
-  }, [username]);
+  }, [username, onCountChange]);
 
   useEffect(() => {
     loadCollections();
@@ -82,7 +84,7 @@ const ProfileCollections = ({ username }) => {
       );
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || "Unable to delete collection");
-      setCollections((current) => current.filter((item) => item._id !== collection._id));
+      await loadCollections();
       if (editingId === collection._id) {
         setEditingId("");
         setName("");
@@ -224,7 +226,7 @@ const ProfileCollections = ({ username }) => {
                           src={
                             item.poster_path
                               ? `https://image.tmdb.org/t/p/w185${item.poster_path}`
-                              : "/placeholder.png"
+                              : "/pic.png"
                           }
                           alt={item.title}
                           className="aspect-[2/3] w-full rounded-lg object-cover"

@@ -88,3 +88,31 @@ export const GET = async () => {
     return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 };
+
+export const DELETE = async (req) => {
+  try {
+    await connectDB();
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.email) {
+      return NextResponse.json({ error: "User not authenticated" }, { status: 401 });
+    }
+
+    const body = await req.json();
+    const movieID = Number(body?.movieID);
+    if (!Number.isInteger(movieID) || movieID <= 0) {
+      return NextResponse.json({ error: "Valid movieID is required" }, { status: 400 });
+    }
+
+    const user = await User.findOne({ email: session.user.email });
+    if (!user) return NextResponse.json({ error: "User not found" }, { status: 404 });
+    const movie = await Movie.findOne({ movieid: movieID });
+    if (!movie) return NextResponse.json({ error: "Title not found" }, { status: 404 });
+
+    const removed = await Interested.findOneAndDelete({ user: user._id, movie: movie._id });
+    if (!removed) return NextResponse.json({ error: "Title is not in your interested list" }, { status: 404 });
+    return NextResponse.json({ message: "Removed from interested list" });
+  } catch (error) {
+    console.error("DELETE interested error:", error);
+    return NextResponse.json({ error: "Unable to update interested list" }, { status: 500 });
+  }
+};
