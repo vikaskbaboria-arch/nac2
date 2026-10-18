@@ -102,7 +102,7 @@ export const GET = async () => {
     }
 
     const watchlist = await Watchlist.find({ user: user._id })
-      .populate({ path: "movie", select: "movieid" })
+      .populate({ path: "movie", select: "movieid media_type" })
       .lean();
 
     return NextResponse.json({ watchlist }, { status: 200 });

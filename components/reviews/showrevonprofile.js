@@ -1,194 +1,153 @@
 "use client";
 
-import {  useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useEffect } from "react";
-import { Bookmark, Heart, Star } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { ProfileReviewsSkeleton } from "@/components/skeletons/HomeSectionSkeletons";
+import { CalendarDays, Eye, EyeOff, Film, Star, Trash2 } from "lucide-react";
+import { fetchMovies } from "@/lib/masterfetch";
 
+function ReviewEntry({ review, isOwner, onDelete }) {
+  const [movie, setMovie] = useState(null);
+  const [movieLoading, setMovieLoading] = useState(true);
+  const [showSpoiler, setShowSpoiler] = useState(!review.spoiler);
+  const [deleting, setDeleting] = useState(false);
+  const movieId = review.movie?.movieid;
+  const mediaType = review.movie?.media_type === "tv" ? "tv" : "movie";
 
-/**
- * Review shape:
- * {
- *   id, movieTitle, movieHref, reviewHref,
- *   quote, author, avatarUrl?, rating, likes,
- *   featured?   // highlights the card in amber (use on one review)
- * }
- */
+  useEffect(() => {
+    if (!movieId) {
+      setMovieLoading(false);
+      return;
+    }
+    let active = true;
+    fetchMovies({ type: "byid", id: movieId, type_of: mediaType })
+      .then((result) => active && setMovie(result))
+      .catch(() => {})
+      .finally(() => active && setMovieLoading(false));
+    return () => {
+      active = false;
+    };
+  }, [movieId, mediaType]);
 
+  const title = movie?.title || movie?.name || review.movie?.movieTitle || (movieId ? `Title #${movieId}` : "Film review");
+  const poster = movie?.poster_path || review.movie?.moviePoster;
+  const movieHref = movieId ? `/movie/${movieId}?type=${mediaType}` : null;
+  const date = review.createdAt
+    ? new Date(review.createdAt).toLocaleDateString("en", { month: "short", day: "numeric", year: "numeric" })
+    : "";
 
-const SAMPLE_REVIEWS = [
-  {
-    id: "1",
-    movieTitle: "After the Orchard",
-    movieHref: "/movie/after-the-orchard",
-    reviewHref: "/reviews/1",
-    quote:
-      "A patient, sun-dappled meditation on the stories families prune away.",
-    author: "Mara Ellison",
-    rating: 4.5,
-    likes: 128,
-  },
-  {
-    id: "2",
-    movieTitle: "Midnight Frequency",
-    movieHref: "/movie/midnight-frequency",
-    reviewHref: "/reviews/2",
-    quote:
-      "Every hiss of static feels like a door opening somewhere it shouldn't.",
-    author: "Theo Grant",
-    rating: 4,
-    likes: 98,
-    featured: true,
-  },
-  {
-    id: "3",
-    movieTitle: "The Quiet Atlas",
-    movieHref: "/movie/the-quiet-atlas",
-    reviewHref: "/reviews/3",
-    quote:
-      "Grand adventure rendered with the intimacy of a handwritten letter.",
-    author: "Imani Cole",
-    rating: 4.5,
-    likes: 133,
-  },
-];
-
-const compact = new Intl.NumberFormat("en", { notation: "compact" });
-
-function initials(name = "") {
-  return name
-    .split(" ")
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((part) => part[0].toUpperCase())
-    .join("");
-}
-
-function Avatar({ name, src }) {
-  return (
-    <span className="grid size-9 shrink-0 place-items-center overflow-hidden rounded-full bg-white/10 text-xs font-medium text-white ring-1 ring-white/10">
-      {src ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img src={src} alt="" className="size-full object-cover" />
-      ) : (
-        initials(name)
-      )}
-    </span>
-  );
-}
-
-function ReviewCard({ review, onSaveChange }) {
-  const [saved, setSaved] = useState(false);
-  const { featured } = review;
- 
-  function toggleSave() {
-    const next = !saved;
-    setSaved(next);
-    onSaveChange?.(review.id, next);
-  }
+  const deleteReview = async () => {
+    if (!movieId || !window.confirm("Delete this review? This can’t be undone.")) return;
+    setDeleting(true);
+    try {
+      const response = await fetch("/api/review", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ movieid: Number(movieId) }),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || "Unable to delete this review");
+      onDelete(review._id);
+    } catch (error) {
+      window.alert(error.message || "Unable to delete this review");
+    } finally {
+      setDeleting(false);
+    }
+  };
 
   return (
-    <article
-      className={cn(
-        "flex flex-col justify-between gap-8 rounded-xl border p-6",
-        "shadow-md shadow-black/40",
-        featured
-          ? "border-[#7c3aed]/40 bg-[#7c3aed]/10 shadow-[0_8px_28px_-16px_rgba(124,58,237,0.45)]"
-          : "border-white/10 bg-black"
-      )}
-    >
-      <div className="space-y-5">
-        <div className="flex items-start  justify-between gap-3">
-     <p className="text-white">yarr chale bahar</p>
-
-          <button
-            type="button"
-            onClick={toggleSave}
-            aria-pressed={saved}
-            aria-label={saved ? "Remove from saved reviews" : "Save review"}
-            className={cn(
-              "-mr-2 -mt-2 grid size-8 place-items-center rounded-md transition-colors hover:bg-white/10",
-              saved ? "text-[#a78bfa]" : "text-white/50 hover:text-white"
-            )}
-          >
-            <Bookmark className={cn("size-4", saved && "fill-current")} aria-hidden="true" />
-          </button>
+    <article className="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.025]">
+      <div className="flex gap-4 p-4 sm:p-5">
+        <div className="w-[72px] shrink-0 sm:w-24">
+          {movieHref ? (
+            <Link href={movieHref} aria-label={`Open ${title}`} className="block aspect-[2/3] overflow-hidden rounded-xl bg-white/5">
+              {poster ? <img src={`https://image.tmdb.org/t/p/w185${poster}`} alt="" className="size-full object-cover" /> : <div className="grid size-full place-items-center text-white/30"><Film size={22} /></div>}
+            </Link>
+          ) : <div className="grid aspect-[2/3] place-items-center rounded-xl bg-white/5 text-white/30"><Film size={22} /></div>}
         </div>
 
-    <p className="text-sm text-white/70 line-clamp-3">
-            {review.review }
-    </p>
+        <div className="min-w-0 flex-1">
+          <div className="flex items-start justify-between gap-3">
+            <div className="min-w-0">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/35">{mediaType === "tv" ? "Series review" : "Movie review"}</p>
+              {movieHref ? <Link href={movieHref} className="mt-1 block truncate text-base font-semibold text-white hover:text-purple-200 sm:text-lg">{title}</Link> : <h3 className="mt-1 truncate text-base font-semibold">{title}</h3>}
+            </div>
+            {isOwner && <button type="button" onClick={deleteReview} disabled={deleting} aria-label={`Delete review for ${title}`} title="Delete review" className="shrink-0 rounded-lg p-2 text-white/35 transition hover:bg-red-400/10 hover:text-red-200 disabled:opacity-50"><Trash2 size={15} /></button>}
+          </div>
+
+          <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-white/45">
+            {typeof review.rating === "number" && <span className="inline-flex items-center gap-1.5 text-amber-200"><Star size={13} fill="currentColor" />{review.rating}/10</span>}
+            {date && <span className="inline-flex items-center gap-1.5"><CalendarDays size={13} />{date}</span>}
+          </div>
+
+          {review.review ? (
+            <div className="mt-3">
+              {review.spoiler && !showSpoiler ? (
+                <div className="flex flex-wrap items-center gap-3 rounded-xl border border-amber-200/10 bg-amber-100/[0.035] px-3 py-2.5 text-xs text-white/55">
+                  <span>Spoiler hidden</span>
+                  <button type="button" onClick={() => setShowSpoiler(true)} className="inline-flex items-center gap-1.5 font-medium text-amber-100 hover:text-white"><Eye size={13} />Show review</button>
+                </div>
+              ) : (
+                <>
+                  <p className="whitespace-pre-wrap text-sm leading-6 text-white/70">{review.review}</p>
+                  {review.spoiler && <button type="button" onClick={() => setShowSpoiler(false)} className="mt-2 inline-flex items-center gap-1.5 text-xs text-white/40 hover:text-white/70"><EyeOff size={13} />Hide spoiler</button>}
+                </>
+              )}
+            </div>
+          ) : <p className="mt-3 text-sm italic text-white/35">Rating only</p>}
+          {movieLoading && !review.movie?.movieTitle && <span className="sr-only">Loading title</span>}
+        </div>
       </div>
-
-      <footer className="flex items-center gap-3">
-        <Avatar name={review.author} src={review.avatarUrl} />
-        <div className="min-w-0">
-          <p className="truncate text-sm font-medium text-white">{review.user.username}</p>
-          <p className="flex items-center gap-3 text-xs text-white/50">
-            <span className="inline-flex items-center gap-1">
-              <Star className="size-3 fill-[#a78bfa] text-[#a78bfa]" aria-hidden="true" />
-              {Number(review.rating).toFixed(1)}
-              <span className="sr-only">rating</span>
-            </span>
-            <span className="inline-flex items-center gap-1">
-              <Heart className="size-3" aria-hidden="true" />
-              {compact.format(review.likes)}
-              <span className="sr-only">likes</span>
-            </span>
-          </p>
-        </div>
-      </footer>
     </article>
   );
 }
 
-/**
- * <ReviewsSection />                       // renders with sample data
- * <ReviewsSection reviews={reviewsFromDb} href="/reviews" />
- */
-export function ShowRevonProflie({
-  
-  title = "Reviews worth reading",
-  description = "From the front row",
-  href = "/reviews",
-  linkLabel = "Browse all reviews",
-  onSaveChange,
-  className,
-}) {
+export function ShowRevonProflie({ username, isOwner = false }) {
+  const [reviews, setReviews] = useState(null);
+  const [error, setError] = useState("");
 
- const [reviews, setReviews] = useState([]);
- const [loading, setLoading] = useState(true);
-     useEffect(() => {
-    const writtenReview = async ()=>{
-        try {
-          const res = await fetch(`/api/review/user/`)
-          const data = await res.json()
-          setReviews(data.reviews || [])
-        } catch (error) {
-          console.error("Failed to load profile reviews:", error)
-          setReviews([])
-        } finally {
-          setLoading(false)
+  useEffect(() => {
+    let active = true;
+    const query = username ? `?username=${encodeURIComponent(username)}` : "";
+    fetch(`/api/review/user${query}`)
+      .then(async (response) => {
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || "Unable to load reviews");
+        if (active) setReviews(data.reviews || []);
+      })
+      .catch((loadError) => {
+        if (active) {
+          setError(loadError.message || "Unable to load reviews");
+          setReviews([]);
         }
-    }
-    writtenReview()
-   
-  },[])
+      });
+    return () => {
+      active = false;
+    };
+  }, [username]);
 
-  if (loading) return <ProfileReviewsSkeleton />
+  if (reviews === null) {
+    return <div className="space-y-3" aria-label="Loading reviews">{[0, 1, 2].map((item) => <div key={item} className="h-36 animate-pulse rounded-2xl border border-white/[0.06] bg-white/[0.03]" />)}</div>;
+  }
 
   return (
-    <section className={cn("bg-black   py-8  mt-6 sm:py-16", className)}>
-      <div className="container-page">
-      
-        <div className="grid gap-4 md:grid-cols-3">
-          {reviews.map((review) => (
-            <ReviewCard key={review._id} review={review} onSaveChange={onSaveChange} />
-          ))}
-        </div>
+    <section>
+      <div className="mb-4 flex items-end justify-between gap-3">
+        <div><h2 className="text-xl font-semibold">Reviews</h2><p className="mt-1 text-sm text-white/45">Thoughts and ratings from the watchlist.</p></div>
+        <span className="text-sm text-white/40">{reviews.length} {reviews.length === 1 ? "review" : "reviews"}</span>
       </div>
+      {error && <p role="alert" className="mb-4 rounded-xl border border-red-400/20 bg-red-400/5 p-3 text-sm text-red-200">{error}</p>}
+      {reviews.length === 0 ? (
+        <div className="rounded-2xl border border-dashed border-white/10 px-6 py-12 text-center">
+          <div className="mx-auto grid size-12 place-items-center rounded-2xl bg-white/5 text-white/45"><Film size={20} /></div>
+          <h3 className="mt-4 font-medium">No reviews yet</h3>
+          <p className="mx-auto mt-1 max-w-sm text-sm text-white/45">{isOwner ? "Your movie and series reviews will show up here. Open a title and share your take." : "When this member writes a review, it will appear here."}</p>
+          {isOwner && <Link href="/explore/trending" className="mt-4 inline-flex rounded-xl bg-purple-600 px-4 py-2 text-sm font-medium hover:bg-purple-500">Explore titles</Link>}
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {reviews.map((review) => <ReviewEntry key={review._id} review={review} isOwner={isOwner} onDelete={(id) => setReviews((current) => current.filter((entry) => entry._id !== id))} />)}
+        </div>
+      )}
     </section>
   );
 }

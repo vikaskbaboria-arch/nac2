@@ -34,13 +34,27 @@ export const authOptions = {
           currentUser = await User.create({
             email: userEmail,
             username: userEmail.split("@")[0],
+            name: user?.name || profile?.name || userEmail.split("@")[0],
+            profilepic: user?.image || profile?.picture || "",
             isAdmin: shouldBeAdmin,
             role: shouldBeAdmin ? "admin" : "user",
           });
-        } else if (shouldBeAdmin && !currentUser.isAdmin) {
-          currentUser.isAdmin = true;
-          currentUser.role = "admin";
-          await currentUser.save();
+        } else {
+          let changed = false;
+          if (!currentUser.name && (user?.name || profile?.name)) {
+            currentUser.name = user?.name || profile?.name;
+            changed = true;
+          }
+          if (!currentUser.profilepic && (user?.image || profile?.picture)) {
+            currentUser.profilepic = user?.image || profile?.picture;
+            changed = true;
+          }
+          if (shouldBeAdmin && !currentUser.isAdmin) {
+            currentUser.isAdmin = true;
+            currentUser.role = "admin";
+            changed = true;
+          }
+          if (changed) await currentUser.save();
         }
 
         return profile?.email_verified && profile?.email?.endsWith("@gmail.com");
@@ -53,7 +67,9 @@ export const authOptions = {
         const dbUser = await User.findOne({ email: session.user.email });
         if (dbUser) {
           session.user.name = dbUser.username;
-          session.user.id = dbUser._id;
+          session.user.id = String(dbUser._id);
+          session.user.displayName = dbUser.name || dbUser.username;
+          session.user.image = dbUser.profilepic || session.user.image || "";
 
           const adminEmails = (process.env.ADMIN_EMAIL || "")
             .split(",")

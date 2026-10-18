@@ -24,6 +24,21 @@ const UserSchema =new Schema ({
     coverpic:{
         type:String
     },
+    bio: {
+        type: String,
+        default: "",
+        maxlength: 280,
+    },
+    location: {
+        type: String,
+        default: "",
+        maxlength: 80,
+    },
+    website: {
+        type: String,
+        default: "",
+        maxlength: 200,
+    },
     fav_genres:{
         type:Array,
         default:[],
