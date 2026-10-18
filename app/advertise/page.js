@@ -3,7 +3,7 @@ import { ArrowLeft, Megaphone } from "lucide-react";
 
 export default function AdvertisePage() {
   return (
-    <main className="blackgreengrad min-h-screen px-4 pb-16 pt-24 text-white sm:px-8">
+    <main className="min-h-screen bg-black px-4 pb-16 pt-24 text-white sm:px-8">
       <section className="mx-auto max-w-3xl">
         <Link href="/" className="mb-6 inline-flex items-center gap-2 text-sm text-white/55 transition hover:text-white">
           <ArrowLeft size={16} /> Home

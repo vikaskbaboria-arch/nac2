@@ -25,7 +25,7 @@ const sections = [
 
 export default function PrivacyPage() {
   return (
-    <main className="blackgreengrad min-h-screen px-4 pb-16 pt-24 text-white sm:px-8">
+    <main className="min-h-screen bg-black px-4 pb-16 pt-24 text-white sm:px-8">
       <article className="mx-auto max-w-3xl">
         <p className="text-sm font-medium text-violet-300">NAC policies</p>
         <h1 className="mt-2 text-3xl font-bold sm:text-4xl">Privacy Policy</h1>
