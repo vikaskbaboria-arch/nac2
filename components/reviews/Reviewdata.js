@@ -396,7 +396,7 @@ export default function Reviewdata({ movieId, refreshKey }) {
                 isOwner={!!currentUserId && rv.user?._id === currentUserId}
                 showSpoilers={showSpoilers}
                 movieId={movieId}
-                onOpenProfile={() => router.push(`/user/${rv.user?.username}`)}
+                onOpenProfile={() => router.push(`/profile/${encodeURIComponent(rv.user?.username || "")}`)}
                 onAskDelete={() => setPendingDelete(rv._id)}
               />
             ))}
