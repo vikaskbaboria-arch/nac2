@@ -255,7 +255,7 @@ const Navbar = () => {
         </li>
        
        {status === 'authenticated' && session ? (
-        <li className="hover:text-gray-400 transition"><Link href={`/profile/${session.user.email.split("@")[0]}`}>
+        <li className="hover:text-gray-400 transition"><Link href={`/profile/${encodeURIComponent(session.user.name)}`}>
   Profile
 </Link></li>) : null}
 
@@ -301,7 +301,7 @@ const Navbar = () => {
               transition-all origin-top
               ${dropdown2 ? "scale-100 opacity-100" : "scale-95 opacity-0 pointer-events-none"}`}>
               <ul className="text-sm">
-                <li className="p-2 hover:bg-white/5"><Link href={`/profile/${session.user.email.split("@")[0]}`}>
+                <li className="p-2 hover:bg-white/5"><Link href={`/profile/${encodeURIComponent(session.user.name)}`}>
   Profile
 </Link></li>
                 {session.user.isAdmin && (

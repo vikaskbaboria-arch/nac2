@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { fetchMovies } from "@/lib/masterfetch";
 import { useRouter } from "next/navigation";
 
-const Watchcomp  = ({ movieid,type_of }) => {
+const Watchcomp  = ({ movieid, type_of = "movie" }) => {
   const [movie, setMovie] = useState(null);
   const router = useRouter();
 
@@ -11,9 +11,9 @@ const Watchcomp  = ({ movieid,type_of }) => {
     fetchMovies({
       type: "byid",
       id: movieid,
-      type_of: "movie",
-    }).then((m) => setMovie(m));
-  }, [movieid]);
+      type_of: type_of === "tv" ? "tv" : "movie",
+    }).then((m) => setMovie(m)).catch(() => setMovie(null));
+  }, [movieid, type_of]);
 
   if (!movie) {
     return (
@@ -26,7 +26,7 @@ const Watchcomp  = ({ movieid,type_of }) => {
 
   return (
     <div
-      onClick={() => router.push(`/movie/${movie.id}?type=movie`)}
+      onClick={() => router.push(`/movie/${movie.id}?type=${type_of === "tv" ? "tv" : "movie"}`)}
       className="
         group
         cursor-pointer
@@ -44,7 +44,7 @@ const Watchcomp  = ({ movieid,type_of }) => {
               ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
               : "/placeholder.png"
           }
-          alt={movie?.title}
+          alt={movie?.title || movie?.name}
           className="
             absolute inset-0
             w-full h-full object-cover
@@ -57,7 +57,7 @@ const Watchcomp  = ({ movieid,type_of }) => {
 
       {/* TITLE */}
       <div className="mt-2 text-sm font-semibold truncate">
-        {movie?.title}
+        {movie?.title || movie?.name}
       </div>
     </div>
   );
