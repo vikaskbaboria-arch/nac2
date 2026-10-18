@@ -234,19 +234,10 @@ export default function MoreLikeThis({
 
   return (
     <section className="w-full">
-      <div className="mb-4 flex flex-col gap-1">
-        <h2 className="text-xl font-bold text-white sm:text-2xl">
-          <AnimatedShinyText>More Like This</AnimatedShinyText>
-        </h2>
-        <p className="text-xs text-slate-400 sm:text-sm">
-          {leadInfo?.name
-            ? `Recommended titles with similar genres and works by ${leadInfo.role.toLowerCase()} ${leadInfo.name}`
-            : "Movies and series sharing similar genres and themes"}
-        </p>
-      </div>
+      <h2 className="mb-4 text-lg font-semibold sm:text-xl">More Like This</h2>
 
       {loading ? (
-        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-4 md:grid-cols-5 lg:grid-cols-6">
+        <div className="grid grid-cols-2 gap-1 sm:grid-cols-3 sm:gap-4 sm:p-3 lg:grid-cols-5 xl:grid-cols-6">
           {Array.from({ length: 6 }).map((_, index) => (
             <div key={index} className="w-full rounded-xl p-2">
               <div className="relative aspect-[2/3] w-full overflow-hidden rounded-xl skeleton-shimmer border border-white/[0.08] shadow-lg shadow-black/40" />
@@ -256,20 +247,9 @@ export default function MoreLikeThis({
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-4 md:grid-cols-5 lg:grid-cols-6">
+        <div className="grid grid-cols-2 gap-1 sm:grid-cols-3 sm:gap-4 sm:p-3 lg:grid-cols-5 xl:grid-cols-6">
           {items.map((m) => (
-            <MovieCard
-              key={m.id}
-              movie={m}
-              typeFallback={type}
-              badge={
-                m.__leadMatch ? (
-                  <div className="absolute top-2 left-2 max-w-[85%] bg-purple-900/80 backdrop-blur-md px-1.5 py-0.5 rounded text-[10px] text-purple-200 font-semibold border border-purple-500/40 truncate shadow-md">
-                    ★ {m.__leadRole}
-                  </div>
-                ) : undefined
-              }
-            />
+            <MovieCard key={m.id} movie={m} typeFallback={type} />
           ))}
         </div>
       )}
