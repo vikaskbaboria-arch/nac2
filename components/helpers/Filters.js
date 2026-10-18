@@ -103,7 +103,7 @@ const PROVIDERS = [
 
 // Matches SearchTips.jsx's panel shell, so the two read as one system
 // on either side of the results grid.
-const PANEL_CLASSES = `{
+const PANEL_CLASSES = `
   flex  flex-col gap-4
   rounded-lg 
   w-[95vw] p-1 md:px-4
@@ -113,7 +113,7 @@ const PANEL_CLASSES = `{
         shadow-[0_0_20px_rgba(0,0,0,0.6)]
       
    lg:top-22 lg:w-76 lg:rounded-2xl
-}`;
+`;
 
 // Full-rounded pill dropdown, matching the "Sort By" control shape.
 const SELECT_CLASSES = `
@@ -241,13 +241,10 @@ const Filters = ({
       prev.includes(value) ? prev.filter((p) => p !== value) : [...prev, value]
     );
   };
-  var fixer;
-if(!genre){
-  fixer="lg:fixed"
-}
+  const fixer = !genre ? " lg:fixed" : "";
   return (
     <>
-    <div className={PANEL_CLASSES + fixer+" " + className}>
+    <div className={`${PANEL_CLASSES}${fixer} ${className}`}>
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-2">
           <SlidersHorizontal className="size-4 text-white" aria-hidden="true" />
@@ -264,7 +261,7 @@ if(!genre){
         )}
       </div>
 
-      <div className="flex min-w-0 gap-2 overflow-x-auto pb-1 lg:hidden">
+      <div className="flex min-w-0 gap-2 overflow-x-auto overflow-y-hidden pb-1 no-scrollbar [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden lg:hidden">
         <div className="w-36 shrink-0">
           <PillSelect options={SORTS} value={sort} onChange={setSort} />
         </div>
