@@ -20,6 +20,7 @@ import SeriesSkeleton from "@/components/results/SeriesSkeleton";
 import Link from "next/link";
 import CollectionButton from "@/components/collections/CollectionButton";
 import ReportButton from "@/components/common/ReportButton";
+import MoreLikeThis from "@/components/media/MoreLikeThis";
 
 /* ---------- small helpers ---------- */
 const formatRuntime = (mins) => {
@@ -507,6 +508,15 @@ const SeriesR = (props) => {
 
             <div className="mt-10">
               <ReviewsSection movieId={movie?.id} />
+            </div>
+
+            <div className="mt-12">
+              <MoreLikeThis
+                movieId={movie?.id}
+                type={type || (isTv ? "tv" : "movie")}
+                movie={movie}
+                credits={credits}
+              />
             </div>
           </div>
 
