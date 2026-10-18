@@ -235,7 +235,7 @@ const SearchFilters = ({ onFilterChange, className = "" }) => {
         )}
       </div>
 
-      <div className="flex min-w-0 gap-2 overflow-x-auto pb-1 lg:hidden">
+      <div className="flex min-w-0 gap-2 overflow-x-auto overflow-y-hidden pb-1 no-scrollbar [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden lg:hidden">
         <div className="w-36 shrink-0">
           <PillSelect options={SORTS} value={sort} onChange={setSort} />
         </div>
