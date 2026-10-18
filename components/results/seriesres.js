@@ -9,6 +9,7 @@ import { fetchCredit } from "@/fetch/credit";
 import { getTrailerUrl } from "@/lib/gettrailer";
 import SeriesSkeleton from "@/components/results/SeriesSkeleton";
 import ReportButton from "@/components/common/ReportButton";
+import MoreLikeThis from "@/components/media/MoreLikeThis";
 const SeriesR = (movies) => {
   const castRef = useRef(null);
 
@@ -266,8 +267,18 @@ w-full
       </div>
 
       {/* ================= REVIEWS ================= */}
-      <div className="bg-black pb-16">
+      <div className="bg-black pb-12">
         <ReviewsSection movieId={movie?.id} />
+      </div>
+
+      {/* ================= MORE LIKE THIS ================= */}
+      <div className="bg-black px-4 sm:px-8 lg:px-16 xl:px-36 pb-16">
+        <MoreLikeThis
+          movieId={movie?.id}
+          type="tv"
+          movie={movie}
+          credits={credits}
+        />
       </div>
 
       {/* ================= TRAILER OVERLAY ================= */}

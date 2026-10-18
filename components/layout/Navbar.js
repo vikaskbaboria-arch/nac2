@@ -8,7 +8,7 @@ import { fetchMovies } from '@/lib/masterfetch'
 import { signOut } from 'next-auth/react'
 import { useSession } from 'next-auth/react'
 import { SearchSuggestionsSkeleton } from '@/components/skeletons/HomeSectionSkeletons'
-import { Bookmark, Compass, Globe2, Home, Languages, Search as SearchIcon, Shapes, Sparkles } from 'lucide-react'
+import { Bookmark, Compass, Flame, Globe2, Home, Languages, Search as SearchIcon, Shapes, Sparkles } from 'lucide-react'
 
 const Navbar = () => {
   const { data: session, status } = useSession();
@@ -220,6 +220,14 @@ const Navbar = () => {
               </Link>
               <Link
                 role="menuitem"
+                href="/explore/trending"
+                onClick={() => setExploreOpen(false)}
+                className="flex items-center gap-3 rounded-md px-3 py-2.5 text-sm text-white/85 transition hover:bg-white/10 hover:text-white"
+              >
+                <Flame size={17} aria-hidden="true" className="text-amber-400" /> Trending
+              </Link>
+              <Link
+                role="menuitem"
                 href="/explore/country"
                 onClick={() => setExploreOpen(false)}
                 className="flex items-center gap-3 rounded-md px-3 py-2.5 text-sm text-white/85 transition hover:bg-white/10 hover:text-white"
@@ -412,6 +420,13 @@ const Navbar = () => {
             className="flex items-center gap-3 rounded-lg px-3 py-3 text-sm text-purple-300 font-semibold transition hover:bg-white/10 hover:text-white"
           >
             <Sparkles size={18} aria-hidden="true" className="text-purple-400" /> NAC Space
+          </Link>
+          <Link
+            href="/explore/trending"
+            onClick={() => setExploreOpen(false)}
+            className="flex items-center gap-3 rounded-lg px-3 py-3 text-sm text-white/85 transition hover:bg-white/10 hover:text-white"
+          >
+            <Flame size={18} aria-hidden="true" className="text-amber-400" /> Trending
           </Link>
           <Link
             href="/explore/country"
