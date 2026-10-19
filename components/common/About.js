@@ -192,33 +192,29 @@ export default function About() {
         </h2>
 
         <p className="text-[#9A968C] text-sm sm:text-base leading-relaxed mb-7">
-          NAC is built by someone who loves movies, tech, and building things
-          people actually enjoy using. Feedback, ideas, and suggestions are
-          always welcome.
+          I’m a student who loves watching movies and series and learning all
+          the details behind them. Since I also love web development, I started
+          wondering why I couldn’t build a movie site of my own. NAC is my first
+          full-stack project, and I keep improving it as I learn more. I add
+          new ideas and features along the way, so the project can grow with me.
+          Feedback and suggestions are always welcome.
         </p>
 
         <div className="flex flex-wrap justify-center gap-3">
           <Link
-            href="mailto:vikaskbaboria@example.com"
+            href="mailto:vikaskbaboria@gmail.com"
             className="px-5 py-2.5 rounded-full bg-[#C9A227] text-[#0A0A0A] text-sm font-semibold hover:bg-[#dab13a] transition-colors"
           >
             Email
           </Link>
 
           <Link
-            href="https://github.com/vikaskbaboria-arch"
+            href="https://github.com/vikaskbaboria-arch/nac2"
             target="_blank"
+            rel="noopener noreferrer"
             className="px-5 py-2.5 rounded-full border border-white/15 text-[#F2F0EA] text-sm font-medium hover:border-white/30 transition-colors"
           >
-            GitHub
-          </Link>
-
-          <Link
-            href="https://linkedin.com/in/your-linkedin"
-            target="_blank"
-            className="px-5 py-2.5 rounded-full border border-white/15 text-[#F2F0EA] text-sm font-medium hover:border-white/30 transition-colors"
-          >
-            LinkedIn
+            View project on GitHub
           </Link>
         </div>
       </motion.div>
