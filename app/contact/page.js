@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowLeft, Flag, MessageCircle } from "lucide-react";
+import { ArrowLeft, Flag, Mail, MessageCircle } from "lucide-react";
 
 export default function ContactPage() {
   return (
@@ -14,6 +14,12 @@ export default function ContactPage() {
           Need help with NAC, have feedback, or spotted a problem? Choose the
           option that best fits your request.
         </p>
+        <a
+          href="mailto:vikaskbaboria@gmail.com"
+          className="mt-6 inline-flex items-center gap-2 rounded-full bg-violet-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-violet-500"
+        >
+          <Mail size={16} aria-hidden="true" /> vikaskbaboria@gmail.com
+        </a>
         <div className="mt-8 grid gap-4 sm:grid-cols-2">
           <article className="rounded-2xl border border-white/10 bg-white/[0.03] p-6">
             <MessageCircle className="text-violet-300" aria-hidden="true" />

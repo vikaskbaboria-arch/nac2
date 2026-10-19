@@ -5,6 +5,6 @@ const CountryPage = async ({ params }) => {
  
   return <Country country={countryCode} />;
 };
- 
+  
 export default CountryPage;
  
