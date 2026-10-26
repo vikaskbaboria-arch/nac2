@@ -57,7 +57,7 @@ function Starfield() {
     };
   }, []);
 
-  return <canvas ref={canvasRef} className="absolute inset-0 z-0 pointer-events-none opacity-40" />;
+  return <canvas ref={canvasRef} className="fixed inset-0 z-0 pointer-events-none opacity-40" />;
 }
 
 /* ================= POSTER COLLAGE (left panel) ================= */
@@ -77,20 +77,20 @@ function PosterCollage() {
   }, []);
 
   return (
-    <div className="relative h-48 sm:h-56 md:h-full w-full overflow-hidden">
-      {/* Poster grid */}
-      <div className="grid h-full grid-cols-3 gap-1.5 sm:gap-2 p-2 sm:p-2.5">
+    <div className="relative w-full h-[360px] sm:h-[440px] md:h-full md:min-h-[calc(100vh-6rem)] overflow-hidden flex flex-col justify-end">
+      {/* Poster grid spanning full area - seamless with no space between movies */}
+      <div className="absolute inset-0 grid grid-cols-3 gap-0 p-0">
         {(posters ?? Array.from({ length: 9 })).map((src, i) => (
           <div
             key={src ?? i}
-            className="relative overflow-hidden rounded-lg bg-white/5 aspect-[2/3] md:aspect-auto"
+            className="relative overflow-hidden bg-white/5 h-full w-full"
           >
             {src ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
                 src={src}
                 alt=""
-                className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
+                className="h-full w-full object-cover"
                 style={{ animationDelay: `${i * 70}ms` }}
               />
             ) : (
@@ -100,21 +100,24 @@ function PosterCollage() {
         ))}
       </div>
 
-      {/* Cinematic gradient overlays for smooth blending */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0d0914] via-[#0d0914]/60 to-black/30 md:from-[#0d0914] md:via-black/30 md:to-black/60" />
-      <div className="pointer-events-none absolute inset-0 hidden md:block bg-gradient-to-r from-black/20 via-transparent to-[#0d0914]" />
+      {/* Gentle gradient so text is readable while keeping the posters bright and clear */}
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-[#060000] via-[#060000]/60 to-transparent" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 w-24 sm:w-32 hidden md:block bg-gradient-to-r from-transparent to-[#060000]" />
 
       {/* Copy over the collage */}
-      <div className="absolute inset-0 flex flex-col justify-end p-5 sm:p-7 md:p-10 text-white">
-        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-purple-500/20 border border-purple-400/30 text-purple-300 text-xs font-medium w-fit mb-2 backdrop-blur-md">
-          <span className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-pulse" />
+      <div className="relative z-10 p-6 sm:p-10 md:p-12 lg:p-16 text-white max-w-xl">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-950/70 border border-purple-400/40 text-purple-200 text-xs font-medium w-fit mb-3 backdrop-blur-md shadow-md">
+          <span className="w-2 h-2 rounded-full bg-purple-400 animate-pulse" />
           <span>Trending Discoveries</span>
         </div>
-        <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight mb-1.5 md:mb-2 text-white">
-          Welcome to <span className="bg-gradient-to-r from-[#9b51e0] via-[#c084fc] to-[#e8a94a] bg-clip-text text-transparent">NAC</span>
+        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight mb-2 md:mb-3 text-white leading-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
+          Welcome to{" "}
+          <span className="bg-gradient-to-r from-[#9b51e0] via-[#c084fc] to-[#e8a94a] bg-clip-text text-transparent">
+            NAC
+          </span>
         </h1>
-        <p className="max-w-md text-xs sm:text-sm md:text-base text-gray-300/90 leading-relaxed">
-          Discover movies, rate content, and curate your ultimate watchlist.
+        <p className="text-sm sm:text-base lg:text-lg text-gray-200 leading-relaxed max-w-md drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
+          Discover movies, rate content, and curate your ultimate personal watchlist.
         </p>
       </div>
     </div>
@@ -149,11 +152,11 @@ export default function Login() {
   /* Skeleton Loader */
   if (status === "loading" || status === "authenticated") {
     return (
-      <div className="min-h-[calc(100vh-12rem)] flex items-center justify-center px-4">
-        <div className="w-full max-w-sm p-8 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-xl space-y-4 animate-pulse">
-          <div className="w-12 h-12 bg-white/10 rounded-2xl mx-auto" />
-          <div className="h-6 w-32 bg-white/10 rounded mx-auto" />
-          <div className="h-4 w-48 bg-white/5 rounded mx-auto" />
+      <div className="min-h-[calc(100vh-6rem)] w-full flex items-center justify-center px-4">
+        <div className="w-full max-w-sm space-y-4 animate-pulse text-center">
+          <div className="w-14 h-14 bg-white/10 rounded-2xl mx-auto mb-4" />
+          <div className="h-7 w-40 bg-white/10 rounded mx-auto" />
+          <div className="h-4 w-56 bg-white/5 rounded mx-auto" />
           <div className="h-12 w-full bg-white/10 rounded-xl mt-6" />
         </div>
       </div>
@@ -161,13 +164,9 @@ export default function Login() {
   }
 
   return (
-    <div className="relative min-h-[calc(100vh-12rem)] flex items-center justify-center px-4 py-8 sm:py-12 overflow-hidden">
+    <div className="relative min-h-[calc(100vh-6rem)] w-full flex flex-col md:flex-row items-stretch overflow-hidden">
       {/* Starfield background */}
       <Starfield />
-
-      {/* Atmospheric ambient glow */}
-      <div className="pointer-events-none absolute top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 w-72 sm:w-96 h-72 sm:h-96 bg-purple-600/15 rounded-full blur-[120px]" />
-      <div className="pointer-events-none absolute bottom-1/4 right-1/4 translate-x-1/2 translate-y-1/2 w-72 sm:w-96 h-72 sm:h-96 bg-amber-500/10 rounded-full blur-[120px]" />
 
       {/* Mobile Intro */}
       <AnimatePresence>
@@ -197,39 +196,30 @@ export default function Login() {
         )}
       </AnimatePresence>
 
-      {/* Floating Glass Card */}
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-        className="relative z-10 w-full max-w-sm sm:max-w-md md:max-w-4xl lg:max-w-5xl
-                   min-h-[500px] md:h-[580px] grid grid-cols-1 md:grid-cols-2
-                   rounded-2xl sm:rounded-3xl overflow-hidden
-                   bg-[#0c0912]/85 backdrop-blur-2xl
-                   border border-white/10
-                   shadow-[0_0_80px_rgba(125,41,228,0.15),0_0_40px_rgba(232,169,74,0.1)]"
-      >
-        {/* LEFT PANEL: poster collage */}
+      {/* Left Panel: Full-bleed poster collage */}
+      <div className="w-full md:w-1/2 lg:w-7/12 relative flex">
         <PosterCollage />
+      </div>
 
-        {/* RIGHT PANEL: sign in */}
-        <div className="flex flex-col items-center justify-center p-6 sm:p-10 md:p-12 bg-[#0d0914]/80 backdrop-blur-xl relative">
-          {/* Subtle decorative glow */}
-          <div className="pointer-events-none absolute -top-12 -right-12 w-48 h-48 bg-purple-600/20 rounded-full blur-3xl" />
-          <div className="pointer-events-none absolute -bottom-12 -left-12 w-48 h-48 bg-amber-500/10 rounded-full blur-3xl" />
+      {/* Right Panel: Full-height Sign-in area (no box) */}
+      <div className="w-full md:w-1/2 lg:w-5/12 flex flex-col items-center justify-center p-6 sm:p-10 md:p-12 lg:p-16 relative z-10">
+        {/* Ambient atmospheric glow */}
+        <div className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 sm:w-96 h-80 sm:h-96 bg-purple-600/15 rounded-full blur-[130px]" />
+        <div className="pointer-events-none absolute bottom-12 right-12 w-64 h-64 bg-amber-500/10 rounded-full blur-[110px]" />
 
-          {/* Logo / Badge */}
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#7d29e4] to-[#49168f] p-[1px] shadow-[0_0_25px_rgba(125,41,228,0.4)] mb-4 flex items-center justify-center">
-            <div className="w-full h-full bg-[#0d0914] rounded-2xl flex items-center justify-center">
-              <span className="text-lg font-black tracking-wider text-[#e8a94a]">N</span>
+        <div className="w-full max-w-sm sm:max-w-md flex flex-col items-center relative z-10">
+          {/* Logo / Emblem */}
+          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#7d29e4] to-[#49168f] p-[1px] shadow-[0_0_30px_rgba(125,41,228,0.4)] mb-4 flex items-center justify-center">
+            <div className="w-full h-full bg-[#0a0710] rounded-2xl flex items-center justify-center">
+              <span className="text-xl font-black tracking-wider text-[#e8a94a]">N</span>
             </div>
           </div>
 
-          <h2 className="text-2xl sm:text-3xl text-white font-bold tracking-tight mb-2 text-center">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl text-white font-bold tracking-tight mb-2 text-center">
             Sign in to NAC
           </h2>
 
-          <p className="text-gray-400 text-xs sm:text-sm mb-6 sm:mb-8 text-center max-w-xs">
+          <p className="text-gray-400 text-xs sm:text-sm mb-8 text-center max-w-xs leading-relaxed">
             Connect your account to save movies, write reviews, and track your watchlist.
           </p>
 
@@ -237,10 +227,10 @@ export default function Login() {
             whileHover={{ scale: 1.02, y: -1 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => signIn("google")}
-            className="w-full max-w-xs sm:max-w-sm px-6 py-3.5 rounded-xl
+            className="w-full px-6 py-3.5 sm:py-4 rounded-xl
                        bg-white hover:bg-neutral-100 text-neutral-900
                        text-sm sm:text-base font-semibold
-                       shadow-[0_4px_20px_rgba(255,255,255,0.15)] hover:shadow-[0_6px_28px_rgba(255,255,255,0.25)]
+                       shadow-[0_4px_25px_rgba(255,255,255,0.18)] hover:shadow-[0_6px_35px_rgba(255,255,255,0.28)]
                        border border-neutral-200
                        flex items-center justify-center gap-3 transition-all cursor-pointer"
           >
@@ -266,22 +256,22 @@ export default function Login() {
           </motion.button>
 
           {/* Feature benefits / trust indicators */}
-          <div className="grid grid-cols-3 gap-2 w-full max-w-xs sm:max-w-sm mt-6 pt-6 border-t border-white/10 text-center">
+          <div className="grid grid-cols-3 gap-2 w-full mt-8 pt-8 border-t border-white/10 text-center">
             <div className="flex flex-col items-center">
-              <span className="text-[11px] sm:text-xs font-medium text-white/90">Watchlist</span>
-              <span className="text-[10px] text-gray-500">Sync anytime</span>
+              <span className="text-xs sm:text-sm font-medium text-white/90">Watchlist</span>
+              <span className="text-[10px] sm:text-xs text-gray-500">Sync anytime</span>
             </div>
             <div className="flex flex-col items-center border-x border-white/10">
-              <span className="text-[11px] sm:text-xs font-medium text-white/90">Reviews</span>
-              <span className="text-[10px] text-gray-500">Share verdict</span>
+              <span className="text-xs sm:text-sm font-medium text-white/90">Reviews</span>
+              <span className="text-[10px] sm:text-xs text-gray-500">Share verdict</span>
             </div>
             <div className="flex flex-col items-center">
-              <span className="text-[11px] sm:text-xs font-medium text-white/90">Curations</span>
-              <span className="text-[10px] text-gray-500">Find gems</span>
+              <span className="text-xs sm:text-sm font-medium text-white/90">Curations</span>
+              <span className="text-[10px] sm:text-xs text-gray-500">Find gems</span>
             </div>
           </div>
 
-          <p className="text-xs text-gray-500 mt-6 text-center leading-relaxed">
+          <p className="text-xs text-gray-500 mt-8 text-center leading-relaxed">
             By signing in, you agree to our{" "}
             <Link
               href="/terms"
@@ -298,7 +288,7 @@ export default function Login() {
             </Link>
           </p>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 }

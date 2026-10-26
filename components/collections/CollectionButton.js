@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Bookmark, X } from "lucide-react";
 import { useSession } from "next-auth/react";
 
-const CollectionButton = ({ movie }) => {
+const CollectionButton = ({ movie, className = "" }) => {
   const { data: session } = useSession();
   const [open, setOpen] = useState(false);
   const [collections, setCollections] = useState([]);
@@ -95,9 +95,10 @@ const CollectionButton = ({ movie }) => {
           setError("");
           setSuccess("");
         }}
-        className="flex h-11 w-full items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] text-sm font-semibold text-white transition hover:bg-white/10"
+        className={`flex h-11 w-full items-center justify-center gap-1.5 sm:gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-2 text-xs sm:text-sm font-semibold text-white transition hover:bg-white/10 active:scale-[0.98] ${className}`}
       >
-        <Bookmark size={17} /> Collections
+        <Bookmark size={16} className="shrink-0 text-white/70" />
+        <span className="truncate">Collections</span>
       </button>
 
       {open && (

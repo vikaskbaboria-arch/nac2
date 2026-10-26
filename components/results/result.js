@@ -5,7 +5,6 @@ import {
   Play,
   Eye,
   Share2,
-  ArrowUpRight,
   Info,
   X,
 } from "lucide-react";
@@ -87,30 +86,23 @@ const ActionButtons = ({ movie }) => (
   <div className="flex flex-col gap-2.5">
     <button
       type="button"
-      className="flex h-11 w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-purple-500 to-violet-600 text-sm font-semibold text-white shadow-lg shadow-purple-900/30 transition hover:brightness-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-300"
+      className="flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-purple-500 to-violet-600 text-sm font-semibold text-white shadow-lg shadow-purple-900/30 transition hover:brightness-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-300 active:scale-[0.99]"
     >
       <Eye size={18} /> Mark as Watched
     </button>
-    <div className="grid grid-cols-2 gap-2.5 ">
-      <div className="h-11">
-        <CollectionButton movie={movie} />
-      </div>
-      {/* your existing Watchlist component ("Watch Later") */}
-      <div className="">
-        <Watchlist movieId={movie.id} />
-      </div>
+    <div className="grid grid-cols-3 gap-2">
+      <Watchlist movieId={movie.id} />
+      <CollectionButton movie={movie} />
+      <InterestedButton
+        movieID={movie.id}
+        type={movie.mediaType === "tv" ? "series" : "movie"}
+      />
     </div>
-    <InterestedButton
-      movieID={movie.id}
-      type={movie.mediaType === "tv" ? "series" : "movie"}
-      className="w-full justify-center"
-    />
   </div>
 );
 
 const WatchOnlineCard = ({
   providersList,
-  regionLink,
   title,
   movieId,
   mediaType,
@@ -128,18 +120,13 @@ const WatchOnlineCard = ({
 
     <div className="border-t border-white/10">
       {providersList.length > 0 ? (
-        <ul className="divide-y divide-white/5">
+        <ul className="divide-y divide-white/5 max-h-64 overflow-y-auto overscroll-contain lg:max-h-none no-scrollbar [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
           {providersList.map((provider) => (
             <li
               key={`${provider.provider_id}-${provider.kind}`}
               className="flex items-center gap-1 pr-2"
             >
-              <a
-                href={regionLink || "#"}
-                target="_blank"
-                rel="noreferrer"
-                className="flex min-w-0 flex-1 items-center gap-3 px-4 py-3 transition hover:bg-white/5"
-              >
+              <div className="flex min-w-0 flex-1 items-center gap-3 px-4 py-3">
                 <img
                   src={`https://image.tmdb.org/t/p/w92${provider.logo_path}`}
                   alt=""
@@ -151,8 +138,7 @@ const WatchOnlineCard = ({
                   </p>
                   <p className="text-xs text-white/50">{provider.kind}</p>
                 </div>
-                <ArrowUpRight size={16} className="text-white/60" />
-              </a>
+              </div>
               <ReportButton
                 targetType="provider"
                 targetTitle={`${title} — ${provider.provider_name}`}
@@ -312,7 +298,7 @@ const SeriesR = (props) => {
           disabled={!trailerUrl}
           aria-label={trailerUrl ? "Play trailer" : "Trailer unavailable"}
           title={trailerUrl ? "Play trailer" : "Trailer unavailable"}
-          className="absolute left-1/2 top-1/2 flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 items-center group justify-center rounded-full bg-black/40 backdrop-blur transition-all hover:bg-black/50 disabled:cursor-not-allowed disabled:opacity-60 sm:h-12 sm:w-12 shadow-lg"
+          className="absolute left-1/2 top-1/2 md:top-1/2 flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 items-center group justify-center rounded-full bg-black/40 backdrop-blur transition-all hover:bg-black/50 disabled:cursor-not-allowed disabled:opacity-60 sm:h-12 sm:w-12 shadow-lg"
         >
           <Play
             size={20}
@@ -332,7 +318,7 @@ const SeriesR = (props) => {
       </div>
 
       {/* ================= POSTER + DETAILS ================= */}
-      <div className="relative z-10 mx-auto -mt-16 max-w-7xl px-4 sm:-mt-24 sm:px-8 lg:-mt-50 lg:px-12">
+      <div className="relative z-10 mx-auto -mt-22 max-w-7xl px-4 sm:-mt-24 sm:px-8 lg:-mt-50 lg:px-12">
         <div className="grid grid-cols-[auto_minmax(0,1fr)] items-end gap-x-4 gap-y-5 sm:gap-x-6 lg:grid-cols-[auto_minmax(0,1fr)_340px] lg:gap-x-8">
           <img
             src={poster}
@@ -439,15 +425,16 @@ const SeriesR = (props) => {
             <h2 className="mb-3 text-lg font-semibold sm:text-xl">Overview</h2>
             <p
               className={`max-w-3xl leading-relaxed text-white/70 ${
-                showFullOverview ? "" : "line-clamp-6 sm:line-clamp-none"
+                showFullOverview ? "" : "line-clamp-3"
               }`}
             >
-              {movie?.overview}
+              {movie?.overview || "No overview available."}
             </p>
-            {movie?.overview?.length > 220 && (
+            {movie?.overview && movie.overview.length > 140 && (
               <button
+                type="button"
                 onClick={() => setShowFullOverview((v) => !v)}
-                className="mt-2 text-sm text-purple-400 sm:hidden"
+                className="mt-2 inline-flex items-center gap-1 text-sm font-medium text-purple-400 hover:text-purple-300 transition cursor-pointer"
               >
                 {showFullOverview ? "Show less" : "Show more"}
               </button>
@@ -468,7 +455,6 @@ const SeriesR = (props) => {
 
             <WatchOnlineCard
               providersList={providersList}
-              regionLink={regionObj?.link}
               title={title}
               movieId={movie?.id}
               mediaType={isTv ? "tv" : "movie"}
@@ -523,7 +509,6 @@ const SeriesR = (props) => {
           {/* ---- Watch Online card ---- */}
           <WatchOnlineCard
             providersList={providersList}
-            regionLink={regionObj?.link}
             title={title}
             movieId={movie?.id}
             mediaType={isTv ? "tv" : "movie"}
