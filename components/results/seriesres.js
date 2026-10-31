@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
+import SeasonEpisodes from "@/components/results/SeasonEpisodes";
 import Rating from "@/components/media/rating";
 import Watchlist from "@/components/results/watchlist";
 import ReviewsSection from "@/components/reviews/parent";
@@ -22,7 +23,6 @@ const SeriesR = (movies) => {
 const [loading, setLoading] = useState(true);
   /* ================= FETCH DATA ================= */
   useEffect(() => {
-
     async function loadData() {
 
 
@@ -266,6 +266,11 @@ w-full
       </div>
       </div>
 
+      <SeasonEpisodes
+        key={movie?.id}
+        movieId={movie?.id}
+        seasons={movie?.seasons || []}
+      />
       {/* ================= REVIEWS ================= */}
       <div className="bg-black pb-12">
         <ReviewsSection movieId={movie?.id} />
