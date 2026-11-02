@@ -25,17 +25,7 @@ My love for cinema, movies, and TV series inspired me to build this platform in 
   * Rating
   * Content type
 
-### 🌍 Country Exploration
 
-Browse content based on its country of origin.
-
-Example:
-
-```text
-/explore/country/in
-/explore/country/us
-/explore/country/jp
-```
 
 Country pages support:
 
@@ -44,20 +34,6 @@ Country pages support:
 * Language filtering
 * Sorting
 * Pagination
-
-### 🔎 Advanced Filters
-
-NAC 2 provides filtering options such as:
-
-* Sort by newest
-* Sort by oldest
-* Top rated
-* A–Z
-* Movies
-* Shows
-* Country
-* Language
-* Streaming providers
 
 ### 📺 Streaming Providers
 
@@ -86,6 +62,7 @@ Each title can provide information such as:
 
 * Poster
 * Title
+* Episode Info 
 * Overview
 * Release date
 * Rating
