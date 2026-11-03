@@ -118,7 +118,7 @@ const SeasonEpisodes = ({ movieId, seasons = [] }) => {
               <button
                 type="button"
                 onClick={() => selectSeason(selectedSeason)}
-                className="rounded-lg bg-white/10 px-3 py-2 text-sm font-medium transition hover:bg-white/15"
+                className="rounded-lg bg-white/10 px-3 py-2 text-sm font-medium transition hover:bg-white/10"
               >
                 Try again
               </button>
