@@ -5,7 +5,7 @@ const redis = Redis.fromEnv()
 
 const rateLimiter = new  Ratelimit({
     redis: redis,
-    limiter: Ratelimit.slidingWindow(10, "1 m"),
+    limiter: Ratelimit.slidingWindow(200, "1 m"),
 })
 
 export {rateLimiter}
