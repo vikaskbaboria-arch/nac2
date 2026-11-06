@@ -23,17 +23,23 @@ export async function GET(request) {
   let path = "";
 
   try {
-       const ip = req.headers.get("x-forwarded-for")
-        ?.split(",")[0]
-        ?.trim() || "unknown";
-         const identifier = "api";
-  const result = await rateLimiter.limit(ip, identifier);
-  res.setHeader('X-RateLimit-Limit', result.limit)
-  res.setHeader('X-RateLimit-Remaining', result.remaining)
+    const ip =
+      request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+      request.headers.get("x-real-ip") ||
+      "unknown";
+    const result = await rateLimiter.limit(`api:${ip}`);
+    const rateLimitHeaders = {
+      "X-RateLimit-Limit": String(result.limit),
+      "X-RateLimit-Remaining": String(result.remaining),
+    };
+
     if (!result.success) {
-    res.status(200).json({message: 'The request has been rate limited.', rateLimitState: result})
-    return
-  }
+      return NextResponse.json(
+        { message: "The request has been rate limited." },
+        { status: 429, headers: rateLimitHeaders }
+      );
+    }
+
     const url = new URL(request.url);
     const prefix = "/api/tmdb/";
     path = url.pathname.startsWith(prefix)
