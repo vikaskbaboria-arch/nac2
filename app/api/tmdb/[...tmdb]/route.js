@@ -1,6 +1,6 @@
 
 import { NextResponse } from "next/server";
-
+import {rateLimiter} from "@/services/redislimiter.js"
 const TMDB_BASE = "https://api.themoviedb.org/3";
 
 function errorResponse(code, message, status, details) {
@@ -23,6 +23,17 @@ export async function GET(request) {
   let path = "";
 
   try {
+       const ip = req.headers.get("x-forwarded-for")
+        ?.split(",")[0]
+        ?.trim() || "unknown";
+         const identifier = "api";
+  const result = await rateLimiter.limit(ip, identifier);
+  res.setHeader('X-RateLimit-Limit', result.limit)
+  res.setHeader('X-RateLimit-Remaining', result.remaining)
+    if (!result.success) {
+    res.status(200).json({message: 'The request has been rate limited.', rateLimitState: result})
+    return
+  }
     const url = new URL(request.url);
     const prefix = "/api/tmdb/";
     path = url.pathname.startsWith(prefix)
